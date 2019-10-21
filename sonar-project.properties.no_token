@@ -1,0 +1,17 @@
+sonar.projectKey=SMPD
+sonar.projectName=Statystyczne metody przetwarzania danych
+sonar.projectVersion=1.0
+
+sonar.sources=src
+
+# The build-wrapper output dir
+sonar.cfamily.build-wrapper-output=bw-outputs
+
+# Encoding of the source files
+sonar.sourceEncoding=UTF-8
+sonar.language=cpp
+
+# Settings for SonarQube UI Web
+sonar.host.url=https://sonarcloud.io
+sonar.organization=vego1mar-github
+sonar.login=

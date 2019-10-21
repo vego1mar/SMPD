@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1571590752 source:/home/moon/Documents/Projekty/SMPD/main.cpp
+	<iostream>
+
+1571597924 source:/home/moon/Documents/Projekty/SMPD/src/main.cpp
+	<iostream>
+

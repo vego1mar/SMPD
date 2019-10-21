@@ -1,0 +1,18 @@
+# Prerequisites
+G++ compiler to compile the project sample
+[SonarQube](http://www.sonarqube.org/downloads/) 5.6+
+[SonarQube Scanner](https://redirect.sonarsource.com/doc/install-configure-scanner.html) 2.8+
+[SonarCFamily for C/C++](https://www.sonarsource.com/why-us/products/codeanalyzers/sonarcfamilyforcpp.html)
+[SonarSource Build Wrapper](https://docs.sonarqube.org/pages/viewpage.action?pageId=7996665)
+
+# Usage
+build-wrapper --out-dir bw-outputs ./build.sh
+sonar-scanner
+
+# ld.so & LD_PRELOAD issue
+strace -f -E LD_DEBUG=all ~/opt2/sonarqube/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-output /bin/echo test >stdout.txt 2>stderr.txt
+libinterceptor-x86_64.so --> libinterceptor-haswell.so
+
+# Localized usage
+~/opt2/sonarqube/build-wrapper-linux-x86/build-wrapper-linux-x86-64 --out-dir bw-outputs ./build.sh
+~/opt2/sonarqube/sonar-scanner-4.2.0.1873-linux/bin/sonar-scanner

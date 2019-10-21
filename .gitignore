@@ -1,0 +1,6 @@
+obj/
+bin/
+bw-outputs/
+build/
+.scannerwork/
+sonar-project.properties
