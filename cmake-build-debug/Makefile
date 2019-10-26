@@ -48,10 +48,10 @@ RM = /home/moon/opt2/jetbrains-intellij/clion-2019.2.4/bin/cmake/linux/bin/cmake
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/moon/Documents/Projekty/SMPD
+CMAKE_SOURCE_DIR = /home/moon/Documents/Projekty/SMPD_TEST
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/moon/Documents/Projekty/SMPD/cmake-build-debug
+CMAKE_BINARY_DIR = /home/moon/Documents/Projekty/SMPD_TEST/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/moon/Documents/Projekty/SMPD/cmake-build-debug/CMakeFiles /home/moon/Documents/Projekty/SMPD/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/moon/Documents/Projekty/SMPD_TEST/cmake-build-debug/CMakeFiles /home/moon/Documents/Projekty/SMPD_TEST/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/moon/Documents/Projekty/SMPD/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/moon/Documents/Projekty/SMPD_TEST/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -111,44 +111,44 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named SMPD
+# Target rules for targets named SMPD_TEST
 
 # Build rule for target.
-SMPD: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 SMPD
-.PHONY : SMPD
+SMPD_TEST: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 SMPD_TEST
+.PHONY : SMPD_TEST
 
 # fast build rule for target.
-SMPD/fast:
-	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/build
-.PHONY : SMPD/fast
+SMPD_TEST/fast:
+	$(MAKE) -f CMakeFiles/SMPD_TEST.dir/build.make CMakeFiles/SMPD_TEST.dir/build
+.PHONY : SMPD_TEST/fast
 
-src/main.o: src/main.cpp.o
+wheres_the_catch.o: wheres_the_catch.cpp.o
 
-.PHONY : src/main.o
+.PHONY : wheres_the_catch.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+wheres_the_catch.cpp.o:
+	$(MAKE) -f CMakeFiles/SMPD_TEST.dir/build.make CMakeFiles/SMPD_TEST.dir/wheres_the_catch.cpp.o
+.PHONY : wheres_the_catch.cpp.o
 
-src/main.i: src/main.cpp.i
+wheres_the_catch.i: wheres_the_catch.cpp.i
 
-.PHONY : src/main.i
+.PHONY : wheres_the_catch.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+wheres_the_catch.cpp.i:
+	$(MAKE) -f CMakeFiles/SMPD_TEST.dir/build.make CMakeFiles/SMPD_TEST.dir/wheres_the_catch.cpp.i
+.PHONY : wheres_the_catch.cpp.i
 
-src/main.s: src/main.cpp.s
+wheres_the_catch.s: wheres_the_catch.cpp.s
 
-.PHONY : src/main.s
+.PHONY : wheres_the_catch.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+wheres_the_catch.cpp.s:
+	$(MAKE) -f CMakeFiles/SMPD_TEST.dir/build.make CMakeFiles/SMPD_TEST.dir/wheres_the_catch.cpp.s
+.PHONY : wheres_the_catch.cpp.s
 
 # Help Target
 help:
@@ -157,11 +157,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... SMPD"
+	@echo "... SMPD_TEST"
 	@echo "... edit_cache"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... wheres_the_catch.o"
+	@echo "... wheres_the_catch.i"
+	@echo "... wheres_the_catch.s"
 .PHONY : help
 
 
