@@ -6,7 +6,7 @@ G++ compiler to compile the project sample
 [SonarSource Build Wrapper](https://docs.sonarqube.org/pages/viewpage.action?pageId=7996665)
 
 # Usage
-build-wrapper --out-dir bw-outputs ./build.sh
+build-wrapper --out-dir bw-outputs ./sonar-build.sh
 sonar-scanner
 
 # ld.so & LD_PRELOAD issue

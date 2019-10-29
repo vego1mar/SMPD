@@ -123,6 +123,19 @@ SMPD/fast:
 	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/build
 .PHONY : SMPD/fast
 
+#=============================================================================
+# Target rules for targets named Catch_tests_run
+
+# Build rule for target.
+Catch_tests_run: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Catch_tests_run
+.PHONY : Catch_tests_run
+
+# fast build rule for target.
+Catch_tests_run/fast:
+	$(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/build
+.PHONY : Catch_tests_run/fast
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -150,6 +163,33 @@ src/main.cpp.s:
 	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
+src/statistical.o: src/statistical.cpp.o
+
+.PHONY : src/statistical.o
+
+# target to build an object file
+src/statistical.cpp.o:
+	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/statistical.cpp.o
+.PHONY : src/statistical.cpp.o
+
+src/statistical.i: src/statistical.cpp.i
+
+.PHONY : src/statistical.i
+
+# target to preprocess a source file
+src/statistical.cpp.i:
+	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/statistical.cpp.i
+.PHONY : src/statistical.cpp.i
+
+src/statistical.s: src/statistical.cpp.s
+
+.PHONY : src/statistical.s
+
+# target to generate assembly for a file
+src/statistical.cpp.s:
+	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/statistical.cpp.s
+.PHONY : src/statistical.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -159,9 +199,13 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... SMPD"
 	@echo "... edit_cache"
+	@echo "... Catch_tests_run"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/statistical.o"
+	@echo "... src/statistical.i"
+	@echo "... src/statistical.s"
 .PHONY : help
 
 

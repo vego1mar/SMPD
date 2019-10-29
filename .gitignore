@@ -1,7 +1,8 @@
 obj/
 bin/
 bw-outputs/
-build/
+sonar-build/
 .scannerwork/
 sonar-project.properties
 cmake-build-debug/CMakeFiles/
+cmake-build-debug/Catch_tests/CMakeFiles
