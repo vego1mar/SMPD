@@ -51,5 +51,15 @@ double statistical::norm_distance(std::vector<double> &point1, std::vector<doubl
 }
 
 double statistical::geometric_distance(std::vector<double> &point1, std::vector<double> &point2) {
-    return statistical::norm_distance(point1, point2, 2);
+    if (point1.size() != point2.size()) {
+        throw std::invalid_argument("Vector sizes differs.");
+    }
+
+    double summed_mse = 0.0;
+
+    for (size_t i = 0; i < point1.size(); i++) {
+        summed_mse += statistical::mean_squared_error(point1[i], point2[i]);
+    }
+
+    return std::sqrt(summed_mse);
 }

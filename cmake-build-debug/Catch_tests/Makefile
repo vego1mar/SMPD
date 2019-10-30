@@ -152,32 +152,32 @@ __/src/statistical.cpp.s:
 	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/__/src/statistical.cpp.s
 .PHONY : __/src/statistical.cpp.s
 
-unit_test.o: unit_test.cpp.o
+statistical_test.o: statistical_test.cpp.o
 
-.PHONY : unit_test.o
+.PHONY : statistical_test.o
 
 # target to build an object file
-unit_test.cpp.o:
-	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/unit_test.cpp.o
-.PHONY : unit_test.cpp.o
+statistical_test.cpp.o:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/statistical_test.cpp.o
+.PHONY : statistical_test.cpp.o
 
-unit_test.i: unit_test.cpp.i
+statistical_test.i: statistical_test.cpp.i
 
-.PHONY : unit_test.i
+.PHONY : statistical_test.i
 
 # target to preprocess a source file
-unit_test.cpp.i:
-	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/unit_test.cpp.i
-.PHONY : unit_test.cpp.i
+statistical_test.cpp.i:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/statistical_test.cpp.i
+.PHONY : statistical_test.cpp.i
 
-unit_test.s: unit_test.cpp.s
+statistical_test.s: statistical_test.cpp.s
 
-.PHONY : unit_test.s
+.PHONY : statistical_test.s
 
 # target to generate assembly for a file
-unit_test.cpp.s:
-	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/unit_test.cpp.s
-.PHONY : unit_test.cpp.s
+statistical_test.cpp.s:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/statistical_test.cpp.s
+.PHONY : statistical_test.cpp.s
 
 # Help Target
 help:
@@ -191,9 +191,9 @@ help:
 	@echo "... __/src/statistical.o"
 	@echo "... __/src/statistical.i"
 	@echo "... __/src/statistical.s"
-	@echo "... unit_test.o"
-	@echo "... unit_test.i"
-	@echo "... unit_test.s"
+	@echo "... statistical_test.o"
+	@echo "... statistical_test.i"
+	@echo "... statistical_test.s"
 .PHONY : help
 
 

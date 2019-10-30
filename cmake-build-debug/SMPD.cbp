@@ -130,7 +130,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/moon/Documents/Projekty/SMPD/Catch_tests/unit_test.cpp">
+		<Unit filename="/home/moon/Documents/Projekty/SMPD/Catch_tests/statistical_test.cpp">
 			<Option target="Catch_tests_run"/>
 		</Unit>
 		<Unit filename="/home/moon/Documents/Projekty/SMPD/src/main.cpp">
