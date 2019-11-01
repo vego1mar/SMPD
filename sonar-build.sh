@@ -10,6 +10,7 @@ echo "BUILDING"
 mkdir sonar-build
 g++ -Wall -fexceptions -std=c++14 -g  -c src/main.cpp -o sonar-build/main.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/statistical.cpp -o sonar-build/statistical.o
+g++ -Wall -fexceptions -std=c++14 -g  -c src/classifiers.cpp -o sonar-build/classifiers.o
 RC=$?
 
 if [ $RC -ne 0 ]; then

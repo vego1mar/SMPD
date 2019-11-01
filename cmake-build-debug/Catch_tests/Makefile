@@ -125,6 +125,33 @@ Catch_tests_run/fast:
 	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/build
 .PHONY : Catch_tests_run/fast
 
+__/src/classifiers.o: __/src/classifiers.cpp.o
+
+.PHONY : __/src/classifiers.o
+
+# target to build an object file
+__/src/classifiers.cpp.o:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/__/src/classifiers.cpp.o
+.PHONY : __/src/classifiers.cpp.o
+
+__/src/classifiers.i: __/src/classifiers.cpp.i
+
+.PHONY : __/src/classifiers.i
+
+# target to preprocess a source file
+__/src/classifiers.cpp.i:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/__/src/classifiers.cpp.i
+.PHONY : __/src/classifiers.cpp.i
+
+__/src/classifiers.s: __/src/classifiers.cpp.s
+
+.PHONY : __/src/classifiers.s
+
+# target to generate assembly for a file
+__/src/classifiers.cpp.s:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/__/src/classifiers.cpp.s
+.PHONY : __/src/classifiers.cpp.s
+
 __/src/statistical.o: __/src/statistical.cpp.o
 
 .PHONY : __/src/statistical.o
@@ -151,6 +178,33 @@ __/src/statistical.s: __/src/statistical.cpp.s
 __/src/statistical.cpp.s:
 	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/__/src/statistical.cpp.s
 .PHONY : __/src/statistical.cpp.s
+
+classifiers_test.o: classifiers_test.cpp.o
+
+.PHONY : classifiers_test.o
+
+# target to build an object file
+classifiers_test.cpp.o:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/classifiers_test.cpp.o
+.PHONY : classifiers_test.cpp.o
+
+classifiers_test.i: classifiers_test.cpp.i
+
+.PHONY : classifiers_test.i
+
+# target to preprocess a source file
+classifiers_test.cpp.i:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/classifiers_test.cpp.i
+.PHONY : classifiers_test.cpp.i
+
+classifiers_test.s: classifiers_test.cpp.s
+
+.PHONY : classifiers_test.s
+
+# target to generate assembly for a file
+classifiers_test.cpp.s:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/classifiers_test.cpp.s
+.PHONY : classifiers_test.cpp.s
 
 statistical_test.o: statistical_test.cpp.o
 
@@ -188,9 +242,15 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Catch_tests_run"
 	@echo "... edit_cache"
+	@echo "... __/src/classifiers.o"
+	@echo "... __/src/classifiers.i"
+	@echo "... __/src/classifiers.s"
 	@echo "... __/src/statistical.o"
 	@echo "... __/src/statistical.i"
 	@echo "... __/src/statistical.s"
+	@echo "... classifiers_test.o"
+	@echo "... classifiers_test.i"
+	@echo "... classifiers_test.s"
 	@echo "... statistical_test.o"
 	@echo "... statistical_test.i"
 	@echo "... statistical_test.s"

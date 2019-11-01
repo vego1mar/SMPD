@@ -136,6 +136,33 @@ Catch_tests_run/fast:
 	$(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/build
 .PHONY : Catch_tests_run/fast
 
+src/classifiers.o: src/classifiers.cpp.o
+
+.PHONY : src/classifiers.o
+
+# target to build an object file
+src/classifiers.cpp.o:
+	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/classifiers.cpp.o
+.PHONY : src/classifiers.cpp.o
+
+src/classifiers.i: src/classifiers.cpp.i
+
+.PHONY : src/classifiers.i
+
+# target to preprocess a source file
+src/classifiers.cpp.i:
+	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/classifiers.cpp.i
+.PHONY : src/classifiers.cpp.i
+
+src/classifiers.s: src/classifiers.cpp.s
+
+.PHONY : src/classifiers.s
+
+# target to generate assembly for a file
+src/classifiers.cpp.s:
+	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/classifiers.cpp.s
+.PHONY : src/classifiers.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -200,6 +227,9 @@ help:
 	@echo "... SMPD"
 	@echo "... edit_cache"
 	@echo "... Catch_tests_run"
+	@echo "... src/classifiers.o"
+	@echo "... src/classifiers.i"
+	@echo "... src/classifiers.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
