@@ -5,28 +5,8 @@
 #include "statistical.hpp"
 
 namespace classifiers {
-    ClassVector::ClassVector(std::string label, std::vector<double> features)
-            : label(std::move(label)), features(std::move(features)) {
-    }
-
-    ClassVector &ClassVector::operator=(const ClassVector &rhs) {
-        if (this == &rhs) {
-            return *this;
-        }
-
-        label = rhs.label;
-        features = rhs.features;
-        return *this;
-    }
-
-    ClassVector &ClassVector::operator=(ClassVector &&rvalue) noexcept {
-        if (this == &rvalue) {
-            return *this;
-        }
-
-        std::swap(label, rvalue.label);
-        std::swap(features, rvalue.features);
-        return *this;
+    ClassVector::ClassVector(std::string label, std::vector<double> const &features)
+            : label(std::move(label)), features(features) {
     }
 
     std::string ClassVector::getIdentifier() const {

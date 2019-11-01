@@ -14,17 +14,19 @@ namespace classifiers {
     public:
         ClassVector() = delete;
 
-        ClassVector(std::string label, std::vector<double> features);
+        // Large label sizes are discouraged.
+        ClassVector(std::string label, std::vector<double> const &features);
 
+        // Used by STL construction for features.
         ClassVector(const ClassVector &object) = default;
 
-        ClassVector(ClassVector &&rvalue) = default;
+        ClassVector(ClassVector &&rvalue) = delete;
 
-        ClassVector &operator=(const ClassVector &rhs);
+        ClassVector &operator=(const ClassVector &rhs) = delete;
 
-        ClassVector &operator=(ClassVector &&rvalue) noexcept;
+        ClassVector &operator=(ClassVector &&rvalue) noexcept = delete;
 
-        ~ClassVector() = default;
+        virtual ~ClassVector() = default;
 
         std::string getIdentifier() const;
 
