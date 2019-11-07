@@ -163,6 +163,33 @@ src/classifiers.cpp.s:
 	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/classifiers.cpp.s
 .PHONY : src/classifiers.cpp.s
 
+src/io_manager.o: src/io_manager.cpp.o
+
+.PHONY : src/io_manager.o
+
+# target to build an object file
+src/io_manager.cpp.o:
+	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/io_manager.cpp.o
+.PHONY : src/io_manager.cpp.o
+
+src/io_manager.i: src/io_manager.cpp.i
+
+.PHONY : src/io_manager.i
+
+# target to preprocess a source file
+src/io_manager.cpp.i:
+	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/io_manager.cpp.i
+.PHONY : src/io_manager.cpp.i
+
+src/io_manager.s: src/io_manager.cpp.s
+
+.PHONY : src/io_manager.s
+
+# target to generate assembly for a file
+src/io_manager.cpp.s:
+	$(MAKE) -f CMakeFiles/SMPD.dir/build.make CMakeFiles/SMPD.dir/src/io_manager.cpp.s
+.PHONY : src/io_manager.cpp.s
+
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -230,6 +257,9 @@ help:
 	@echo "... src/classifiers.o"
 	@echo "... src/classifiers.i"
 	@echo "... src/classifiers.s"
+	@echo "... src/io_manager.o"
+	@echo "... src/io_manager.i"
+	@echo "... src/io_manager.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

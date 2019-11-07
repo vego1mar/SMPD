@@ -3,5 +3,5 @@ project(SMPD)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(SMPD src/main.cpp src/statistical.hpp src/statistical.cpp src/classifiers.hpp src/classifiers.cpp)
+add_executable(SMPD src/main.cpp src/statistical.hpp src/statistical.cpp src/classifiers.hpp src/classifiers.cpp src/io_manager.hpp src/io_manager.cpp)
 add_subdirectory(Catch_tests)

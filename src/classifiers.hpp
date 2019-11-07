@@ -20,7 +20,8 @@ namespace classifiers {
         // Used by STL construction for features.
         ClassVector(const ClassVector &object) = default;
 
-        ClassVector(ClassVector &&rvalue) = delete;
+        // Used by io_manager::readFileIntoCluster()
+        ClassVector(ClassVector &&rvalue) = default;
 
         ClassVector &operator=(const ClassVector &rhs) = delete;
 

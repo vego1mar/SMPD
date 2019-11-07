@@ -152,6 +152,33 @@ __/src/classifiers.cpp.s:
 	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/__/src/classifiers.cpp.s
 .PHONY : __/src/classifiers.cpp.s
 
+__/src/io_manager.o: __/src/io_manager.cpp.o
+
+.PHONY : __/src/io_manager.o
+
+# target to build an object file
+__/src/io_manager.cpp.o:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/__/src/io_manager.cpp.o
+.PHONY : __/src/io_manager.cpp.o
+
+__/src/io_manager.i: __/src/io_manager.cpp.i
+
+.PHONY : __/src/io_manager.i
+
+# target to preprocess a source file
+__/src/io_manager.cpp.i:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/__/src/io_manager.cpp.i
+.PHONY : __/src/io_manager.cpp.i
+
+__/src/io_manager.s: __/src/io_manager.cpp.s
+
+.PHONY : __/src/io_manager.s
+
+# target to generate assembly for a file
+__/src/io_manager.cpp.s:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/__/src/io_manager.cpp.s
+.PHONY : __/src/io_manager.cpp.s
+
 __/src/statistical.o: __/src/statistical.cpp.o
 
 .PHONY : __/src/statistical.o
@@ -206,6 +233,33 @@ classifiers_test.cpp.s:
 	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/classifiers_test.cpp.s
 .PHONY : classifiers_test.cpp.s
 
+io_manager_test.o: io_manager_test.cpp.o
+
+.PHONY : io_manager_test.o
+
+# target to build an object file
+io_manager_test.cpp.o:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/io_manager_test.cpp.o
+.PHONY : io_manager_test.cpp.o
+
+io_manager_test.i: io_manager_test.cpp.i
+
+.PHONY : io_manager_test.i
+
+# target to preprocess a source file
+io_manager_test.cpp.i:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/io_manager_test.cpp.i
+.PHONY : io_manager_test.cpp.i
+
+io_manager_test.s: io_manager_test.cpp.s
+
+.PHONY : io_manager_test.s
+
+# target to generate assembly for a file
+io_manager_test.cpp.s:
+	cd /home/moon/Documents/Projekty/SMPD/cmake-build-debug && $(MAKE) -f Catch_tests/CMakeFiles/Catch_tests_run.dir/build.make Catch_tests/CMakeFiles/Catch_tests_run.dir/io_manager_test.cpp.s
+.PHONY : io_manager_test.cpp.s
+
 statistical_test.o: statistical_test.cpp.o
 
 .PHONY : statistical_test.o
@@ -245,12 +299,18 @@ help:
 	@echo "... __/src/classifiers.o"
 	@echo "... __/src/classifiers.i"
 	@echo "... __/src/classifiers.s"
+	@echo "... __/src/io_manager.o"
+	@echo "... __/src/io_manager.i"
+	@echo "... __/src/io_manager.s"
 	@echo "... __/src/statistical.o"
 	@echo "... __/src/statistical.i"
 	@echo "... __/src/statistical.s"
 	@echo "... classifiers_test.o"
 	@echo "... classifiers_test.i"
 	@echo "... classifiers_test.s"
+	@echo "... io_manager_test.o"
+	@echo "... io_manager_test.i"
+	@echo "... io_manager_test.s"
 	@echo "... statistical_test.o"
 	@echo "... statistical_test.i"
 	@echo "... statistical_test.s"

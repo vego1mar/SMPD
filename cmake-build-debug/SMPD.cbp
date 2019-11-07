@@ -133,6 +133,9 @@
 		<Unit filename="/home/moon/Documents/Projekty/SMPD/Catch_tests/classifiers_test.cpp">
 			<Option target="Catch_tests_run"/>
 		</Unit>
+		<Unit filename="/home/moon/Documents/Projekty/SMPD/Catch_tests/io_manager_test.cpp">
+			<Option target="Catch_tests_run"/>
+		</Unit>
 		<Unit filename="/home/moon/Documents/Projekty/SMPD/Catch_tests/statistical_test.cpp">
 			<Option target="Catch_tests_run"/>
 		</Unit>
@@ -141,6 +144,13 @@
 			<Option target="Catch_tests_run"/>
 		</Unit>
 		<Unit filename="/home/moon/Documents/Projekty/SMPD/src/classifiers.hpp">
+			<Option target="SMPD"/>
+		</Unit>
+		<Unit filename="/home/moon/Documents/Projekty/SMPD/src/io_manager.cpp">
+			<Option target="SMPD"/>
+			<Option target="Catch_tests_run"/>
+		</Unit>
+		<Unit filename="/home/moon/Documents/Projekty/SMPD/src/io_manager.hpp">
 			<Option target="SMPD"/>
 		</Unit>
 		<Unit filename="/home/moon/Documents/Projekty/SMPD/src/main.cpp">
