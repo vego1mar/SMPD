@@ -4,5 +4,4 @@ bw-outputs/
 sonar-build/
 .scannerwork/
 sonar-project.properties
-cmake-build-debug/CMakeFiles/
-cmake-build-debug/Catch_tests/CMakeFiles
+cmake-build-debug/*
