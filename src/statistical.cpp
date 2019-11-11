@@ -46,7 +46,7 @@ double statistical::norm_distance(std::vector<double> &point1, std::vector<doubl
         summed_mse += statistical::mean_norm_error(point1[i], point2[i], p_norm);
     }
 
-    auto root_exponent = 1.0 / static_cast<double >(p_norm);
+    auto root_exponent = 1.0 / static_cast<double>(p_norm);
     return std::pow(summed_mse, root_exponent);
 }
 

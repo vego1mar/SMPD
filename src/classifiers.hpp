@@ -5,7 +5,7 @@
 #include <vector>
 
 namespace classifiers {
-    // This class should be immutable.
+    // This class should be immutable. Represents single vector with a label.
     class ClassVector {
     private:
         std::string label;
@@ -27,6 +27,10 @@ namespace classifiers {
 
         ClassVector &operator=(ClassVector &&rvalue) noexcept = delete;
 
+        bool operator==(const ClassVector &object) const;
+
+        bool operator!=(const ClassVector &object) const;
+
         virtual ~ClassVector() = default;
 
         std::string getIdentifier() const;
@@ -37,6 +41,29 @@ namespace classifiers {
     };
 
     std::string nearest_neighbor(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k = 1);
+
+    // Represents set of labeled vectors. Grouped place for using kNN algorithm.
+    class Cluster {
+    private:
+        std::vector<ClassVector> vectors;
+
+    public:
+        Cluster() = default;
+
+        Cluster(const Cluster &object) = delete;
+
+        Cluster(Cluster &&rvalue) = delete;
+
+        Cluster &operator=(const Cluster &rhs) = delete;
+
+        Cluster &operator=(Cluster &&rvalue) noexcept = delete;
+
+        virtual ~Cluster() = default;
+
+        const std::vector<ClassVector> &getVectors() const;
+
+        bool read(std::string &filepath);
+    };
 
 }
 

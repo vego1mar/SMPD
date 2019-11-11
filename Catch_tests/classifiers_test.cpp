@@ -12,6 +12,7 @@ TEST_CASE("Nearest Neighbor", "[classifiers]") {
             {"B", {3, 8, 2}},
             {"B", {5, 6, 1}},
     };
+    const std::string PATH_VECTORS1 = "../../files/classes_vectors_1";
 
     SECTION("x=(1,7,3), cluster1, k=1 -> 'B'") {
         std::vector<double> input = {1, 7, 3};
@@ -52,5 +53,20 @@ TEST_CASE("Nearest Neighbor", "[classifiers]") {
         };
 
         REQUIRE_THROWS_AS(nn_func(), std::invalid_argument);
+    }
+
+    SECTION("Cluster.read()  ->  OK") {
+        classifiers::Cluster clusterMaster;
+        bool isOK = true;
+
+        clusterMaster.read(const_cast<std::string &>(PATH_VECTORS1));
+
+        for (size_t i = 0; i < clusterMaster.getVectors().size(); i++) {
+            if (clusterMaster.getVectors()[i] != cluster1[i]) {
+                isOK = false;
+            }
+        }
+
+        REQUIRE(isOK);
     }
 }

@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "classifiers.hpp"
 #include "statistical.hpp"
+#include "io_manager.hpp"
 
 namespace classifiers {
     ClassVector::ClassVector(std::string label, std::vector<double> const &features)
@@ -21,6 +22,18 @@ namespace classifiers {
         return features.size() == object.size();
     }
 
+    bool ClassVector::operator==(const ClassVector &object) const {
+        bool isLabelEqual = (this->label == object.getIdentifier());
+        bool isFeaturesEqual = std::equal(this->features.begin(), this->features.end(),
+                                          object.getFeatures().begin());
+        return isLabelEqual && isFeaturesEqual;
+    }
+
+    bool ClassVector::operator!=(const classifiers::ClassVector &object) const {
+        return !operator==(object);
+    }
+
+    // Returns the input vector class label (classifier).
     std::string nearest_neighbor(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k) {
         if (k == 0) {
             throw std::invalid_argument("Parameter of neighbors is set to be k=0.");
@@ -76,4 +89,11 @@ namespace classifiers {
         return neighbor;
     }
 
+    bool Cluster::read(std::string &filepath) {
+        return io_manager::readFileIntoCluster(filepath, this->vectors);
+    }
+
+    const std::vector<ClassVector> &Cluster::getVectors() const {
+        return vectors;
+    }
 }
