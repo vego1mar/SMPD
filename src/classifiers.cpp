@@ -33,8 +33,72 @@ namespace classifiers {
         return !operator==(object);
     }
 
-    // Returns the input vector class label (classifier).
+    Affiliation::Affiliation(u_int nominator, u_int denominator) {
+        fraction = std::to_string(nominator) + '/' + std::to_string(denominator);
+        percent = (static_cast<double>(nominator) / static_cast<double>(denominator)) * 100.0;
+    }
+
+    const std::string &Affiliation::getFraction() const {
+        return fraction;
+    }
+
+    double Affiliation::getPercent() const {
+        return percent;
+    }
+
+    std::string Affiliation::toString() const {
+        return '{' + fraction + ',' + std::to_string(percent) + '}';
+    }
+
+    bool Affiliation::operator==(const Affiliation &object) const {
+        return this->fraction == object.getFraction();
+    }
+
+    ClassificationResult::ClassificationResult(std::string &label, std::vector<double> &features, u_short k,
+                                               Affiliation &affiliation)
+            : label(label), features(features), k(k), affiliation(affiliation) {
+    }
+
+    std::string ClassificationResult::toString() const {
+        return '{' + label + ',' + featuresToString() + ',' + std::to_string(k) + ',' +
+               affiliation.toString() + '}';
+    }
+
+    std::string ClassificationResult::featuresToString() const {
+        std::string result = "[";
+
+        for (auto feature : features) {
+            result += std::to_string(feature) + ',';
+        }
+
+        return result.substr(0, result.size() - 2) + ']';
+    }
+
+    const std::string &ClassificationResult::getLabel() const {
+        return label;
+    }
+
+    bool Cluster::read(std::string &filepath) {
+        return io_manager::readFileIntoCluster(filepath, this->vectors);
+    }
+
+    const std::vector<ClassVector> &Cluster::getVectors() const {
+        return vectors;
+    }
+
+    void Cluster::classify(std::vector<double> &input, u_short k) {
+        classified.emplace_back(nearest_neighbor_2(input, vectors, k));
+    }
+
+    const std::vector<ClassificationResult> &Cluster::getClassified() const {
+        return classified;
+    }
+
     std::string nearest_neighbor(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k) {
+        return nearest_neighbor_2(input, cluster, k).getLabel();
+    }
+
+    ClassificationResult nearest_neighbor_2(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k) {
         if (k == 0) {
             throw std::invalid_argument("Parameter of neighbors is set to be k=0.");
         }
@@ -77,6 +141,7 @@ namespace classifiers {
         }
 
         u_int nearest = 0;
+        u_int total = 0;
         std::string neighbor;
 
         for (const auto &i : counts) {
@@ -84,71 +149,15 @@ namespace classifiers {
                 nearest = i.second;
                 neighbor = i.first;
             }
+
+            total += i.second;
         }
 
-        return neighbor;
+        Affiliation affiliation(nearest, total);
+        return ClassificationResult(neighbor, input, k, affiliation);
     }
 
-    Affiliation::Affiliation(u_int nominator, u_int denominator) {
-        fraction = std::to_string(nominator) + '/' + std::to_string(denominator);
-        percent = (static_cast<double>(nominator) / static_cast<double>(denominator)) * 100.0;
-    }
-
-    const std::string &Affiliation::getFraction() const {
-        return fraction;
-    }
-
-    double Affiliation::getPercent() const {
-        return percent;
-    }
-
-    std::string Affiliation::toString() const {
-        return '{' + fraction + ',' + std::to_string(percent) + '}';
-    }
-
-    bool Cluster::read(std::string &filepath) {
-        return io_manager::readFileIntoCluster(filepath, this->vectors);
-    }
-
-    const std::vector<ClassVector> &Cluster::getVectors() const {
-        return vectors;
-    }
-
-    ClassificationResult::ClassificationResult() :
-            label({}),
-            features({}),
-            k{},
-            affiliation(0, 0) {
-    }
-
-    void ClassificationResult::setLabel(const std::string &resultLabel) {
-        this->label = resultLabel;
-    }
-
-    void ClassificationResult::setFeatures(const std::vector<double> &resultFeatures) {
-        this->features = resultFeatures;
-    }
-
-    void ClassificationResult::setK(u_short resultK) {
-        this->k = resultK;
-    }
-
-    void ClassificationResult::setAffiliation(u_int nominator, u_int denominator) {
-        this->affiliation = Affiliation(nominator, denominator);
-    }
-
-    std::string ClassificationResult::toString() const {
-        return '{' + label + ',' + featuresToString() + ',' + std::to_string(k) + ',' +
-               affiliation.toString() + '}';
-    }
-
-    std::string ClassificationResult::featuresToString() const {
-        std::string result = "[";
-
-        for (auto feature : features) {
-            result += std::to_string(feature) + ',';
-        }
-
-        return result.substr(0, result.size() - 2) + ']';
-    }
+    // TODO: build nearest_neighbor for multiple inputs as (param := std::vector<ClassVector> &inputCluster)
+    // TODO: complete Cluster::classify for single and multiple inputs
+    // TODO: provide nearest_mean(input, cluster) && nearest_mean(cluster, cluster)
 }

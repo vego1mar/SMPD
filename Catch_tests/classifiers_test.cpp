@@ -78,14 +78,78 @@ TEST_CASE("classifiers", "[classifiers]") {
     }
 
     SECTION("ClassificationResult.toString()  ->  OK") {
-        classifiers::ClassificationResult results;
-        results.setLabel("A");
-        results.setFeatures(std::vector<double>({1, 2, 3}));
-        results.setK(4);
-        results.setAffiliation(12, 23);
+        u_short k = 4;
+        std::string label = "A";
+        std::vector<double> input = {1, 2, 3};
+        classifiers::Affiliation affiliation(12, 23);
+        classifiers::ClassificationResult results(label, input, k, affiliation);
 
         auto toString = results.toString();
 
         REQUIRE_THAT(toString, Catch::Equals("{A,[1.000000,2.000000,3.00000],4,{12/23,52.173913}}"));
+    }
+
+    SECTION("x=(1,7,3), cluster1, k=1 -> 'B' [2]") {
+        u_short k = 1;
+        std::vector<double> input = {1, 7, 3};
+        auto result = classifiers::nearest_neighbor_2(input, cluster1, k);
+        std::string expectedResult = "{B,[1.000000,7.000000,3.00000],1,{1/1,100.000000}}";
+
+        REQUIRE_THAT(result.getLabel(), Catch::Equals("B"));
+        REQUIRE_THAT(result.toString(), Catch::Equals(expectedResult));
+    }
+
+    SECTION("x=(1,7,3), cluster1, k=3 -> 'A' [2]") {
+        u_short k = 3;
+        std::vector<double> input = {1, 7, 3};
+        auto result = classifiers::nearest_neighbor_2(input, cluster1, k);
+        std::string expectedResult = "{A,[1.000000,7.000000,3.00000],3,{2/3,66.666667}}";
+
+        REQUIRE_THAT(result.getLabel(), Catch::Equals("A"));
+        REQUIRE_THAT(result.toString(), Catch::Equals(expectedResult));
+    }
+
+    SECTION("x=(2,5,2), cluster1, k=3 -> 'A' [2]") {
+        u_short k = 3;
+        std::vector<double> input = {2, 5, 2};
+        auto result = classifiers::nearest_neighbor_2(input, cluster1, k);
+        std::string expectedString = "{A,[2.000000,5.000000,2.00000],3,{2/3,66.666667}}";
+
+        REQUIRE_THAT(result.getLabel(), Catch::Equals("A"));
+        REQUIRE_THAT(result.toString(), Catch::Equals(expectedString));
+    }
+
+    SECTION("x=(1,0,1), cluster1, k=0 -> throws [2]") {
+        std::vector<double> x = {1, 0, 1};
+
+        auto nn_func = [&]() {
+            return classifiers::nearest_neighbor(x, cluster1, 0);
+        };
+
+        REQUIRE_THROWS_AS(nn_func(), std::invalid_argument);
+    }
+
+    SECTION("x=(1,0), cluster1, k=5 -> throws [2]") {
+        std::vector<double> x = {1, 0};
+
+        auto nn_func = [&]() {
+            return classifiers::nearest_neighbor(x, cluster1, 5);
+        };
+
+        REQUIRE_THROWS_AS(nn_func(), std::invalid_argument);
+    }
+
+    SECTION("Cluster.classify() -> emplace_back(classified)") {
+        std::vector<double> point = {3, 3, 3};
+        u_short k = 5;
+        const std::string EXPECTED_STRING = "{A,[3.000000,3.000000,3.00000],5,{4/5,80.000000}}";
+        classifiers::Cluster bevy;
+        bevy.read(const_cast<std::string &>(PATH_VECTORS1));
+
+        bevy.classify(point, k);
+        auto results = bevy.getClassified();
+
+        REQUIRE(results.size() == 1);
+        REQUIRE_THAT(results[0].toString(), Catch::Equals(EXPECTED_STRING));
     }
 }
