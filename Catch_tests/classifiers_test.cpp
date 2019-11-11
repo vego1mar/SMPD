@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include "../src/classifiers.hpp"
+#include "../src/io_manager.hpp"
 
 TEST_CASE("classifiers", "[classifiers]") {
     std::vector<classifiers::ClassVector> cluster1 = {
@@ -13,6 +14,7 @@ TEST_CASE("classifiers", "[classifiers]") {
             {"B", {5, 6, 1}},
     };
     const std::string PATH_VECTORS1 = "../../files/classes_vectors_1";
+    std::string PATH_INPUT1 = "../../files/classes_unknowns_1";
 
     SECTION("x=(1,7,3), cluster1, k=1 -> 'B'") {
         std::vector<double> input = {1, 7, 3};
@@ -151,5 +153,18 @@ TEST_CASE("classifiers", "[classifiers]") {
 
         REQUIRE(results.size() == 1);
         REQUIRE_THAT(results[0].toString(), Catch::Equals(EXPECTED_STRING));
+    }
+
+    SECTION("nearest_neighbor(inputCluster, cluster, k) -> vector(ClassificationResult)") {
+        classifiers::Cluster cloud;
+        cloud.read(const_cast<std::string &>(PATH_VECTORS1));
+        std::vector<classifiers::ClassVector> inputGroup{};
+        bool isOK = io_manager::readFileIntoCluster(PATH_INPUT1, inputGroup);
+        u_short k = 3;
+
+        cloud.classify(inputGroup, k);
+
+        REQUIRE(isOK);
+        REQUIRE(cloud.getClassified().size() == 2);
     }
 }

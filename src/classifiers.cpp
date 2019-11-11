@@ -90,6 +90,10 @@ namespace classifiers {
         classified.emplace_back(nearest_neighbor_2(input, vectors, k));
     }
 
+    void Cluster::classify(std::vector<ClassVector> &inputGroup, u_short k) {
+        classified = nearest_neighbor(inputGroup, vectors, k);
+    }
+
     const std::vector<ClassificationResult> &Cluster::getClassified() const {
         return classified;
     }
@@ -98,7 +102,7 @@ namespace classifiers {
         return nearest_neighbor_2(input, cluster, k).getLabel();
     }
 
-    ClassificationResult nearest_neighbor_2(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k) {
+    ClassificationResult nearest_neighbor_2(std::vector<double> input, std::vector<ClassVector> &cluster, u_short k) {
         if (k == 0) {
             throw std::invalid_argument("Parameter of neighbors is set to be k=0.");
         }
@@ -157,7 +161,18 @@ namespace classifiers {
         return ClassificationResult(neighbor, input, k, affiliation);
     }
 
-    // TODO: build nearest_neighbor for multiple inputs as (param := std::vector<ClassVector> &inputCluster)
-    // TODO: complete Cluster::classify for single and multiple inputs
+    std::vector<ClassificationResult>
+    nearest_neighbor(std::vector<ClassVector> &inputGroup, std::vector<ClassVector> &cluster, u_short k) {
+        std::vector<ClassificationResult> results{};
+        results.reserve(inputGroup.size());
+
+        for (const auto &vector : inputGroup) {
+            results.emplace_back(nearest_neighbor_2(vector.getFeatures(), cluster, k));
+        }
+
+        return results;
+    }
+
+    // TODO: getClusterList( byName )
     // TODO: provide nearest_mean(input, cluster) && nearest_mean(cluster, cluster)
 }

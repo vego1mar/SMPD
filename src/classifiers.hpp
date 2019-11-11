@@ -119,12 +119,17 @@ namespace classifiers {
 
         void classify(std::vector<double> &input, u_short k);
 
+        void classify(std::vector<ClassVector> &inputGroup, u_short k);
+
         const std::vector<ClassificationResult> &getClassified() const;
     };
 
     std::string nearest_neighbor(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k = 1);
 
-    ClassificationResult nearest_neighbor_2(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k);
+    ClassificationResult nearest_neighbor_2(std::vector<double> input, std::vector<ClassVector> &cluster, u_short k);
+
+    std::vector<ClassificationResult>
+    nearest_neighbor(std::vector<ClassVector> &inputGroup, std::vector<ClassVector> &cluster, u_short k);
 
 }
 
