@@ -1,7 +1,7 @@
 #include "catch.hpp"
 #include "../src/classifiers.hpp"
 
-TEST_CASE("Nearest Neighbor", "[classifiers]") {
+TEST_CASE("classifiers", "[classifiers]") {
     std::vector<classifiers::ClassVector> cluster1 = {
             {"A", {1, 2, 3}},
             {"A", {2, 5, 3}},
@@ -68,5 +68,24 @@ TEST_CASE("Nearest Neighbor", "[classifiers]") {
         }
 
         REQUIRE(isOK);
+    }
+
+    SECTION("Affiliation.getters  ->  OK") {
+        classifiers::Affiliation affiliation(2, 3);
+
+        REQUIRE_THAT(affiliation.getFraction(), Catch::Equals("2/3"));
+        REQUIRE(affiliation.getPercent() == Approx(66.666).margin(3));
+    }
+
+    SECTION("ClassificationResult.toString()  ->  OK") {
+        classifiers::ClassificationResult results;
+        results.setLabel("A");
+        results.setFeatures(std::vector<double>({1, 2, 3}));
+        results.setK(4);
+        results.setAffiliation(12, 23);
+
+        auto toString = results.toString();
+
+        REQUIRE_THAT(toString, Catch::Equals("{A,[1.000000,2.000000,3.00000],4,{12/23,52.173913}}"));
     }
 }

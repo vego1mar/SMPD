@@ -89,11 +89,66 @@ namespace classifiers {
         return neighbor;
     }
 
+    Affiliation::Affiliation(u_int nominator, u_int denominator) {
+        fraction = std::to_string(nominator) + '/' + std::to_string(denominator);
+        percent = (static_cast<double>(nominator) / static_cast<double>(denominator)) * 100.0;
+    }
+
+    const std::string &Affiliation::getFraction() const {
+        return fraction;
+    }
+
+    double Affiliation::getPercent() const {
+        return percent;
+    }
+
+    std::string Affiliation::toString() const {
+        return '{' + fraction + ',' + std::to_string(percent) + '}';
+    }
+
     bool Cluster::read(std::string &filepath) {
         return io_manager::readFileIntoCluster(filepath, this->vectors);
     }
 
     const std::vector<ClassVector> &Cluster::getVectors() const {
         return vectors;
+    }
+
+    ClassificationResult::ClassificationResult() :
+            label({}),
+            features({}),
+            k{},
+            affiliation(0, 0) {
+    }
+
+    void ClassificationResult::setLabel(const std::string &resultLabel) {
+        this->label = resultLabel;
+    }
+
+    void ClassificationResult::setFeatures(const std::vector<double> &resultFeatures) {
+        this->features = resultFeatures;
+    }
+
+    void ClassificationResult::setK(u_short resultK) {
+        this->k = resultK;
+    }
+
+    void ClassificationResult::setAffiliation(u_int nominator, u_int denominator) {
+        this->affiliation = Affiliation(nominator, denominator);
+    }
+
+    std::string ClassificationResult::toString() const {
+        return '{' + label + ',' + featuresToString() + ',' + std::to_string(k) + ',' +
+               affiliation.toString() + '}';
+    }
+
+    std::string ClassificationResult::featuresToString() const {
+        std::string result = "[";
+
+        for (auto feature : features) {
+            result += std::to_string(feature) + ',';
+        }
+
+        return result.substr(0, result.size() - 2) + ']';
     }
 }
