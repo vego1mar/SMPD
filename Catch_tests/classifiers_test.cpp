@@ -167,4 +167,40 @@ TEST_CASE("classifiers", "[classifiers]") {
         REQUIRE(isOK);
         REQUIRE(cloud.getClassified().size() == 2);
     }
+
+    SECTION("Cluster.getSubCluster('A') -> outCluster('A')") {
+        classifiers::Cluster cloud;
+        cloud.read(const_cast<std::string &>(PATH_VECTORS1));
+        std::vector<classifiers::ClassVector> inputGroup{};
+        bool isOK = io_manager::readFileIntoCluster(PATH_INPUT1, inputGroup);
+        u_short k = 3;
+        std::vector<classifiers::ClassVector> expectedVectors;
+        expectedVectors = std::vector<classifiers::ClassVector>(cluster1.begin(), cluster1.begin() + 4);
+        expectedVectors.emplace_back("A", std::vector<double>({1, 7, 3}));
+        expectedVectors.emplace_back("A", std::vector<double>({2, 5, 2}));
+
+        cloud.classify(inputGroup, k);
+        std::vector<classifiers::ClassVector> outCluster = cloud.getSubCluster("A");
+
+        REQUIRE(isOK);
+        REQUIRE(cloud.getClassified().size() == 2);
+        REQUIRE_THAT(outCluster, Catch::UnorderedEquals(expectedVectors));
+    }
+
+    SECTION("Cluster.getSubClusters() -> outCluster[2][4]") {
+        classifiers::Cluster cloud;
+        cloud.read(const_cast<std::string &>(PATH_VECTORS1));
+        std::vector<classifiers::ClassVector> expectedGroupA;
+        std::vector<classifiers::ClassVector> expectedGroupB;
+        expectedGroupA = std::vector<classifiers::ClassVector>(cluster1.begin(), cluster1.begin() + 4);
+        expectedGroupB = std::vector<classifiers::ClassVector>(cluster1.begin() + 4, cluster1.end());
+
+        std::vector<std::vector<classifiers::ClassVector>> outCluster = cloud.getSubClusters();
+
+        REQUIRE(outCluster.size() == 2);
+        REQUIRE(outCluster[0].size() == 4);
+        REQUIRE(outCluster[1].size() == 4);
+        REQUIRE_THAT(outCluster[0], Catch::UnorderedEquals(expectedGroupA));
+        REQUIRE_THAT(outCluster[1], Catch::UnorderedEquals(expectedGroupB));
+    }
 }

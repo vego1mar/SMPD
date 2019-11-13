@@ -91,6 +91,8 @@ namespace classifiers {
 
         const std::string &getLabel() const;
 
+        ClassVector getClassVector() const;
+
     private:
         std::string featuresToString() const;
     };
@@ -122,6 +124,10 @@ namespace classifiers {
         void classify(std::vector<ClassVector> &inputGroup, u_short k);
 
         const std::vector<ClassificationResult> &getClassified() const;
+
+        std::vector<ClassVector> getSubCluster(const std::string &label) const;
+
+        std::vector<std::vector<ClassVector>> getSubClusters() const;
     };
 
     std::string nearest_neighbor(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k = 1);

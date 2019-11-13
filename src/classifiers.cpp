@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include <unordered_map>
+#include <set>
 #include "classifiers.hpp"
 #include "statistical.hpp"
 #include "io_manager.hpp"
@@ -78,6 +79,10 @@ namespace classifiers {
         return label;
     }
 
+    ClassVector ClassificationResult::getClassVector() const {
+        return ClassVector(label, features);
+    }
+
     bool Cluster::read(std::string &filepath) {
         return io_manager::readFileIntoCluster(filepath, this->vectors);
     }
@@ -96,6 +101,46 @@ namespace classifiers {
 
     const std::vector<ClassificationResult> &Cluster::getClassified() const {
         return classified;
+    }
+
+    std::vector<ClassVector> Cluster::getSubCluster(const std::string &label) const {
+        std::vector<ClassVector> outCluster{};
+
+        for (const auto &classVector : vectors) {
+            if (classVector.getIdentifier() == label) {
+                outCluster.push_back(classVector);
+            }
+        }
+
+        for (const auto &classificationResult : classified) {
+            if (classificationResult.getLabel() == label) {
+                outCluster.push_back(classificationResult.getClassVector());
+            }
+        }
+
+        return outCluster;
+    }
+
+    std::vector<std::vector<ClassVector>> Cluster::getSubClusters() const {
+        std::vector<std::vector<ClassVector>> outClusters;
+        std::set<std::string> labelsSet;
+
+        for (const auto &classVector : vectors) {
+            bool isLabelInSet = labelsSet.find(classVector.getIdentifier()) != labelsSet.end();
+
+            if (!isLabelInSet) {
+                labelsSet.insert(classVector.getIdentifier());
+                continue;
+            }
+        }
+
+        outClusters.reserve(labelsSet.size());
+
+        for (const auto &label : labelsSet) {
+            outClusters.push_back(getSubCluster(label));
+        }
+
+        return outClusters;
     }
 
     std::string nearest_neighbor(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k) {
@@ -173,6 +218,5 @@ namespace classifiers {
         return results;
     }
 
-    // TODO: getClusterList( byName )
     // TODO: provide nearest_mean(input, cluster) && nearest_mean(cluster, cluster)
 }
