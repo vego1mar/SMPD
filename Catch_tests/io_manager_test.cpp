@@ -6,7 +6,7 @@ TEST_CASE("readFileIntoCluster", "[io_manager]") {
 
     SECTION("readFileIntoCluster() -> 'classes_vectors_1' [8]") {
         // GIVEN
-        std::vector<classifiers::ClassVector> cluster;
+        std::vector<casing::ClassVector> cluster;
         std::vector<std::vector<double>> expectedFeatures = {
                 {1, 2, 3},
                 {2, 5, 3},
@@ -28,7 +28,7 @@ TEST_CASE("readFileIntoCluster", "[io_manager]") {
         REQUIRE(cluster.size() == CLASSES_VECTORS_NO);
 
         for (const auto &classVector : cluster) {
-            REQUIRE_THAT(classVector.getIdentifier(), Catch::Equals("A") || Catch::Equals("B"));
+            REQUIRE_THAT(classVector.getLabel(), Catch::Equals("A") || Catch::Equals("B"));
             REQUIRE_THAT(classVector.getFeatures(), Catch::UnorderedEquals(expectedFeatures[i]));
             i++;
         }

@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "classifiers.hpp"
+#include "casing.hpp"
 
 namespace io_manager {
 
@@ -11,7 +11,7 @@ namespace io_manager {
 
     bool readFileToBuffer(std::string &path, std::vector<char> &buffer);
 
-    bool readFileIntoCluster(std::string &path, std::vector<classifiers::ClassVector> &cluster);
+    bool readFileIntoCluster(std::string &path, std::vector<casing::ClassVector> &cluster);
 
 }
 

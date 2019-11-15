@@ -1,153 +1,19 @@
 #include <stdexcept>
+#include <tuple>
 #include <algorithm>
 #include <unordered_map>
-#include <set>
 #include "classifiers.hpp"
+#include "casing.hpp"
 #include "statistical.hpp"
-#include "io_manager.hpp"
+#include "helpers.hpp"
 
 namespace classifiers {
-    ClassVector::ClassVector(std::string label, std::vector<double> const &features)
-            : label(std::move(label)), features(features) {
-    }
-
-    std::string ClassVector::getIdentifier() const {
-        return label;
-    }
-
-    std::vector<double> ClassVector::getFeatures() const {
-        return std::vector<double>(features);
-    }
-
-    bool ClassVector::hasSameFeaturesSize(const std::vector<double> &object) const {
-        return features.size() == object.size();
-    }
-
-    bool ClassVector::operator==(const ClassVector &object) const {
-        bool isLabelEqual = (this->label == object.getIdentifier());
-        bool isFeaturesEqual = std::equal(this->features.begin(), this->features.end(),
-                                          object.getFeatures().begin());
-        return isLabelEqual && isFeaturesEqual;
-    }
-
-    bool ClassVector::operator!=(const classifiers::ClassVector &object) const {
-        return !operator==(object);
-    }
-
-    Affiliation::Affiliation(u_int nominator, u_int denominator) {
-        fraction = std::to_string(nominator) + '/' + std::to_string(denominator);
-        percent = (static_cast<double>(nominator) / static_cast<double>(denominator)) * 100.0;
-    }
-
-    const std::string &Affiliation::getFraction() const {
-        return fraction;
-    }
-
-    double Affiliation::getPercent() const {
-        return percent;
-    }
-
-    std::string Affiliation::toString() const {
-        return '{' + fraction + ',' + std::to_string(percent) + '}';
-    }
-
-    bool Affiliation::operator==(const Affiliation &object) const {
-        return this->fraction == object.getFraction();
-    }
-
-    ClassificationResult::ClassificationResult(std::string &label, std::vector<double> &features, u_short k,
-                                               Affiliation &affiliation)
-            : label(label), features(features), k(k), affiliation(affiliation) {
-    }
-
-    std::string ClassificationResult::toString() const {
-        return '{' + label + ',' + featuresToString() + ',' + std::to_string(k) + ',' +
-               affiliation.toString() + '}';
-    }
-
-    std::string ClassificationResult::featuresToString() const {
-        std::string result = "[";
-
-        for (auto feature : features) {
-            result += std::to_string(feature) + ',';
-        }
-
-        return result.substr(0, result.size() - 2) + ']';
-    }
-
-    const std::string &ClassificationResult::getLabel() const {
-        return label;
-    }
-
-    ClassVector ClassificationResult::getClassVector() const {
-        return ClassVector(label, features);
-    }
-
-    bool Cluster::read(std::string &filepath) {
-        return io_manager::readFileIntoCluster(filepath, this->vectors);
-    }
-
-    const std::vector<ClassVector> &Cluster::getVectors() const {
-        return vectors;
-    }
-
-    void Cluster::classify(std::vector<double> &input, u_short k) {
-        classified.emplace_back(nearest_neighbor_2(input, vectors, k));
-    }
-
-    void Cluster::classify(std::vector<ClassVector> &inputGroup, u_short k) {
-        classified = nearest_neighbor(inputGroup, vectors, k);
-    }
-
-    const std::vector<ClassificationResult> &Cluster::getClassified() const {
-        return classified;
-    }
-
-    std::vector<ClassVector> Cluster::getSubCluster(const std::string &label) const {
-        std::vector<ClassVector> outCluster{};
-
-        for (const auto &classVector : vectors) {
-            if (classVector.getIdentifier() == label) {
-                outCluster.push_back(classVector);
-            }
-        }
-
-        for (const auto &classificationResult : classified) {
-            if (classificationResult.getLabel() == label) {
-                outCluster.push_back(classificationResult.getClassVector());
-            }
-        }
-
-        return outCluster;
-    }
-
-    std::vector<std::vector<ClassVector>> Cluster::getSubClusters() const {
-        std::vector<std::vector<ClassVector>> outClusters;
-        std::set<std::string> labelsSet;
-
-        for (const auto &classVector : vectors) {
-            bool isLabelInSet = labelsSet.find(classVector.getIdentifier()) != labelsSet.end();
-
-            if (!isLabelInSet) {
-                labelsSet.insert(classVector.getIdentifier());
-                continue;
-            }
-        }
-
-        outClusters.reserve(labelsSet.size());
-
-        for (const auto &label : labelsSet) {
-            outClusters.push_back(getSubCluster(label));
-        }
-
-        return outClusters;
-    }
-
-    std::string nearest_neighbor(std::vector<double> &input, std::vector<ClassVector> &cluster, u_short k) {
+    std::string nearest_neighbor(std::vector<double> &input, std::vector<casing::ClassVector> &cluster, u_short k) {
         return nearest_neighbor_2(input, cluster, k).getLabel();
     }
 
-    ClassificationResult nearest_neighbor_2(std::vector<double> input, std::vector<ClassVector> &cluster, u_short k) {
+    casing::NNResultSet
+    nearest_neighbor_2(std::vector<double> input, std::vector<casing::ClassVector> &cluster, u_short k) {
         if (k == 0) {
             throw std::invalid_argument("Parameter of neighbors is set to be k=0.");
         }
@@ -164,7 +30,7 @@ namespace classifiers {
         for (size_t i = 0; i < cluster.size(); i++) {
             std::vector<double> currentPoint = cluster[i].getFeatures();
             double distance = statistical::geometric_distance(input, currentPoint);
-            markers.emplace_back(std::make_tuple(cluster[i].getIdentifier(), distance, i));
+            markers.emplace_back(std::make_tuple(cluster[i].getLabel(), distance, i));
         }
 
         if (k > markers.size()) {
@@ -202,13 +68,14 @@ namespace classifiers {
             total += i.second;
         }
 
-        Affiliation affiliation(nearest, total);
-        return ClassificationResult(neighbor, input, k, affiliation);
+        casing::Affiliation affiliation(nearest, total);
+        return casing::NNResultSet(neighbor, input, k, affiliation);
     }
 
-    std::vector<ClassificationResult>
-    nearest_neighbor(std::vector<ClassVector> &inputGroup, std::vector<ClassVector> &cluster, u_short k) {
-        std::vector<ClassificationResult> results{};
+    std::vector<casing::NNResultSet>
+    nearest_neighbor(std::vector<casing::ClassVector> &inputGroup, std::vector<casing::ClassVector> &cluster,
+                     u_short k) {
+        std::vector<casing::NNResultSet> results{};
         results.reserve(inputGroup.size());
 
         for (const auto &vector : inputGroup) {
@@ -218,5 +85,39 @@ namespace classifiers {
         return results;
     }
 
-    // TODO: provide nearest_mean(input, cluster) && nearest_mean(cluster, cluster)
+    std::string nearest_mean(std::vector<double> &input, std::vector<casing::ClassVector> &cluster) {
+        helpers::checkVectorSizes(input, cluster);
+        auto subClusters = helpers::getSubClusters(cluster);
+        auto meanVectors = helpers::getMeanVectors(subClusters);
+
+        std::vector<double> distances;
+        distances.resize(subClusters.size());
+        size_t i = 0;
+
+        for (auto &mean : meanVectors) {
+            distances[i] = statistical::geometric_distance(mean, input);
+            i++;
+        }
+
+        auto lowestIndex = helpers::getLowestValueIndex(distances);
+        return subClusters[lowestIndex][0].getLabel();
+    }
+
+    std::vector<std::string>
+    nearest_mean(std::vector<casing::ClassVector> &inputGroup, std::vector<casing::ClassVector> &cluster) {
+        std::vector<std::string> labels;
+        labels.reserve(inputGroup.size());
+        int i = 0;
+
+        for (const auto &classVector : inputGroup) {
+            auto input = classVector.getFeatures();
+            labels[i] = nearest_mean(input, cluster);
+            i++;
+        }
+
+        return labels;
+    }
+
+    // TODO: storeResults()
+    // TODO: casing/classifiers test split
 }

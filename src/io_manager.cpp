@@ -38,7 +38,7 @@ bool io_manager::readFileToBuffer(std::string &path, std::vector<char> &buffer) 
     return true;
 }
 
-bool io_manager::readFileIntoCluster(std::string &path, std::vector<classifiers::ClassVector> &cluster) {
+bool io_manager::readFileIntoCluster(std::string &path, std::vector<casing::ClassVector> &cluster) {
     std::ifstream file(path, std::ios::out);
 
     if (!file.is_open()) {
@@ -53,7 +53,7 @@ bool io_manager::readFileIntoCluster(std::string &path, std::vector<classifiers:
         std::string label;
         iss >> label;
         std::vector<double> features((std::istream_iterator<double>(iss)), std::istream_iterator<double>());
-        cluster.emplace_back(classifiers::ClassVector(label, features));
+        cluster.emplace_back(casing::ClassVector(label, features));
     }
 
     file.close();
