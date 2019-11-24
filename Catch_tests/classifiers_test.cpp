@@ -28,8 +28,9 @@ TEST_CASE("classifiers", "[classifiers]") {
             {"B", {3, 8, 2}},
             {"B", {5, 6, 1}},
     };
-    std::string PATH_VECTORS1 = "../../files/classes_vectors_1";
-    std::string PATH_INPUT1 = "../../files/classes_unknowns_1";
+    std::string PATH_VECTORS_1 = "../../files/classes_vectors_1";
+    std::string PATH_VECTORS_2 = "../../files/classes_vectors_2";
+    std::string PATH_INPUT_1 = "../../files/classes_unknowns_1";
 
     SECTION("x=(1,7,3), CLUSTER1, k=1 -> 'B'") {
         std::vector<double> input = {1, 7, 3};
@@ -124,9 +125,9 @@ TEST_CASE("classifiers", "[classifiers]") {
 
     SECTION("nearest_neighbor(CLUSTER_FILE, k) -> vector(NNResultSet)") {
         NNCluster cloud;
-        cloud.read(PATH_VECTORS1);
+        cloud.read(PATH_VECTORS_1);
         Cluster inputGroup{};
-        bool isOK = io_manager::readFileIntoCluster(PATH_INPUT1, inputGroup);
+        bool isOK = io_manager::readFileIntoCluster(PATH_INPUT_1, inputGroup);
         u_short k = 3;
 
         cloud.classify(inputGroup, k);
@@ -160,9 +161,9 @@ TEST_CASE("classifiers", "[classifiers]") {
 
     SECTION("nearest_neighbor(INPUT_FILE, CLUSTER_FILE, k=3) -> [A,A]") {
         NNCluster cloud;
-        cloud.read(PATH_VECTORS1);
+        cloud.read(PATH_VECTORS_1);
         Cluster inputGroup{};
-        bool isOK = io_manager::readFileIntoCluster(PATH_INPUT1, inputGroup);
+        bool isOK = io_manager::readFileIntoCluster(PATH_INPUT_1, inputGroup);
         u_short k = 3;
         std::vector<std::string> expected = {
                 "{A,[1.000000,7.000000,3.00000],3,{2/3,66.666667}}",
@@ -185,8 +186,8 @@ TEST_CASE("classifiers", "[classifiers]") {
     SECTION("nearest_mean(INPUT_FILE, CLUSTER_FILE) -> [A,A]") {
         Cluster inputGroup;
         Cluster baseCluster;
-        bool isInputGroupOK = io_manager::readFileIntoCluster(PATH_INPUT1, inputGroup);
-        bool isBaseClusterOK = io_manager::readFileIntoCluster(PATH_VECTORS1, baseCluster);
+        bool isInputGroupOK = io_manager::readFileIntoCluster(PATH_INPUT_1, inputGroup);
+        bool isBaseClusterOK = io_manager::readFileIntoCluster(PATH_VECTORS_1, baseCluster);
         std::vector<std::string> expected = {"A", "A"};
 
         auto labels = classifiers::nearest_mean(inputGroup, baseCluster);
@@ -195,5 +196,16 @@ TEST_CASE("classifiers", "[classifiers]") {
         REQUIRE(isBaseClusterOK);
         REQUIRE(labels.size() == 2);
         REQUIRE_THAT(labels, Catch::UnorderedEquals(expected));
+    }
+
+    SECTION("k_means(CLUSTER_FILE_2, k=3) -> ???") {
+        Cluster base;
+        io_manager::readFileIntoCluster(PATH_VECTORS_2, base);
+        u_short k = 3;
+
+        auto result = classifiers::k_means(base, k);
+
+        REQUIRE(!result.empty());
+        REQUIRE(result.size() == k);
     }
 }

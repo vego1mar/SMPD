@@ -74,4 +74,24 @@ namespace classifiers {
         return labels;
     }
 
+    std::vector<Cluster> k_means(Cluster &cluster, u_short k) {
+        if (k <= 0 || k >= cluster.size()) {
+            throw std::invalid_argument("k <= 0 || k >= cluster.size()");
+        }
+
+        helpers::checkVectorSizes(cluster);
+
+        // TODO: @ordinals = getOrdinalSequence(0,k+1) -> for indices of &cluster
+        // TODO: shuffle @ordinals -> obtain random permutation
+        // TODO: set @indicator for first @k indices in @ordinals--@cluster -> (0..k) will denote random centers
+        // TODO: populate structures now or later (previous-next centers, solution subclasses)
+        // TODO: start a cycle ??? -- restrict with MAX_ITER
+        // TODO: determineSubLabelsInOrder(from=@cluster, using=@ordinals, with=@indicator) -> getMin(computeDists())
+        // TODO: computeMeans(selectSubClasses(byIndices)) -> set them as new centers
+        // TODO: computeCentersCloseness(previousCenters, newCenters) -> check condition delta(error)
+        // TODO: fold solution using subclasses vector
+        // TODO: alter return statement
+        return std::vector<Cluster>();
+    }
+
 }

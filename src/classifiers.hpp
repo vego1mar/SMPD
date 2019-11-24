@@ -20,6 +20,8 @@ namespace classifiers {
 
     std::vector<std::string> nearest_mean(Cluster &inputGroup, Cluster &cluster);
 
+    std::vector<Cluster> k_means(Cluster &cluster, u_short k);
+
 }
 
 #endif //CLASSIFIERS_HPP

@@ -52,6 +52,20 @@ namespace helpers {
         }
     }
 
+    void checkVectorSizes(Cluster &cluster) {
+        if (cluster.empty()) {
+            return;
+        }
+
+        auto vectorSize = cluster[0].getFeatures().size();
+
+        for (const auto &classVector : cluster) {
+            if (classVector.getFeatures().size() != vectorSize) {
+                throw std::invalid_argument("Feature sizes differs!");
+            }
+        }
+    }
+
     std::vector<std::vector<double>> getMeanVectors(std::vector<Cluster> &subClusters) {
         std::vector<std::vector<double>> meanVectors;
         meanVectors.resize(subClusters.size());

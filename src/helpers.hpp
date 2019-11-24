@@ -25,6 +25,8 @@ namespace helpers {
 
     void checkVectorSizes(std::vector<double> &input, Cluster &cluster);
 
+    void checkVectorSizes(Cluster &cluster);
+
     std::vector<std::vector<double>> getMeanVectors(std::vector<Cluster> &subClusters);
 
     std::vector<double> getMeanVector(Cluster &cluster);
