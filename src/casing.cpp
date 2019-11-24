@@ -20,15 +20,11 @@ namespace casing {
         return std::vector<double>(features);
     }
 
-    bool ClassVector::hasSameFeaturesSize(const std::vector<double> &object) const {
-        return features.size() == object.size();
-    }
-
     bool ClassVector::operator==(const ClassVector &object) const {
         bool isLabelEqual = (this->label == object.getLabel());
-        bool isFeaturesEqual = std::equal(this->features.begin(), this->features.end(),
-                                          object.getFeatures().begin());
-        return isLabelEqual && isFeaturesEqual;
+        bool areFeaturesEqual = std::equal(this->features.begin(), this->features.end(),
+                                           object.getFeatures().begin());
+        return isLabelEqual && areFeaturesEqual;
     }
 
     bool ClassVector::operator!=(const ClassVector &object) const {
@@ -56,8 +52,7 @@ namespace casing {
         return this->fraction == object.getFraction();
     }
 
-    NNResultSet::NNResultSet(std::string &label, std::vector<double> &features, u_short k,
-                             Affiliation &affiliation)
+    NNResultSet::NNResultSet(std::string &label, std::vector<double> &features, u_short k, Affiliation &affiliation)
             : label(label), features(features), k(k), affiliation(affiliation) {
     }
 
@@ -84,28 +79,28 @@ namespace casing {
         return ClassVector(label, features);
     }
 
-    bool SuperCluster::read(std::string &filepath) {
+    bool NNCluster::read(std::string &filepath) {
         return io_manager::readFileIntoCluster(filepath, this->vectors);
     }
 
-    const std::vector<ClassVector> &SuperCluster::getVectors() const {
+    const Cluster &NNCluster::getVectors() const {
         return vectors;
     }
 
-    void SuperCluster::classify(std::vector<double> &input, u_short k) {
+    void NNCluster::classify(std::vector<double> &input, u_short k) {
         classifiedByNN.emplace_back(classifiers::nearest_neighbor_2(input, vectors, k));
     }
 
-    void SuperCluster::classify(std::vector<ClassVector> &inputGroup, u_short k) {
+    void NNCluster::classify(Cluster &inputGroup, u_short k) {
         classifiedByNN = classifiers::nearest_neighbor(inputGroup, vectors, k);
     }
 
-    const std::vector<NNResultSet> &SuperCluster::getClassified() const {
+    const std::vector<NNResultSet> &NNCluster::getClassified() const {
         return classifiedByNN;
     }
 
-    std::vector<ClassVector> SuperCluster::getSubCluster(const std::string &label) const {
-        std::vector<ClassVector> outCluster{};
+    Cluster NNCluster::getSubCluster(const std::string &label) const {
+        Cluster outCluster{};
 
         for (const auto &classVector : vectors) {
             if (classVector.getLabel() == label) {
@@ -122,8 +117,8 @@ namespace casing {
         return outCluster;
     }
 
-    std::vector<std::vector<ClassVector>> SuperCluster::getSubClusters() {
-        std::vector<std::vector<ClassVector>> outClusters;
+    std::vector<Cluster> NNCluster::getSubClusters() {
+        std::vector<Cluster> outClusters;
         auto labelsSet = helpers::getClustersLabels(vectors);
         outClusters.reserve(labelsSet.size());
 

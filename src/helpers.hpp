@@ -5,24 +5,38 @@
 #include <vector>
 #include <set>
 #include <stdexcept>
+#include <unordered_map>
 #include "casing.hpp"
 
 using namespace casing;
 
 namespace helpers {
-    std::vector<ClassVector> getSubCluster(const std::string &label, std::vector<ClassVector> &vectors);
+    typedef std::tuple<std::string, double, size_t> DistRecord;
+    typedef std::vector<DistRecord> DistRecordList;
+    typedef std::unordered_map<std::string, u_int> LabelsMap;
 
-    std::set<std::string> getClustersLabels(std::vector<ClassVector> &vectors);
 
-    std::vector<std::vector<ClassVector>> getSubClusters(std::vector<ClassVector> &vectors);
+    Cluster getSubCluster(const std::string &label, Cluster &vectors);
 
-    void checkVectorSizes(std::vector<double> &input, std::vector<ClassVector> &cluster);
+    std::set<std::string> getClustersLabels(Cluster &vectors);
 
-    std::vector<std::vector<double>> getMeanVectors(std::vector<std::vector<casing::ClassVector>> &subClusters);
+    std::vector<Cluster> getSubClusters(Cluster &vectors);
 
-    std::vector<double> getMeanVector(std::vector<ClassVector> &cluster);
+    void checkVectorSizes(std::vector<double> &input, Cluster &cluster);
+
+    std::vector<std::vector<double>> getMeanVectors(std::vector<Cluster> &subClusters);
+
+    std::vector<double> getMeanVector(Cluster &cluster);
 
     int getLowestValueIndex(std::vector<double> &features);
+
+    DistRecordList getDistanceRecords(std::vector<double> &input, Cluster &cluster);
+
+    void sortDistanceRecords(DistRecordList &records);
+
+    LabelsMap getDistinctLabelsCounts(DistRecordList &records, u_short k);
+
+    std::tuple<std::string, Affiliation> getNearestNeighborAndAffiliation(LabelsMap &counts);
 
 }
 

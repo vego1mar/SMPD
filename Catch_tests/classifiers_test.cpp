@@ -67,8 +67,8 @@ TEST_CASE("classifiers", "[classifiers]") {
 //        REQUIRE_THROWS_AS(nn_func(), std::invalid_argument);
 //    }
 //
-//    SECTION("SuperCluster.read()  ->  OK") {
-//        casing::SuperCluster clusterMaster;
+//    SECTION("NNCluster.read()  ->  OK") {
+//        casing::NNCluster clusterMaster;
 //        bool isOK = true;
 //
 //        clusterMaster.read(const_cast<std::string &>(PATH_VECTORS1));
@@ -151,11 +151,11 @@ TEST_CASE("classifiers", "[classifiers]") {
 //        REQUIRE_THROWS_AS(nn_func(), std::invalid_argument);
 //    }
 //
-//    SECTION("SuperCluster.classify() -> emplace_back(classifiedByNN)") {
+//    SECTION("NNCluster.classify() -> emplace_back(classifiedByNN)") {
 //        std::vector<double> point = {3, 3, 3};
 //        u_short k = 5;
 //        const std::string EXPECTED_STRING = "{A,[3.000000,3.000000,3.00000],5,{4/5,80.000000}}";
-//        casing::SuperCluster bevy;
+//        casing::NNCluster bevy;
 //        bevy.read(const_cast<std::string &>(PATH_VECTORS1));
 //
 //        bevy.classify(point, k);
@@ -166,7 +166,7 @@ TEST_CASE("classifiers", "[classifiers]") {
 //    }
 //
 //    SECTION("nearest_neighbor(inputCluster, cluster, k) -> vector(NNResultSet)") {
-//        casing::SuperCluster cloud;
+//        casing::NNCluster cloud;
 //        cloud.read(const_cast<std::string &>(PATH_VECTORS1));
 //        std::vector<casing::ClassVector> inputGroup{};
 //        bool isOK = io_manager::readFileIntoCluster(PATH_INPUT1, inputGroup);
@@ -178,8 +178,8 @@ TEST_CASE("classifiers", "[classifiers]") {
 //        REQUIRE(cloud.getClassified().size() == 2);
 //    }
 //
-//    SECTION("SuperCluster.getSubCluster('A') -> outCluster('A')") {
-//        casing::SuperCluster cloud;
+//    SECTION("NNCluster.getSubCluster('A') -> outCluster('A')") {
+//        casing::NNCluster cloud;
 //        cloud.read(const_cast<std::string &>(PATH_VECTORS1));
 //        std::vector<casing::ClassVector> inputGroup{};
 //        bool isOK = io_manager::readFileIntoCluster(PATH_INPUT1, inputGroup);
@@ -197,8 +197,8 @@ TEST_CASE("classifiers", "[classifiers]") {
 //        REQUIRE_THAT(outCluster, Catch::UnorderedEquals(expectedVectors));
 //    }
 //
-//    SECTION("SuperCluster.getSubClusters() -> outCluster[2][4]") {
-//        casing::SuperCluster cloud;
+//    SECTION("NNCluster.getSubClusters() -> outCluster[2][4]") {
+//        casing::NNCluster cloud;
 //        cloud.read(const_cast<std::string &>(PATH_VECTORS1));
 //        std::vector<casing::ClassVector> expectedGroupA;
 //        std::vector<casing::ClassVector> expectedGroupB;

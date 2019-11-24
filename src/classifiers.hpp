@@ -5,21 +5,19 @@
 #include <vector>
 #include "casing.hpp"
 
+using namespace casing;
+
 namespace classifiers {
 
-    std::string nearest_neighbor(std::vector<double> &input, std::vector<casing::ClassVector> &cluster, u_short k = 1);
+    std::string nearest_neighbor(std::vector<double> &input, Cluster &cluster, u_short k = 1);
 
-    casing::NNResultSet
-    nearest_neighbor_2(std::vector<double> input, std::vector<casing::ClassVector> &cluster, u_short k);
+    NNResultSet nearest_neighbor_2(std::vector<double> input, Cluster &cluster, u_short k);
 
-    std::vector<casing::NNResultSet>
-    nearest_neighbor(std::vector<casing::ClassVector> &inputGroup, std::vector<casing::ClassVector> &cluster,
-                     u_short k);
+    std::vector<NNResultSet> nearest_neighbor(Cluster &inputGroup, Cluster &cluster, u_short k);
 
-    std::string nearest_mean(std::vector<double> &input, std::vector<casing::ClassVector> &cluster);
+    std::string nearest_mean(std::vector<double> &input, Cluster &cluster);
 
-    std::vector<std::string>
-    nearest_mean(std::vector<casing::ClassVector> &inputGroup, std::vector<casing::ClassVector> &cluster);
+    std::vector<std::string> nearest_mean(Cluster &inputGroup, Cluster &cluster);
 
 }
 

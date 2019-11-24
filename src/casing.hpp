@@ -34,9 +34,10 @@ namespace casing {
         std::string getLabel() const;
 
         std::vector<double> getFeatures() const;
-
-        bool hasSameFeaturesSize(const std::vector<double> &object) const;
     };
+
+    typedef std::vector<ClassVector> Cluster;
+
 
     class Affiliation {
     private:
@@ -97,37 +98,37 @@ namespace casing {
         std::string featuresToString() const;
     };
 
-    class SuperCluster {
+    class NNCluster {
     private:
-        std::vector<ClassVector> vectors;
+        Cluster vectors;
         std::vector<NNResultSet> classifiedByNN;
 
     public:
-        SuperCluster() = default;
+        NNCluster() = default;
 
-        SuperCluster(const SuperCluster &object) = delete;
+        NNCluster(const NNCluster &object) = delete;
 
-        SuperCluster(SuperCluster &&rvalue) = delete;
+        NNCluster(NNCluster &&rvalue) = delete;
 
-        SuperCluster &operator=(const SuperCluster &rhs) = delete;
+        NNCluster &operator=(const NNCluster &rhs) = delete;
 
-        SuperCluster &operator=(SuperCluster &&rvalue) noexcept = delete;
+        NNCluster &operator=(NNCluster &&rvalue) noexcept = delete;
 
-        virtual ~SuperCluster() = default;
+        virtual ~NNCluster() = default;
 
-        const std::vector<ClassVector> &getVectors() const;
+        const Cluster &getVectors() const;
 
         bool read(std::string &filepath);
 
         void classify(std::vector<double> &input, u_short k);
 
-        void classify(std::vector<ClassVector> &inputGroup, u_short k);
+        void classify(Cluster &inputGroup, u_short k);
 
         const std::vector<NNResultSet> &getClassified() const;
 
-        std::vector<ClassVector> getSubCluster(const std::string &label) const;
+        Cluster getSubCluster(const std::string &label) const;
 
-        std::vector<std::vector<ClassVector>> getSubClusters();
+        std::vector<Cluster> getSubClusters();
     };
 
 }
