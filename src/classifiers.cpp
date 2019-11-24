@@ -74,5 +74,4 @@ namespace classifiers {
         return labels;
     }
 
-    // TODO: helpers::storeResults()
 }

@@ -1,10 +1,15 @@
+#include <fstream>
 #include "catch.hpp"
 #include "../src/io_manager.hpp"
+#include "../src/classifiers.hpp"
 
 using casing::Cluster;
+using casing::NNCluster;
 
-TEST_CASE("readFileIntoCluster", "[io_manager]") {
+TEST_CASE("io_manager", "[io_manager]") {
     std::string PATH_VECTORS1 = "../../files/classes_vectors_1";
+    std::string PATH_RESULTS1 = "../../files/classes_results_1";
+    std::string PATH_INPUT1 = "../../files/classes_unknowns_1";
 
     SECTION("readFileIntoCluster() -> 'classes_vectors_1' [8]") {
         Cluster cluster;
@@ -55,5 +60,34 @@ TEST_CASE("readFileIntoCluster", "[io_manager]") {
         REQUIRE(!buffer.empty());
         REQUIRE(buffer.size() == 192);
         REQUIRE(buffer.capacity() == buffer.size());
+    }
+
+    SECTION("writeResultsIntoFile(nnResultSet) -> 100 B") {
+        NNCluster nnCluster;
+        nnCluster.read(PATH_VECTORS1);
+        Cluster inputGroup;
+        io_manager::readFileIntoCluster(PATH_INPUT1, inputGroup);
+        nnCluster.classify(inputGroup, 3);
+        auto nnResultSet = nnCluster.getClassified();
+
+        bool isOK = io_manager::writeResultsIntoFile(PATH_RESULTS1, nnResultSet);
+        long fileSize = io_manager::getFileSize(PATH_RESULTS1);
+
+        REQUIRE(isOK);
+        REQUIRE(fileSize == 100);
+    }
+
+    SECTION("writeResultsIntoFile(labels) -> 4 B") {
+        Cluster inputGroup;
+        Cluster baseCluster;
+        io_manager::readFileIntoCluster(PATH_INPUT1, inputGroup);
+        io_manager::readFileIntoCluster(PATH_VECTORS1, baseCluster);
+        auto labels = classifiers::nearest_mean(inputGroup, baseCluster);
+
+        bool isOK = io_manager::writeResultsIntoFile(PATH_RESULTS1, labels);
+        long fileSize = io_manager::getFileSize(PATH_RESULTS1);
+
+        REQUIRE(isOK);
+        REQUIRE(fileSize == 4);
     }
 }

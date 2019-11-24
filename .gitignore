@@ -5,3 +5,4 @@ sonar-build/
 .scannerwork/
 sonar-project.properties
 cmake-build-debug/*
+files/classes_results_*
