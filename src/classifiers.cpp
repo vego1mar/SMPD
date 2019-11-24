@@ -74,6 +74,5 @@ namespace classifiers {
         return labels;
     }
 
-    // TODO: storeResults()
-    // TODO: casing/classifiers test split
+    // TODO: helpers::storeResults()
 }

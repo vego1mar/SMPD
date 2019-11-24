@@ -1,12 +1,13 @@
 #include "catch.hpp"
 #include "../src/io_manager.hpp"
 
+using casing::Cluster;
+
 TEST_CASE("readFileIntoCluster", "[io_manager]") {
-    const std::string PATH_VECTORS1 = "../../files/classes_vectors_1";
+    std::string PATH_VECTORS1 = "../../files/classes_vectors_1";
 
     SECTION("readFileIntoCluster() -> 'classes_vectors_1' [8]") {
-        // GIVEN
-        std::vector<casing::ClassVector> cluster;
+        Cluster cluster;
         std::vector<std::vector<double>> expectedFeatures = {
                 {1, 2, 3},
                 {2, 5, 3},
@@ -20,10 +21,8 @@ TEST_CASE("readFileIntoCluster", "[io_manager]") {
         const size_t CLASSES_VECTORS_NO = 8;
         size_t i = 0;
 
-        // WHEN
-        bool isOK = io_manager::readFileIntoCluster(const_cast<std::string &>(PATH_VECTORS1), cluster);
+        bool isOK = io_manager::readFileIntoCluster(PATH_VECTORS1, cluster);
 
-        // THEN
         REQUIRE(isOK);
         REQUIRE(cluster.size() == CLASSES_VECTORS_NO);
 
@@ -35,14 +34,11 @@ TEST_CASE("readFileIntoCluster", "[io_manager]") {
     }
 
     SECTION("readFileToBuffer(char) -> 'classes_vectors_1' [8]") {
-        // GIVEN
-        std::string path = const_cast<std::string &>(PATH_VECTORS1);
+        std::string path = PATH_VECTORS1;
         std::vector<char> buffer;
 
-        // WHEN
         bool isOK = io_manager::readFileToBuffer(path, buffer);
 
-        // THEN
         REQUIRE(isOK);
         REQUIRE(!buffer.empty());
         REQUIRE(buffer.size() == 192);
@@ -50,14 +46,11 @@ TEST_CASE("readFileIntoCluster", "[io_manager]") {
     }
 
     SECTION("readFileToBuffer(u_char) -> 'classes_vectors_1' [8]") {
-        // GIVEN
-        std::string path = const_cast<std::string &>(PATH_VECTORS1);
+        std::string path = PATH_VECTORS1;
         std::vector<u_char> buffer;
 
-        // WHEN
         bool isOK = io_manager::readFileToBuffer(path, buffer);
 
-        // THEN
         REQUIRE(isOK);
         REQUIRE(!buffer.empty());
         REQUIRE(buffer.size() == 192);

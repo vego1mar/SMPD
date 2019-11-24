@@ -2,6 +2,11 @@
 #include "../src/io_manager.hpp"
 #include "../src/classifiers.hpp"
 
+using casing::Cluster;
+using casing::NNResultSet;
+using casing::ClassVector;
+using casing::NNCluster;
+
 TEST_CASE("classifiers", "[classifiers]") {
     Cluster CLUSTER1 = {
             {"A", {1, 2, 3}},

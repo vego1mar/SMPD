@@ -5,7 +5,8 @@
 #include <vector>
 #include "casing.hpp"
 
-using namespace casing;
+using casing::Cluster;
+using casing::NNResultSet;
 
 namespace classifiers {
 

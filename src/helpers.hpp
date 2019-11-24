@@ -8,7 +8,8 @@
 #include <unordered_map>
 #include "casing.hpp"
 
-using namespace casing;
+using casing::Cluster;
+using casing::Affiliation;
 
 namespace helpers {
     typedef std::tuple<std::string, double, size_t> DistRecord;
