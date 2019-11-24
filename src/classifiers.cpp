@@ -62,7 +62,7 @@ namespace classifiers {
 
     std::vector<std::string> nearest_mean(Cluster &inputGroup, Cluster &cluster) {
         std::vector<std::string> labels;
-        labels.reserve(inputGroup.size());
+        labels.resize(inputGroup.size());
         int i = 0;
 
         for (const auto &classVector : inputGroup) {
