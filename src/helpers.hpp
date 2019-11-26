@@ -15,6 +15,8 @@ namespace helpers {
     typedef std::tuple<std::string, double, size_t> DistRecord;
     typedef std::vector<DistRecord> DistRecordList;
     typedef std::unordered_map<std::string, u_int> LabelsMap;
+    typedef std::unordered_map<std::string, std::vector<int>> SubClassesIndicesMap;
+    typedef std::vector<std::vector<double>> Means;
 
 
     Cluster getSubCluster(const std::string &label, Cluster &vectors);
@@ -27,7 +29,7 @@ namespace helpers {
 
     void checkVectorSizes(Cluster &cluster);
 
-    std::vector<std::vector<double>> getMeanVectors(std::vector<Cluster> &subClusters);
+    Means getMeanVectors(std::vector<Cluster> &subClusters);
 
     std::vector<double> getMeanVector(Cluster &cluster);
 
@@ -40,6 +42,26 @@ namespace helpers {
     LabelsMap getDistinctLabelsCounts(DistRecordList &records, u_short k);
 
     std::tuple<std::string, Affiliation> getNearestNeighborAndAffiliation(LabelsMap &counts);
+
+    std::vector<int> getOrdinalSequence(u_short start, u_short end);
+
+    std::vector<int> getSubSequence(std::vector<int> &sequence, u_short start, u_short end);
+
+    void setCentroidLabelsInOrder(Cluster &cluster, std::vector<int> &ordinals);
+
+    void determineSubLabelsInOrder(Cluster &cluster, std::vector<int> &ordinals);
+
+    void determineSubLabels(Cluster &cluster, Means &centroids, std::vector<std::string> &labels);
+
+    SubClassesIndicesMap getSubClassesIndices(Cluster &cluster);
+
+    Means getMeans(Cluster &cluster, SubClassesIndicesMap &indicesMap, std::vector<int> &ordinals);
+
+    Means getMeans(Cluster &cluster, SubClassesIndicesMap &indicesMap, std::vector<std::string> &centroidLabels);
+
+    std::vector<std::string> retrieveLabels(SubClassesIndicesMap &indicesMap);
+
+    double computeGeometricCloseness(Means &previous, Means &next);
 
 }
 

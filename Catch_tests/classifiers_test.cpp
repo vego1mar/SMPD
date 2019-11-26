@@ -198,14 +198,19 @@ TEST_CASE("classifiers", "[classifiers]") {
         REQUIRE_THAT(labels, Catch::UnorderedEquals(expected));
     }
 
-    SECTION("k_means(CLUSTER_FILE_2, k=3) -> ???") {
+    SECTION("k_means(CLUSTER_FILE_2, k=3) -> [k][split]") {
         Cluster base;
         io_manager::readFileIntoCluster(PATH_VECTORS_2, base);
         u_short k = 3;
+        const u_long MAX_ITER = 10'000;
+        int pointsNo = 0;
+        auto pointsNoFunc = [&pointsNo](Cluster &c) { pointsNo += c.size(); };
 
-        auto result = classifiers::k_means(base, k);
+        auto result = classifiers::k_means(base, k, MAX_ITER);
 
         REQUIRE(!result.empty());
         REQUIRE(result.size() == k);
+        std::for_each(result.begin(), result.end(), pointsNoFunc);
+        REQUIRE(pointsNo == base.size());
     }
 }

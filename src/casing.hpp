@@ -33,6 +33,8 @@ namespace casing {
 
         std::string getLabel() const;
 
+        void setLabel(const std::string &newLabel);
+
         std::vector<double> getFeatures() const;
     };
 

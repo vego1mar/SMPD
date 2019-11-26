@@ -31,6 +31,10 @@ namespace casing {
         return !operator==(object);
     }
 
+    void ClassVector::setLabel(const std::string &newLabel) {
+        label = newLabel;
+    }
+
     Affiliation::Affiliation(u_int nominator, u_int denominator) {
         fraction = std::to_string(nominator) + '/' + std::to_string(denominator);
         percent = (static_cast<double>(nominator) / static_cast<double>(denominator)) * 100.0;

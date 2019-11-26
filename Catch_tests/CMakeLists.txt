@@ -3,6 +3,6 @@ add_executable(Catch_tests_run
         classifiers_test.cpp ../src/classifiers.cpp
         io_manager_test.cpp ../src/io_manager.cpp
         casing_test.cpp ../src/casing.cpp
-        ../src/helpers.cpp
+        helpers_test.cpp ../src/helpers.cpp
         )
 target_link_libraries(Catch_tests_run)

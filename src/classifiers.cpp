@@ -1,6 +1,8 @@
 #include <stdexcept>
 #include <tuple>
 #include <algorithm>
+#include <chrono>
+#include <random>
 #include "classifiers.hpp"
 #include "casing.hpp"
 #include "statistical.hpp"
@@ -74,24 +76,40 @@ namespace classifiers {
         return labels;
     }
 
-    std::vector<Cluster> k_means(Cluster &cluster, u_short k) {
-        if (k <= 0 || k >= cluster.size()) {
-            throw std::invalid_argument("k <= 0 || k >= cluster.size()");
+    /// &cluster will be altered!
+    std::vector<Cluster> k_means(Cluster &cluster, u_short k, u_long maxIter) {
+        if (k >= cluster.size()) {
+            throw std::invalid_argument("k >= cluster.size()");
         }
 
         helpers::checkVectorSizes(cluster);
+        auto permutation = helpers::getOrdinalSequence(0, cluster.size());
+        unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+        auto rng = std::default_random_engine(seed);
+        std::shuffle(permutation.begin(), permutation.end(), rng);
+        auto ordinals = helpers::getSubSequence(permutation, 0, k);
 
-        // TODO: @ordinals = getOrdinalSequence(0,k+1) -> for indices of &cluster
-        // TODO: shuffle @ordinals -> obtain random permutation
-        // TODO: set @indicator for first @k indices in @ordinals--@cluster -> (0..k) will denote random centers
-        // TODO: populate structures now or later (previous-next centers, solution subclasses)
-        // TODO: start a cycle ??? -- restrict with MAX_ITER
-        // TODO: determineSubLabelsInOrder(from=@cluster, using=@ordinals, with=@indicator) -> getMin(computeDists())
-        // TODO: computeMeans(selectSubClasses(byIndices)) -> set them as new centers
-        // TODO: computeCentersCloseness(previousCenters, newCenters) -> check condition delta(error)
-        // TODO: fold solution using subclasses vector
-        // TODO: alter return statement
-        return std::vector<Cluster>();
+        helpers::determineSubLabelsInOrder(cluster, ordinals);
+        auto subClassesIndicesMap = helpers::getSubClassesIndices(cluster);
+        auto means = helpers::getMeans(cluster, subClassesIndicesMap, ordinals);
+        auto previousCentroids = means;
+        auto centroidLabels = helpers::retrieveLabels(subClassesIndicesMap);
+        const double ACCEPTABLE_CHANGE = 0.0001;
+        double delta = 1;
+        u_long iter = 0;
+
+        while (iter < maxIter || delta > ACCEPTABLE_CHANGE) {
+            helpers::determineSubLabels(cluster, previousCentroids, centroidLabels);
+            subClassesIndicesMap = helpers::getSubClassesIndices(cluster);
+            means = helpers::getMeans(cluster, subClassesIndicesMap, centroidLabels);
+            centroidLabels = helpers::retrieveLabels(subClassesIndicesMap);
+            auto nextCentroids = means;
+            delta = helpers::computeGeometricCloseness(previousCentroids, nextCentroids);
+            previousCentroids = nextCentroids;
+            iter++;
+        }
+
+        return helpers::getSubClusters(cluster);
     }
 
 }

@@ -1,5 +1,6 @@
 #include <tuple>
 #include <algorithm>
+#include <unordered_map>
 #include "helpers.hpp"
 #include "casing.hpp"
 #include "statistical.hpp"
@@ -66,8 +67,20 @@ namespace helpers {
         }
     }
 
-    std::vector<std::vector<double>> getMeanVectors(std::vector<Cluster> &subClusters) {
-        std::vector<std::vector<double>> meanVectors;
+    void checkVectorSizes(Means &left, Means &right) {
+        if (left.size() != right.size()) {
+            throw std::invalid_argument("left.size() != right.size()");
+        }
+
+        for (size_t i = 0; i < left.size(); i++) {
+            if (left[i].size() != right[i].size()) {
+                throw std::invalid_argument("left[i].size() != right[i].size()");
+            }
+        }
+    }
+
+    Means getMeanVectors(std::vector<Cluster> &subClusters) {
+        Means meanVectors;
         meanVectors.resize(subClusters.size());
         int i = 0;
 
@@ -172,6 +185,169 @@ namespace helpers {
         }
 
         return std::make_tuple(neighbor, Affiliation(nearest, total));
+    }
+
+    std::vector<int> getOrdinalSequence(u_short start, u_short end) {
+        if (start > end) {
+            throw std::invalid_argument("start > end");
+        }
+
+        std::vector<int> sequence;
+        auto length = end - start;
+        sequence.resize(length);
+        u_short i = start;
+
+        auto increment_fn = [&i](int &seqValue) {
+            seqValue = i;
+            i++;
+        };
+
+        std::for_each(sequence.begin(), sequence.end(), increment_fn);
+        return sequence;
+    }
+
+    std::vector<int> getSubSequence(std::vector<int> &sequence, u_short start, u_short end) {
+        if (start > end || end > sequence.size()) {
+            throw std::invalid_argument("start > end || end > sequence.size()");
+        }
+
+        std::vector<int> subSequence;
+        subSequence.resize(end - start);
+
+        for (size_t i = start; i < end; i++) {
+            subSequence[i] = (sequence[i]);
+        }
+
+        return subSequence;
+    }
+
+    void setCentroidLabelsInOrder(Cluster &cluster, std::vector<int> &ordinals) {
+        int subLabelNo = 1;
+
+        for (int centroidIndex : ordinals) {
+            std::string newLabel = cluster[centroidIndex].getLabel() + std::to_string(subLabelNo);
+            cluster[centroidIndex].setLabel(newLabel);
+            subLabelNo++;
+        }
+    }
+
+    void determineSubLabelsInOrder(Cluster &cluster, std::vector<int> &ordinals) {
+        setCentroidLabelsInOrder(cluster, ordinals);
+
+        for (size_t i = 0; i < cluster.size(); i++) {
+            bool isCentroid = std::find(ordinals.begin(), ordinals.end(), i) != ordinals.end();
+
+            if (isCentroid) {
+                continue;
+            }
+
+            std::vector<double> distances;
+
+            for (int centroidIndex : ordinals) {
+                auto centroid = cluster[centroidIndex].getFeatures();
+                auto vector = cluster[i].getFeatures();
+                double distance = statistical::geometric_distance(centroid, vector);
+                distances.emplace_back(distance);
+            }
+
+            int minIndex = getLowestValueIndex(distances);
+            int centroidIndex = ordinals[minIndex];
+            std::string vectorLabel = cluster[centroidIndex].getLabel();
+            cluster[i].setLabel(vectorLabel);
+        }
+    }
+
+    void determineSubLabels(Cluster &cluster, Means &centroids, std::vector<std::string> &labels) {
+        for (auto &cVector : cluster) {
+            std::vector<double> distances;
+
+            for (auto &centroid : centroids) {
+                auto vector = cVector.getFeatures();
+                double distance = statistical::geometric_distance(centroid, vector);
+                distances.emplace_back(distance);
+            }
+
+            int centroidLabelIndex = getLowestValueIndex(distances);
+            std::string vectorLabel = labels[centroidLabelIndex];
+            cVector.setLabel(vectorLabel);
+        }
+    }
+
+    SubClassesIndicesMap getSubClassesIndices(Cluster &cluster) {
+        auto distinctLabels = getClustersLabels(cluster);
+        SubClassesIndicesMap indicesMap{};
+
+        for (const auto &label : distinctLabels) {
+            indicesMap[label] = std::vector<int>();
+        }
+
+        for (size_t i = 0; i < cluster.size(); i++) {
+            std::vector<int> &indices = indicesMap[cluster[i].getLabel()];
+            indices.push_back(i);
+        }
+
+        return indicesMap;
+    }
+
+    Means getMeans(Cluster &cluster, SubClassesIndicesMap &indicesMap, std::vector<int> &ordinals) {
+        Means means;
+
+        for (int centroidIndex : ordinals) {
+            auto label = cluster[centroidIndex].getLabel();
+            const auto &indices = indicesMap[label];
+            Cluster subCluster;
+
+            for (const auto &index : indices) {
+                subCluster.push_back(cluster[index]);
+            }
+
+            auto meanVector = getMeanVector(subCluster);
+            means.emplace_back(meanVector);
+        }
+
+        return means;
+    }
+
+    Means getMeans(Cluster &cluster, SubClassesIndicesMap &indicesMap, std::vector<std::string> &centroidLabels) {
+        Means means;
+
+        for (const auto &label : centroidLabels) {
+            const auto &indices = indicesMap[label];
+            Cluster subCluster;
+
+            for (const auto &index : indices) {
+                subCluster.push_back(cluster[index]);
+            }
+
+            auto meanVector = getMeanVector(subCluster);
+            means.emplace_back(meanVector);
+        }
+
+        return means;
+    }
+
+    std::vector<std::string> retrieveLabels(SubClassesIndicesMap &indicesMap) {
+        std::vector<std::string> labels;
+
+        for (const auto &entry : indicesMap) {
+            labels.push_back(entry.first);
+        }
+
+        return labels;
+    }
+
+    double computeGeometricCloseness(Means &previous, Means &next) {
+        checkVectorSizes(previous, next);
+
+        std::vector<double> distances;
+
+        for (size_t i = 0; i < next.size(); i++) {
+            double distance = statistical::geometric_distance(next[i], previous[i]);
+            distances.emplace_back(distance);
+        }
+
+        double sum = std::accumulate(distances.begin(), distances.end(), 0.0);
+        return sum / distances.size();
     }
 
 }
