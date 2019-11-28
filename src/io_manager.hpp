@@ -22,6 +22,8 @@ namespace io_manager {
 
     bool writeResultsIntoFile(std::string &path, std::vector<std::string> &labels);
 
+    bool writeResultsIntoFile(std::string &path, std::vector<Cluster> &subClusters);
+
 }
 
 #endif //IO_MANAGER_HPP

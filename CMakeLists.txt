@@ -8,5 +8,5 @@ add_executable(SMPD src/main.cpp
         src/casing.hpp src/casing.cpp
         src/io_manager.hpp src/io_manager.cpp
         src/classifiers.cpp src/classifiers.hpp
-        src/helpers.cpp src/helpers.hpp)
+        src/helpers.cpp src/helpers.hpp src/selectors.cpp src/selectors.hpp)
 add_subdirectory(Catch_tests)

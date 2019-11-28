@@ -31,6 +31,7 @@ TEST_CASE("classifiers", "[classifiers]") {
     std::string PATH_VECTORS_1 = "../../files/classes_vectors_1";
     std::string PATH_VECTORS_2 = "../../files/classes_vectors_2";
     std::string PATH_INPUT_1 = "../../files/classes_unknowns_1";
+    std::string PATH_RESULTS_1 = "../../files/classes_results_1";
 
     SECTION("x=(1,7,3), CLUSTER1, k=1 -> 'B'") {
         std::vector<double> input = {1, 7, 3};
@@ -198,7 +199,7 @@ TEST_CASE("classifiers", "[classifiers]") {
         REQUIRE_THAT(labels, Catch::UnorderedEquals(expected));
     }
 
-    SECTION("k_means(CLUSTER_FILE_2, k=3) -> [k][split]") {
+    SECTION("k_means(CLUSTER_FILE_2, k=3) -> [k][split], 140 B") {
         Cluster base;
         io_manager::readFileIntoCluster(PATH_VECTORS_2, base);
         u_short k = 3;
@@ -207,10 +208,13 @@ TEST_CASE("classifiers", "[classifiers]") {
         auto pointsNoFunc = [&pointsNo](Cluster &c) { pointsNo += c.size(); };
 
         auto result = classifiers::k_means(base, k, MAX_ITER);
+        bool isOK = io_manager::writeResultsIntoFile(PATH_RESULTS_1, result);
 
         REQUIRE(!result.empty());
         REQUIRE(result.size() == k);
         std::for_each(result.begin(), result.end(), pointsNoFunc);
         REQUIRE(pointsNo == base.size());
+        REQUIRE(isOK);
+        REQUIRE(io_manager::getFileSize(PATH_RESULTS_1) == 140);
     }
 }

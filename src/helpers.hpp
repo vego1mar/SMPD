@@ -35,6 +35,8 @@ namespace helpers {
 
     int getLowestValueIndex(std::vector<double> &features);
 
+    int getHighestValueIndex(std::vector<double> &features);
+
     DistRecordList getDistanceRecords(std::vector<double> &input, Cluster &cluster);
 
     void sortDistanceRecords(DistRecordList &records);
@@ -62,6 +64,12 @@ namespace helpers {
     std::vector<std::string> retrieveLabels(SubClassesIndicesMap &indicesMap);
 
     double computeGeometricCloseness(Means &previous, Means &next);
+
+    void checkInnerVectorSizes(Cluster &cloud1, Cluster &cloud2);
+
+    Cluster getTransposed(Cluster &cloud);
+
+    std::vector<double> getStandardDeviation(Cluster &cloud);
 
 }
 

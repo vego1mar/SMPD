@@ -1,6 +1,8 @@
 #include <stdexcept>
 #include <algorithm>
 #include <set>
+#include <sstream>
+#include <iterator>
 #include "casing.hpp"
 #include "statistical.hpp"
 #include "io_manager.hpp"
@@ -33,6 +35,20 @@ namespace casing {
 
     void ClassVector::setLabel(const std::string &newLabel) {
         label = newLabel;
+    }
+
+    std::string ClassVector::toString() const {
+        std::string toString = '{' + label + ", [";
+        std::ostringstream stringify;
+        auto delimiter = ";";
+
+        if (!features.empty()) {
+            auto iterator = std::ostream_iterator<double>(stringify, delimiter);
+            std::copy(features.begin(), features.end() - 1, iterator);
+            stringify << features.back();
+        }
+
+        return toString + stringify.str() + "]}";
     }
 
     Affiliation::Affiliation(u_int nominator, u_int denominator) {

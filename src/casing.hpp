@@ -36,6 +36,8 @@ namespace casing {
         void setLabel(const std::string &newLabel);
 
         std::vector<double> getFeatures() const;
+
+        std::string toString() const;
     };
 
     typedef std::vector<ClassVector> Cluster;

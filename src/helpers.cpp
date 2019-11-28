@@ -6,6 +6,7 @@
 #include "statistical.hpp"
 
 namespace helpers {
+
     Cluster getSubCluster(const std::string &label, Cluster &vectors) {
         Cluster outCluster{};
 
@@ -129,6 +130,27 @@ namespace helpers {
         }
 
         return lowestIndex;
+    }
+
+    int getHighestValueIndex(std::vector<double> &features) {
+        if (features.empty()) {
+            throw std::invalid_argument("features.empty()");
+        }
+
+        int highestIndex = 0;
+        double highestValue = features[highestIndex];
+        int i = 0;
+
+        for (const auto &feature : features) {
+            if (feature > highestValue) {
+                highestValue = feature;
+                highestIndex = i;
+            }
+
+            i++;
+        }
+
+        return highestIndex;
     }
 
     DistRecordList getDistanceRecords(std::vector<double> &input, Cluster &cluster) {
@@ -348,6 +370,63 @@ namespace helpers {
 
         double sum = std::accumulate(distances.begin(), distances.end(), 0.0);
         return sum / distances.size();
+    }
+
+    void checkInnerVectorSizes(Cluster &cloud1, Cluster &cloud2) {
+        if (cloud1.empty() || cloud2.empty()) {
+            throw std::invalid_argument("cloud1.empty() || cloud2.empty()");
+        }
+
+        const size_t VECTOR_SIZE = cloud1[0].getFeatures().size();
+        auto checkSizeFunction = [&VECTOR_SIZE](const auto &group) {
+            if (group.getFeatures().size() != VECTOR_SIZE) {
+                throw std::invalid_argument("group.getFeatures().size() != VECTOR_SIZE");
+            }
+        };
+
+        for (const auto &group1 : cloud1) {
+            checkSizeFunction(group1);
+        }
+
+        for (const auto &group2 : cloud2) {
+            checkSizeFunction(group2);
+        }
+    }
+
+    Cluster getTransposed(Cluster &cloud) {
+        using casing::ClassVector;
+
+        Cluster transpose;
+        std::vector<double> horizontalVector;
+        const size_t HORIZONTAL_SIZE = cloud.size();
+        const size_t VERTICAL_SIZE = cloud[0].getFeatures().size();
+
+        for (size_t i = 0; i < VERTICAL_SIZE; i++) {
+            for (size_t j = 0; j < HORIZONTAL_SIZE; j++) {
+                auto currentValue = cloud[j].getFeatures()[i];
+                horizontalVector.push_back(currentValue);
+            }
+
+            auto classLabel = cloud[i].getLabel();
+            ClassVector classVector(classLabel, horizontalVector);
+            transpose.emplace_back(classVector);
+            horizontalVector.clear();
+        }
+
+        return transpose;
+    }
+
+    std::vector<double> getStandardDeviation(Cluster &cloud) {
+        std::vector<double> stdDeviations;
+        auto transposed = getTransposed(cloud);
+
+        for (const auto &row : transposed) {
+            auto features = row.getFeatures();
+            double stdDev = statistical::standard_deviation(features);
+            stdDeviations.emplace_back(stdDev);
+        }
+
+        return stdDeviations;
     }
 
 }

@@ -102,4 +102,24 @@ namespace io_manager {
         file.close();
         return true;
     }
+
+    bool writeResultsIntoFile(std::string &path, std::vector<Cluster> &subClusters) {
+        std::ofstream file;
+        file.open(path, std::ios::out);
+
+        if (!file.is_open()) {
+            std::cerr << path << std::endl;
+            return false;
+        }
+
+        for (const auto &cluster : subClusters) {
+            for (const auto &group : cluster) {
+                file << group.toString() << std::endl;
+            }
+        }
+
+        file.close();
+        return true;
+    }
+
 }

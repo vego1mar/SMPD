@@ -1,5 +1,14 @@
 # SMPD
 Statystyczne metody przetwarzania danych
 
-1-- nearest_neighbors
-2-- nearest_mean
+```Statistical methods of data processing```
+
+
+### classifiers
+* nearest_neighbors
+* nearest_mean
+* k means
+
+
+### selectors
+* Fischer coefficient

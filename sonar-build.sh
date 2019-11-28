@@ -14,6 +14,7 @@ g++ -Wall -fexceptions -std=c++14 -g  -c src/classifiers.cpp -o sonar-build/clas
 g++ -Wall -fexceptions -std=c++14 -g  -c src/io_manager.cpp -o sonar-build/io_manager.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/casing.cpp -o sonar-build/casing.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/helpers.cpp -o sonar-build/helpers.o
+g++ -Wall -fexceptions -std=c++14 -g  -c src/selectors.cpp -o sonar-build/selectors.o
 RC=$?
 
 if [ $RC -ne 0 ]; then
