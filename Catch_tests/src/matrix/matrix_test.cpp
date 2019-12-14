@@ -177,4 +177,36 @@ TEST_CASE("matrix.hpp") {
         REQUIRE(toString == expectedString);
     }
 
+    SECTION("multiply(B) -> A*B, OK") {
+        Matrix matrix1(2, 3);
+        Matrix matrix2(3, 2);
+        Matrix matrix3(4, 3);
+        Matrix expectedResult1(3, 3);
+        Matrix expectedResult2(2, 2);
+        Matrix expectedResult3(4, 3);
+        matrix1.set(std::vector<double>{1, 2, 2, 3, 3, 4});
+        matrix2.set(std::vector<double>{1, 2, 3, 3, 2, 1});
+        matrix3.set(std::vector<double>{1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048});
+        expectedResult1.set(std::vector<double>{7, 6, 5, 11, 10, 9, 15, 14, 13});
+        expectedResult2.set(std::vector<double>{14, 20, 10, 16});
+        expectedResult3.set(std::vector<double>{0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024});
+
+        auto result1 = matrix1.multiply(matrix2);
+        auto result2 = matrix2.multiply(matrix1);
+        matrix3.multiply(0.5);
+
+        bool areDimensionsTheSame1 = result1.getColumns() == result1.getRows();
+        REQUIRE(areDimensionsTheSame1);
+        REQUIRE(result1.getColumns() == 3);
+        bool isResult1AsExpected = result1 == expectedResult1;
+        REQUIRE(isResult1AsExpected);
+        bool areDimensionsTheSame2 = result2.getColumns() == result2.getRows();
+        REQUIRE(areDimensionsTheSame2);
+        REQUIRE(result2.getColumns() == 2);
+        bool isResult2AsExpected = result2 == expectedResult2;
+        REQUIRE(isResult2AsExpected);
+        bool isResult3AsExpected = matrix3 == expectedResult3;
+        REQUIRE(isResult3AsExpected);
+    }
+
 }

@@ -152,6 +152,15 @@ namespace matrix {
         }
     }
 
+    void Matrix::set(std::size_t column, std::size_t row, double value) {
+        if (column >= getColumns() || row >= getRows()) {
+            throw std::logic_error("column >= getColumns() || row >= getRows()");
+        }
+
+        auto index = getRowMajorOrderIndex(row, column);
+        features[index] = value;
+    }
+
     void Matrix::transform(TransformationType type) {
         switch (type) {
             case TransformationType::Identity :
@@ -195,6 +204,37 @@ namespace matrix {
                 auto index = getRowMajorOrderIndex(i, j);
                 features[index] += rhs[i];
             }
+        }
+    }
+
+    Matrix Matrix::multiply(const Matrix &rhs) {
+        if (getColumns() != rhs.getRows()) {
+            throw std::invalid_argument("getColumns() != rhs.getRows()");
+        }
+
+        std::size_t columnsNo = getRows();
+        std::size_t rowsNo = rhs.getColumns();
+        Matrix result(columnsNo, rowsNo);
+        result.transform(TransformationType::Zeroes);
+        auto values = std::vector<double>();
+
+        for (std::size_t i = 0; i < getRows(); i++) {
+            auto currentRow = getRow(i);
+
+            for (std::size_t j = 0; j < rhs.getColumns(); j++) {
+                auto currentColumn = rhs.getColumn(j);
+                auto element = fold(currentRow, currentColumn);
+                values.emplace_back(element);
+            }
+        }
+
+        result.set(values);
+        return result;
+    }
+
+    void Matrix::multiply(double scalar) {
+        for (std::size_t i = 0; i < getSize(); i++) {
+            features[i] *= scalar;
         }
     }
 
@@ -251,6 +291,17 @@ namespace matrix {
         for (std::size_t i = 0; i < getSize(); i++) {
             features[i] = -features[i];
         }
+    }
+
+    double Matrix::fold(const std::vector<double> &row, const std::vector<double> &column) {
+        // Assumption: row.size() == column.size()
+        double sum = 0.0;
+
+        for (std::size_t i = 0; i < row.size(); i++) {
+            sum += row[i] * column[i];
+        }
+
+        return sum;
     }
 
 }

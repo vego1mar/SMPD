@@ -29,7 +29,7 @@ namespace matrix {
 
         Matrix(const Matrix &rhs);
 
-        Matrix(Matrix &&rvalue) = delete;
+        Matrix(Matrix &&rvalue) = default;
 
         Matrix &operator=(const Matrix &rhs) = delete;
 
@@ -61,15 +61,17 @@ namespace matrix {
 
         void set(const std::vector<std::vector<double>> &values);
 
+        void set(std::size_t column, std::size_t row, double value);
+
         void transform(TransformationType type);
 
         void add(const Matrix &rhs);
 
         void add(const std::vector<double> &rhs);
 
-        void multiply(const Matrix &rhs);
+        Matrix multiply(const Matrix &rhs);
 
-        //void multiply(double lhs);
+        void multiply(double scalar);
 
         bool isSquare() const;
 
@@ -85,6 +87,8 @@ namespace matrix {
         void transpose();
 
         void negate();
+
+        static double fold(const std::vector<double> &row, const std::vector<double> &column);
     };
 
 }
