@@ -75,7 +75,7 @@ namespace matrix {
 
     std::vector<double> Matrix::getRow(std::size_t rowNo) const {
         if (rowNo > getRows()) {
-            throw std::logic_error("rowNo > getRows()");
+            throw std::invalid_argument("rowNo > getRows()");
         }
 
         auto selectedRow = std::vector<double>();
@@ -92,7 +92,7 @@ namespace matrix {
 
     std::vector<double> Matrix::getColumn(std::size_t columnNo) const {
         if (columnNo > getColumns()) {
-            throw std::logic_error("columnNo > getColumns()");
+            throw std::invalid_argument("columnNo > getColumns()");
         }
 
         auto selectedColumn = std::vector<double>();
@@ -142,7 +142,7 @@ namespace matrix {
 
     void Matrix::set(const std::vector<std::vector<double>> &values) {
         if (values.size() != getRows()) {
-            throw std::logic_error("values.size() != getRows()");
+            throw std::invalid_argument("values.size() != getRows()");
         }
 
         for (std::size_t i = 0; i < getRows(); i++) {
@@ -155,7 +155,7 @@ namespace matrix {
 
     void Matrix::set(std::size_t column, std::size_t row, double value) {
         if (column >= getColumns() || row >= getRows()) {
-            throw std::logic_error("column >= getColumns() || row >= getRows()");
+            throw std::invalid_argument("column >= getColumns() || row >= getRows()");
         }
 
         auto index = getRowMajorOrderIndex(row, column);
@@ -190,7 +190,7 @@ namespace matrix {
 
     void Matrix::add(const Matrix &rhs) {
         if (rhs.getRows() != getRows() || rhs.getColumns() != getColumns()) {
-            throw std::logic_error("rhs.getRows() != getRows() || rhs.getColumns() != getColumns()");
+            throw std::invalid_argument("rhs.getRows() != getRows() || rhs.getColumns() != getColumns()");
         }
 
         for (std::size_t i = 0; i < getSize(); i++) {
@@ -200,7 +200,7 @@ namespace matrix {
 
     void Matrix::add(const std::vector<double> &rhs) {
         if (rhs.size() != getRows()) {
-            throw std::logic_error("rhs.size() != getRows()");
+            throw std::invalid_argument("rhs.size() != getRows()");
         }
 
         for (std::size_t i = 0; i < getRows(); i++) {
@@ -248,7 +248,7 @@ namespace matrix {
 
     double Matrix::getDeterminant() const {
         if (!isSquare()) {
-            throw std::logic_error("!isSquare()");
+            throw std::length_error("!isSquare()");
         }
 
         if (getSize() == 1) {
@@ -304,7 +304,7 @@ namespace matrix {
 
     void Matrix::makeIdentityMatrix() {
         if (!isSquare()) {
-            throw std::logic_error("!isSquare()");
+            throw std::length_error("!isSquare()");
         }
 
         for (std::size_t i = 0; i < getRows(); i++) {
