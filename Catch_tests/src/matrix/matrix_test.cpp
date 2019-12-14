@@ -87,4 +87,41 @@ TEST_CASE("matrix.hpp") {
         REQUIRE(matrix2.getColumn(1) == std::vector<double>{2, 5});
         REQUIRE(matrix2.getColumn(2) == std::vector<double>{3, 6});
     }
+
+    SECTION("transpose(A) -> A^T, OK") {
+        std::size_t rows = 3;
+        std::size_t columns = 4;
+        Matrix matrix(columns, rows);
+        std::vector<std::vector<double>> before = {
+                {2, 1, 12, 64},
+                {4, 3, 24, 128},
+                {6, 5, 48, 256}
+        };
+        std::vector<std::vector<double>> after = {
+                {2,  4,   6},
+                {1,  3,   5},
+                {12, 24,  48},
+                {64, 128, 256}
+        };
+        matrix.set(before);
+        Matrix beforeMatrix(matrix);
+
+        matrix.transform(TransformationType::Transposition);
+
+        REQUIRE(matrix.getColumns() == rows);
+        REQUIRE(matrix.getRows() == columns);
+        REQUIRE(matrix.getRow(0) == after[0]);
+        REQUIRE(matrix.getRow(1) == after[1]);
+        REQUIRE(matrix.getRow(2) == after[2]);
+        REQUIRE(matrix.getRow(3) == after[3]);
+        REQUIRE(matrix.getColumn(0) == std::vector<double>{2, 1, 12, 64});
+        REQUIRE(matrix.getColumn(1) == std::vector<double>{4, 3, 24, 128});
+        REQUIRE(matrix.getColumn(2) == std::vector<double>{6, 5, 48, 256});
+        Matrix afterMatrix(matrix);
+        bool isMatrixBefore = matrix == beforeMatrix;
+        bool isMatrixAfter = matrix == afterMatrix;
+        REQUIRE(!isMatrixBefore);
+        REQUIRE(isMatrixAfter);
+    }
+
 }

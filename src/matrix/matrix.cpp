@@ -9,6 +9,15 @@ namespace matrix {
         transform(TransformationType::Ones);
     }
 
+    Matrix::Matrix(const Matrix &rhs)
+            : columns(std::make_unique<std::size_t>(*rhs.columns))
+            , rows(std::make_unique<std::size_t>(*rhs.rows))
+            , features(std::make_unique<double[]>((*rhs.columns) * (*rhs.rows))) {
+        for (std::size_t i = 0; i < rhs.getSize(); i++) {
+            features[i] = rhs.get(i);
+        }
+    }
+
     bool Matrix::operator==(const Matrix &rhs) const {
         if (getSize() != rhs.getSize()) {
             return false;
@@ -191,7 +200,17 @@ namespace matrix {
     }
 
     void Matrix::transpose() {
-        throw std::runtime_error("Not implemented");
+        Matrix before(*this);
+
+        for (std::size_t i = 0; i < getRows(); i++) {
+            for (std::size_t j = 0; j < getColumns(); j++) {
+                auto index = getColumnMajorOrderIndex(j, i);
+                features[index] = before.get(j, i);
+            }
+        }
+
+        *columns = before.getRows();
+        *rows = before.getColumns();
     }
 
 }

@@ -26,7 +26,7 @@ namespace matrix {
 
         Matrix(std::size_t columns, std::size_t rows);
 
-        Matrix(const Matrix &rhs) = delete;
+        Matrix(const Matrix &rhs);
 
         Matrix(Matrix &&rvalue) = delete;
 
