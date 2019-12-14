@@ -1,4 +1,5 @@
 #include <sstream>
+#include <limits>
 #include "matrix.hpp"
 
 namespace matrix {
@@ -178,6 +179,9 @@ namespace matrix {
             case TransformationType::Negation:
                 negate();
                 break;
+            case TransformationType::UpperTriangular:
+                makeUpperTriangular();
+                break;
             default:
                 // Do not apply any transformation.
                 break;
@@ -242,6 +246,54 @@ namespace matrix {
         return getColumns() == getRows();
     }
 
+    double Matrix::getDeterminant() const {
+        if (!isSquare()) {
+            throw std::logic_error("!isSquare()");
+        }
+
+        if (getSize() == 1) {
+            return get(0);
+        }
+
+        if (getSize() == 4) {
+            // 2x2 --> ad - bc
+            auto ad = get(0, 0) * get(1, 1);
+            auto bc = get(1, 0) * get(0, 1);
+            return ad - bc;
+        }
+
+        if (getSize() == 9) {
+            // 3x3 --> a(ei-fh) - b(di-fg) + c(dh-eg)
+            auto ei_fh = (get(1, 1) * get(2, 2)) - (get(2, 1) * get(1, 2));
+            auto di_fg = (get(0, 1) * get(2, 2)) - (get(2, 1) * get(0, 2));
+            auto dh_eg = (get(0, 1) * get(1, 2)) - (get(1, 1) * get(0, 2));
+            auto a = get(0, 0) * ei_fh;
+            auto b = get(1, 0) * di_fg;
+            auto c = get(2, 0) * dh_eg;
+            return a - b + c;
+        }
+
+        Matrix triangular(*this);
+        auto swapsNo = triangular.makeUpperTriangular();
+        bool isSwapsNumberEven = swapsNo % 2 == 0;
+        double detSign = isSwapsNumberEven ? 1.0 : -1.0;
+        return detSign * triangular.getDiagonalProduct();
+    }
+
+    double Matrix::getDiagonalProduct() const {
+        double product = 1.0;
+
+        for (std::size_t i = 0; i < getRows(); i++) {
+            for (std::size_t j = 0; j < getColumns(); j++) {
+                if (i == j) {
+                    product *= get(j, i);
+                }
+            }
+        }
+
+        return product;
+    }
+
     std::size_t Matrix::getRowMajorOrderIndex(std::size_t rowNo, std::size_t columnNo) const {
         return (getColumns() * rowNo) + columnNo;
     }
@@ -302,6 +354,101 @@ namespace matrix {
         }
 
         return sum;
+    }
+
+    std::size_t Matrix::makeUpperTriangular() {
+        std::size_t pivotRow = 0;
+        std::size_t pivotColumn = 0;
+        std::size_t endRow = getRows();
+        std::size_t endColumn = getColumns();
+        std::size_t swapsNo = 0;
+        auto epsilon = std::numeric_limits<double>::epsilon();
+
+        while (pivotRow < endRow && pivotColumn < endColumn) {
+            auto argMaxRow = getArgMax(pivotRow, endRow, pivotColumn, *this);
+            auto pivotValue = get(pivotColumn, argMaxRow);
+            bool isEqualZero = pivotValue < epsilon && pivotValue > -epsilon;
+
+            if (isEqualZero) {
+                pivotColumn++;
+                continue;
+            }
+
+            swapRows(pivotRow, argMaxRow);
+
+            if (pivotRow != argMaxRow) {
+                swapsNo++;
+            }
+
+            for (std::size_t i = pivotRow + 1; i < endRow; i++) {
+                auto scalar = get(pivotColumn, i) / get(pivotColumn, pivotRow);
+                set(pivotColumn, i, 0.0);
+
+                for (std::size_t j = pivotColumn + 1; j < endColumn; j++) {
+                    auto newValue = get(j, i) - (get(j, pivotRow) * scalar);
+                    set(j, i, newValue);
+                }
+            }
+
+            pivotRow++;
+            pivotColumn++;
+        }
+
+        return swapsNo;
+    }
+
+    std::size_t Matrix::getArgMax(std::size_t startRow, std::size_t endRow, std::size_t column, const Matrix &upper) {
+        struct ArgMaxHelper {
+            std::size_t row;
+            double arg;
+        };
+        auto args = std::vector<ArgMaxHelper>();
+        ArgMaxHelper currentSelect{};
+
+        for (std::size_t i = startRow; i < endRow; i++) {
+            currentSelect = ArgMaxHelper();
+            currentSelect.row = i;
+            currentSelect.arg = std::abs(upper.get(column, i));
+            args.push_back(currentSelect);
+        }
+
+        std::size_t maxArg = 0;
+        double maxValue = 0.0;
+
+        for (std::size_t j = 0; j < args.size(); j++) {
+            if (args[j].arg > maxValue) {
+                maxValue = args[j].arg;
+                maxArg = j;
+            }
+        }
+
+        return args[maxArg].row;
+    }
+
+    void Matrix::swapRows(std::size_t row1, std::size_t row2) {
+        if (row1 == row2) {
+            return;
+        }
+
+        auto row1Set = getRow(row1);
+        auto row2Set = getRow(row2);
+        std::size_t row1Start = getRowMajorOrderIndex(row1, 0);
+        std::size_t row2Start = getRowMajorOrderIndex(row2, 0);
+        std::size_t row1End = getRowMajorOrderIndex(row1, getColumns());
+        std::size_t row2End = getRowMajorOrderIndex(row2, getColumns());
+        std::size_t j = 0;
+
+        for (std::size_t i = row1Start; i < row1End; i++) {
+            features[i] = row2Set[j];
+            j++;
+        }
+
+        j = 0;
+
+        for (std::size_t k = row2Start; k < row2End; k++) {
+            features[k] = row1Set[j];
+            j++;
+        }
     }
 
 }

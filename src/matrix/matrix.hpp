@@ -12,8 +12,8 @@ namespace matrix {
         Ones,
         Zeroes,
         Transposition,
-        Negation
-        // TODO: upper triangular
+        Negation,
+        UpperTriangular
     };
 
     class Matrix {
@@ -75,6 +75,10 @@ namespace matrix {
 
         bool isSquare() const;
 
+        double getDeterminant() const;
+
+        double getDiagonalProduct() const;
+
     private:
         std::size_t getRowMajorOrderIndex(std::size_t rowNo, std::size_t columnNo) const;
 
@@ -89,6 +93,13 @@ namespace matrix {
         void negate();
 
         static double fold(const std::vector<double> &row, const std::vector<double> &column);
+
+        std::size_t makeUpperTriangular();
+
+        static std::size_t getArgMax(std::size_t startRow, std::size_t endRow, std::size_t column, const Matrix &upper);
+
+        void swapRows(std::size_t row1, std::size_t row2);
+
     };
 
 }

@@ -209,4 +209,93 @@ TEST_CASE("matrix.hpp") {
         REQUIRE(isResult3AsExpected);
     }
 
+    SECTION("det(A) < 0 -> U, swap, arg max, diagonal; OK") {
+        Matrix matrix1(3, 3);
+        matrix1.set(std::vector<double>{-4, 3, 3, 8, 7, 3, 4, 3, 3});
+        auto matrix1Str = matrix1.toString();
+        double matrix1Det = -96.0;
+
+        auto det1 = matrix1.getDeterminant();
+
+        REQUIRE(matrix1.toString() == matrix1Str);
+        REQUIRE(det1 == matrix1Det);
+    }
+
+    SECTION("det(B) > 0 -> U, swap, arg max, diagonal; OK") {
+        Matrix matrix(3, 3);
+        matrix.set(std::vector<double>{4, 3, 1, 6, 2, 1, 3, 1, 0});
+        auto matrixStr = matrix.toString();
+        double matrixDet = 5.0;
+
+        auto det = matrix.getDeterminant();
+
+        REQUIRE(matrix.toString() == matrixStr);
+        REQUIRE(det == matrixDet);
+    }
+
+    SECTION("det(C) == 0 -> U, swap, arg max, diagonal; OK") {
+        Matrix matrix(3, 3);
+        matrix.set(std::vector<double>{0, 1, 1, 4, 3, 2, 4, 3, 2});
+        auto matrixStr = matrix.toString();
+        double matrixDet = 0.0;
+
+        auto det = matrix.getDeterminant();
+
+        REQUIRE(matrix.toString() == matrixStr);
+        REQUIRE(det == matrixDet);
+    }
+
+    SECTION("det(4x4) == 0 -> U, swap, arg max, diagonal; OK") {
+        Matrix matrix(4, 4);
+        matrix.set(std::vector<double>{1, 2, 1, 1, 2, 3, 2, 2, 4, 5, 4, 4, 3, 4, 2, 0});
+        auto matrixStr = matrix.toString();
+        double matrixDet = 0.0;
+
+        auto det = matrix.getDeterminant();
+
+        REQUIRE(matrix.toString() == matrixStr);
+        REQUIRE(det == matrixDet);
+    }
+
+    SECTION("det(4x4) > 0 -> U, swap, arg max, diagonal; OK") {
+        Matrix matrix(4, 4);
+        matrix.set(std::vector<double>{1, 2, 1, 1, 2, 3, -1, 2, 4, 5, 4, 4 / 12.0, 3, 4, 2, 0});
+        auto matrixStr = matrix.toString();
+        double matrixDet = 26 / 3.0;
+
+        auto det = matrix.getDeterminant();
+
+        REQUIRE(matrix.toString() == matrixStr);
+        REQUIRE(det == Approx(matrixDet));
+    }
+
+    SECTION("det(4x4) < 0 -> U, swap, arg max, diagonal; OK") {
+        Matrix matrix(4, 4);
+        matrix.set(std::vector<double>{1, 2, 1, 1, 2, 3, -1, 2, 4, 5, 4, 4 / 12.0, 3, 1 / 8.0, 2, 0});
+        auto matrixStr = matrix.toString();
+        double matrixDet = -815 / 24.0;
+
+        auto det = matrix.getDeterminant();
+
+        REQUIRE(matrix.toString() == matrixStr);
+        REQUIRE(det == Approx(matrixDet));
+    }
+
+    SECTION("det(4x4) < 0 -> U2, swap, arg max, diagonal; OK") {
+        Matrix matrix(4, 4);
+        matrix.set(std::vector<std::vector<double>>{
+                {0,        1,       2,        3},
+                {111,      1,       1 / 2.0,  1 / 3.0},
+                {-3,       0,       -1,       0},
+                {-1 / 9.0, 1 / 4.0, -1 / 3.0, -1 / 5.0}
+        });
+        auto matrixStr = matrix.toString();
+        double matrixDet = -111'623 / 1080.0;
+
+        auto det = matrix.getDeterminant();
+
+        REQUIRE(matrix.toString() == matrixStr);
+        REQUIRE(det == Approx(matrixDet));
+    }
+
 }
