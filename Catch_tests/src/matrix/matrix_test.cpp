@@ -163,4 +163,18 @@ TEST_CASE("matrix.hpp") {
         REQUIRE(matrix2.getRow(2) == expectedSum2.getRow(2));
     }
 
+    SECTION("negate(M) -> -M, OK") {
+        Matrix matrix(2, 3);
+        matrix.set(std::vector<double>{1, -1, 1, 0, -1, 1});
+        Matrix expectedResult(2, 3);
+        expectedResult.set(std::vector<double>{-1, 1, -1, 0, 1, -1});
+        std::string expectedString = "{(3,2),[[-1,1],[-1,-0],[1,-1]]}";
+
+        matrix.transform(TransformationType::Negation);
+        auto toString = matrix.toString();
+
+        REQUIRE(matrix == expectedResult);
+        REQUIRE(toString == expectedString);
+    }
+
 }

@@ -1,3 +1,4 @@
+#include <sstream>
 #include "matrix.hpp"
 
 namespace matrix {
@@ -37,7 +38,26 @@ namespace matrix {
     }
 
     std::string Matrix::toString() const {
-        throw std::runtime_error("Not implemented");
+        std::string sizeTuple = '(' + std::to_string(*rows) + ',' + std::to_string(*columns) + ')';
+        std::string toString = '{' + sizeTuple + ",[";
+        std::ostringstream stringify;
+        stringify.precision(2);
+
+        for (std::size_t i = 0; i < getRows(); i++) {
+            stringify << '[';
+
+            for (std::size_t j = 0; j < getColumns() - 1; j++) {
+                stringify << get(j, i) << ',';
+            }
+
+            stringify << get(getColumns() - 1, i);
+            stringify << "],";
+        }
+
+        std::string featuresStr = stringify.str();
+        featuresStr = featuresStr.substr(0, featuresStr.size() - 1);
+        toString += featuresStr + "]}";
+        return toString;
     }
 
     std::size_t Matrix::getColumns() const {
@@ -146,6 +166,9 @@ namespace matrix {
             case TransformationType::Transposition:
                 transpose();
                 break;
+            case TransformationType::Negation:
+                negate();
+                break;
             default:
                 // Do not apply any transformation.
                 break;
@@ -173,14 +196,6 @@ namespace matrix {
                 features[index] += rhs[i];
             }
         }
-    }
-
-    void Matrix::subtract(const Matrix &rhs) {
-        throw std::runtime_error("Not implemented");
-    }
-
-    void Matrix::multiply(const Matrix &rhs) {
-        throw std::runtime_error("Not implemented");
     }
 
     bool Matrix::isSquare() const {
@@ -230,6 +245,12 @@ namespace matrix {
 
         *columns = before.getRows();
         *rows = before.getColumns();
+    }
+
+    void Matrix::negate() {
+        for (std::size_t i = 0; i < getSize(); i++) {
+            features[i] = -features[i];
+        }
     }
 
 }

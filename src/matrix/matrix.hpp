@@ -11,7 +11,8 @@ namespace matrix {
         Identity,
         Ones,
         Zeroes,
-        Transposition
+        Transposition,
+        Negation
         // TODO: upper triangular
     };
 
@@ -66,10 +67,6 @@ namespace matrix {
 
         void add(const std::vector<double> &rhs);
 
-        void subtract(const Matrix &rhs);
-
-        //void subtract(const std::vector<double> &rhs);
-
         void multiply(const Matrix &rhs);
 
         //void multiply(double lhs);
@@ -86,6 +83,8 @@ namespace matrix {
         void populateMatrix(double defaultValue);
 
         void transpose();
+
+        void negate();
     };
 
 }
