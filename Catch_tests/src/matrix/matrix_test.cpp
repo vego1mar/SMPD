@@ -124,4 +124,43 @@ TEST_CASE("matrix.hpp") {
         REQUIRE(isMatrixAfter);
     }
 
+    SECTION("add(M, Exp) -> A+M, A+Exp; OK") {
+        Matrix matrix1(3, 3);
+        matrix1.set(std::vector<std::vector<double>>{
+                {1, 4, 7},
+                {2, 5, 8},
+                {3, 6, 9}
+        });
+        Matrix addend(3, 3);
+        addend.set(std::vector<std::vector<double>>{
+                {3, 3, 3},
+                {2, 2, 2},
+                {1, 1, 1}
+        });
+        Matrix expectedSum1(3, 3);
+        expectedSum1.set(std::vector<std::vector<double>>{
+                {4, 7, 10},
+                {4, 7, 10},
+                {4, 7, 10}
+        });
+        Matrix matrix2(matrix1);
+        std::vector<double> expander = {1, 2, 3};
+        Matrix expectedSum2(3, 3);
+        expectedSum2.set(std::vector<double>{2, 5, 8, 4, 7, 10, 6, 9, 12});
+
+        matrix1.add(addend);
+        matrix2.add(expander);
+
+        bool isSum1AsExpected = matrix1 == expectedSum1;
+        REQUIRE(isSum1AsExpected);
+        REQUIRE(matrix1.getRow(0) == expectedSum1.getRow(0));
+        REQUIRE(matrix1.getRow(1) == expectedSum1.getRow(1));
+        REQUIRE(matrix1.getRow(2) == expectedSum1.getRow(2));
+        bool isSum2AsExpected = matrix2 == expectedSum2;
+        REQUIRE(isSum2AsExpected);
+        REQUIRE(matrix2.getRow(0) == expectedSum2.getRow(0));
+        REQUIRE(matrix2.getRow(1) == expectedSum2.getRow(1));
+        REQUIRE(matrix2.getRow(2) == expectedSum2.getRow(2));
+    }
+
 }

@@ -153,7 +153,26 @@ namespace matrix {
     }
 
     void Matrix::add(const Matrix &rhs) {
-        throw std::runtime_error("Not implemented");
+        if (rhs.getRows() != getRows() || rhs.getColumns() != getColumns()) {
+            throw std::logic_error("rhs.getRows() != getRows() || rhs.getColumns() != getColumns()");
+        }
+
+        for (std::size_t i = 0; i < getSize(); i++) {
+            features[i] += rhs.get(i);
+        }
+    }
+
+    void Matrix::add(const std::vector<double> &rhs) {
+        if (rhs.size() != getRows()) {
+            throw std::logic_error("rhs.size() != getRows()");
+        }
+
+        for (std::size_t i = 0; i < getRows(); i++) {
+            for (std::size_t j = 0; j < getColumns(); j++) {
+                auto index = getRowMajorOrderIndex(i, j);
+                features[index] += rhs[i];
+            }
+        }
     }
 
     void Matrix::subtract(const Matrix &rhs) {

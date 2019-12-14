@@ -64,9 +64,15 @@ namespace matrix {
 
         void add(const Matrix &rhs);
 
+        void add(const std::vector<double> &rhs);
+
         void subtract(const Matrix &rhs);
 
+        //void subtract(const std::vector<double> &rhs);
+
         void multiply(const Matrix &rhs);
+
+        //void multiply(double lhs);
 
         bool isSquare() const;
 
