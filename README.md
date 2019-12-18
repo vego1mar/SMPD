@@ -11,4 +11,4 @@ Statystyczne metody przetwarzania danych
 
 
 ### selectors
-* Fischer coefficient
+* Fisher Linear Discriminant

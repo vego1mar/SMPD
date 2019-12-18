@@ -6,5 +6,8 @@ add_executable(Catch_tests_run
         helpers_test.cpp ../src/helpers.cpp
         selectors_test.cpp ../src/selectors.cpp
         src/matrix/matrix_test.cpp ../src/matrix/matrix.cpp
+        src/selectors/fisher_test.cpp ../src/selectors/fisher.cpp
+        ../src/statistics/statistics.cpp
+        ../src/helpers/converters.cpp
         )
 target_link_libraries(Catch_tests_run)
