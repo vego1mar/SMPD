@@ -9,5 +9,6 @@ add_executable(Catch_tests_run
         src/selectors/fisher_test.cpp ../src/selectors/fisher.cpp
         ../src/statistics/statistics.cpp
         ../src/helpers/converters.cpp
+        src/helpers/combinations_test.cpp ../src/helpers/combinations.cpp
         )
 target_link_libraries(Catch_tests_run)
