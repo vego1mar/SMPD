@@ -8,6 +8,7 @@ namespace helpers {
     class Combinations {
     private:
         int loopLimit;
+        int combinationLimit;
         std::vector<int> successors;
 
     public:
@@ -33,11 +34,13 @@ namespace helpers {
     private:
         void determineStartingSuccessors(int distinct);
 
-        bool isValidCombination() const;
-
         std::vector<int> getCurrent() const;
 
-        void goNext();
+        void goNext(int i);
+
+        void determineNextSuccessors(int j);
+
+        int getSuccessorFirstInvalidIndex() const;
 
     };
 

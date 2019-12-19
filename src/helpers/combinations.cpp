@@ -1,39 +1,22 @@
-#include <set>
 #include "combinations.hpp"
 
 namespace helpers {
 
     Combinations::Combinations(int elements, int distinct)
-            : loopLimit(elements), successors({}) {
+            : loopLimit(elements), combinationLimit(distinct), successors({}) {
         determineStartingSuccessors(distinct);
     }
 
     std::vector<int> Combinations::getNext() {
         // The first combination should be always valid.
         auto previous = getCurrent();
-        goNext();
-
-        if (!isValidCombination()) {
-            goNext();
-        }
-
+        auto startingPlace = successors.size() - 1;
+        goNext(startingPlace);
         return previous;
     }
 
     bool Combinations::hasNext() const {
-        bool hasNotNext = true;
-
-        for (const auto &distinct : successors) {
-            if (distinct == 0) {
-                hasNotNext &= true;
-                continue;
-            }
-
-            hasNotNext &= false;
-            break;
-        }
-
-        return !hasNotNext;
+        return getSuccessorFirstInvalidIndex() == -1;
     }
 
     void Combinations::determineStartingSuccessors(int distinct) {
@@ -42,16 +25,6 @@ namespace helpers {
         for (int i = 0; i < distinct; i++) {
             successors.push_back(i);
         }
-    }
-
-    bool Combinations::isValidCombination() const {
-        std::set<int> current;
-
-        for (const auto &distinct : successors) {
-            current.insert(distinct);
-        }
-
-        return current.size() == successors.size();
     }
 
     std::vector<int> Combinations::getCurrent() const {
@@ -64,32 +37,41 @@ namespace helpers {
         return current;
     }
 
-    void Combinations::goNext() {
-        std::size_t h = 0;
-        bool hasReachedTheEnd = false;
-
-        for (std::size_t i = successors.size() - 1; i >= 0; i--) {
-            successors[i]++;
-
-            if (successors[i] == loopLimit) {
-                successors[i] = 0;
-                hasReachedTheEnd = true;
-                h = i;
-                continue;
-            }
-
-            break;
+    void Combinations::goNext(int i) {
+        if (i == 0 && successors[i] == loopLimit) {
+            return;
         }
 
-        if (hasReachedTheEnd) {
-            for (std::size_t j = h; j < loopLimit; j++) {
-                successors[j] = successors[j - 1] + 1;
+        successors[i]++;
+
+        if (successors[i] >= loopLimit) {
+            determineNextSuccessors(i - 1);
+        }
+
+        int invalidIndex = getSuccessorFirstInvalidIndex();
+        bool areSuccessorsValid = invalidIndex == -1;
+
+        if (!areSuccessorsValid) {
+            goNext(invalidIndex);
+        }
+    }
+
+    void Combinations::determineNextSuccessors(int j) {
+        successors[j]++;
+
+        for (int i = j + 1; i < combinationLimit; i++) {
+            successors[i] = successors[i - 1] + 1;
+        }
+    }
+
+    int Combinations::getSuccessorFirstInvalidIndex() const {
+        for (int i = 0; i < combinationLimit; i++) {
+            if (successors[i] >= loopLimit) {
+                return i;
             }
         }
 
-        // TODO: validation
-        // if (successors[j] == loopLimit) // [024] == [--4]  => untilValid( hasReachedTheEnd + forNext(0) )
-        // if successors[0] == loopLimit  =>  STOP (field)
+        return -1;
     }
 
 }
