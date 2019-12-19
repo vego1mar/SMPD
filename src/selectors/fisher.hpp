@@ -5,12 +5,16 @@
 
 using matrix::Matrix;
 
+typedef std::vector<double> FpVector;
+typedef std::vector<int> IntVector;
+
 namespace fisher {
 
     /// Fisher Linear Discriminant
     class FLD {
     private:
         int featureIndex;
+        std::vector<int> featureIndices;
 
     public:
         FLD();
@@ -28,13 +32,22 @@ namespace fisher {
         std::string toString();
 
     public:
-        int getFeatureIndex();
+        int getFeatureIndex() const;
+
+        const std::vector<int> &getFeatureIndices() const;
 
     public:
         void selectOne(const Matrix &clusterA, const Matrix &clusterB);
 
-        // TODO: below
-        //void select(int howMany, const Matrix &clusterA, const Matrix &clusterB);
+        void select(int howMany, const Matrix &clusterA, const Matrix &clusterB);
+
+
+    private:
+        static double getNumerator(const FpVector &meanVectorA, const FpVector &meanVectorB, const IntVector &featuresIndices);
+
+        static Matrix getMinorMatrix(const Matrix &cluster, const IntVector &featuresIndices);
+
+        static std::vector<double> getNegatedMeanVector(const FpVector &vector, const IntVector &featuresIndices);
 
     };
 

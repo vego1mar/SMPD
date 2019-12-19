@@ -2,6 +2,9 @@
 #define STATISTICS_HPP
 
 #include <vector>
+#include "../matrix/matrix.hpp"
+
+using matrix::Matrix;
 
 namespace statistics {
 
@@ -23,6 +26,8 @@ namespace statistics {
     public:
         static double arithmeticMean(const std::vector<double> &list);
 
+        static std::vector<double> arithmeticMean(const Matrix &matrix);
+
         static double meanSquaredError(double left, double right);
 
         static double variance(const std::vector<double> &list);
@@ -30,6 +35,8 @@ namespace statistics {
         static double standardDeviation(const std::vector<double> &list);
 
         static int argMax(const std::vector<double> &list);
+
+        static double normL2(const std::vector<double> &list);
     };
 
 }

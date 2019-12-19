@@ -9,6 +9,18 @@ namespace statistics {
         return std::accumulate(list.begin(), list.end(), 0.0) / static_cast<double>(list.size());
     }
 
+    std::vector<double> Statistics::arithmeticMean(const Matrix &matrix) {
+        std::vector<double> mean;
+        mean.reserve(matrix.getRows());
+
+        for (int i = 0; i < matrix.getRows(); i++) {
+            auto currentMean = arithmeticMean(matrix.getRow(i));
+            mean.emplace_back(currentMean);
+        }
+
+        return mean;
+    }
+
     double Statistics::meanSquaredError(double left, double right) {
         const unsigned short P_NORM = 2;
         auto difference = left - right;
@@ -55,6 +67,16 @@ namespace statistics {
         }
 
         return maxIndex;
+    }
+
+    double Statistics::normL2(const std::vector<double> &list) {
+        double sum = 0.0;
+
+        for (const auto &value : list) {
+            sum += value * value;
+        }
+
+        return std::sqrt(sum);
     }
 
 }

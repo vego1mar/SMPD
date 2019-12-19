@@ -40,4 +40,49 @@ TEST_CASE("fisher.hpp") {
         REQUIRE_THAT(str1, Catch::EndsWith("}"));
         REQUIRE_THAT(str2, Catch::EndsWith("}"));
     }
+
+    SECTION("select(2,A,B) -> [0,1]") {
+        auto clusterA = Matrix(4, 3);
+        clusterA.set(std::vector<std::vector<double>>{
+                {1,  1,  2, 1},
+                {3,  -1, 2, 4},
+                {-1, -2, 0, 1}
+        });
+        auto clusterB = Matrix(3, 3);
+        clusterB.set(std::vector<std::vector<double>>{
+                {3, 3, 1},
+                {0, 1, 3},
+                {4, 7, 5}
+        });
+        auto expectedIndices = std::vector<int>{0, 1};
+        FLD fld;
+
+        fld.select(2, clusterA, clusterB);
+
+        REQUIRE(fld.getFeatureIndices().size() == 2);
+        REQUIRE_THAT(fld.getFeatureIndices(), Catch::UnorderedEquals(expectedIndices));
+    }
+
+    SECTION("select(2,C,D) -> [0,1]") {
+        auto clusterA = Matrix(4, 3);
+        clusterA.set(std::vector<std::vector<double>>{
+                {1,  2,  1,  0},
+                {7,  8,  0,  5},
+                {-2, -1, -2, 1}
+        });
+        auto clusterB = Matrix(3, 3);
+        clusterB.set(std::vector<std::vector<double>>{
+                {3,  7,  5},
+                {-1, -2, -3},
+                {0,  1,  -1}
+        });
+        auto expectedIndices = std::vector<int>{0, 1};
+        FLD fld;
+
+        fld.select(2, clusterA, clusterB);
+
+        REQUIRE(fld.getFeatureIndices().size() == 2);
+        REQUIRE_THAT(fld.getFeatureIndices(), Catch::UnorderedEquals(expectedIndices));
+    }
+
 }
