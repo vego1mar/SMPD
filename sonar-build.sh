@@ -7,6 +7,7 @@ echo "REMOVE PREVIOUS BUILD"
 rm -rf sonar-build
 
 echo "BUILDING"
+echo "./"
 mkdir sonar-build
 g++ -Wall -fexceptions -std=c++14 -g  -c src/main.cpp -o sonar-build/main.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/statistical.cpp -o sonar-build/statistical.o
@@ -15,6 +16,7 @@ g++ -Wall -fexceptions -std=c++14 -g  -c src/io_manager.cpp -o sonar-build/io_ma
 g++ -Wall -fexceptions -std=c++14 -g  -c src/casing.cpp -o sonar-build/casing.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/helpers.cpp -o sonar-build/helpers.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/selectors.cpp -o sonar-build/selectors.o
+echo "./matrix"
 mkdir sonar-build/matrix
 g++ -Wall -fexceptions -std=c++14 -g  -c src/matrix/matrix.cpp -o sonar-build/matrix/matrix.o
 RC=$?
