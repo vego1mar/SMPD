@@ -17,6 +17,7 @@ namespace data_builders {
         reader->read();
         processCSVRecords(reader->getContent());
         reader->dispose();
+        buildMatrix();
     }
 
     void CSVParser::dispose() {
@@ -31,10 +32,14 @@ namespace data_builders {
         if (data != nullptr) {
             data.reset();
         }
+
+        if (dataset != nullptr) {
+            dataset.reset();
+        }
     }
 
-    const CSVDataFile &CSVParser::getData() const {
-        return *data;
+    const Matrix &CSVParser::getDataset() const {
+        return *dataset;
     }
 
     const Headers &CSVParser::getHeaders() const {
@@ -54,6 +59,14 @@ namespace data_builders {
                 (*data)[i].push_back(value);
             }
         }
+    }
+
+    void CSVParser::buildMatrix() {
+        const std::size_t columns = (*data)[0].size();
+        const std::size_t rows = data->size();
+        dataset = std::make_unique<Matrix>(columns, rows);
+        dataset->set(*data);
+        data.reset();
     }
 
 }
