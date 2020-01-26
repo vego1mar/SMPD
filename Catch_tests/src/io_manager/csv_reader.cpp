@@ -8,15 +8,21 @@ using test::Constants;
 
 
 TEST_CASE("csv_reader", "[csv_reader]") {
-    Constants consts;
+    const Constants vars;
+
 
     SECTION("read MapleOak.csv -> OK") {
-        CSVReader reader(consts.PATH_MAPLE_OAK);
+        CSVReader reader(vars.MAPLE_OAK_PATH);
 
         reader.read();
         CSVFile content = reader.getContent();
         reader.dispose();
 
-        REQUIRE(content.size() == 123);
+        REQUIRE(content.size() == vars.MAPLE_OAK_LINES);
+
+        for (const auto &line : content) {
+            REQUIRE(line.size() == vars.MAPLE_OAK_COLUMNS);
+        }
     }
+
 }

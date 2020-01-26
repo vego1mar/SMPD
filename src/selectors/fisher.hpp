@@ -5,10 +5,12 @@
 
 using matrix::Matrix;
 
-typedef std::vector<double> FpVector;
-typedef std::vector<int> IntVector;
 
 namespace fisher {
+
+    typedef std::vector<double> FpVector;
+    typedef std::vector<int> IntVector;
+
 
     /// Fisher Linear Discriminant
     class FLD {
