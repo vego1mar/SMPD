@@ -8,7 +8,7 @@ using statistics::Statistics;
 using helpers::Converters;
 using helpers::Combinations;
 
-namespace fisher {
+namespace selectors {
 
     FLD::FLD()
             : featureIndex(-1), featureIndices({}) {
@@ -79,7 +79,7 @@ namespace fisher {
         while (combinations.hasNext()) {
             auto featuresIndices = combinations.getNext();
             auto numerator = getNumerator(meanVectorA, meanVectorB, featuresIndices);
-            auto minorA = getMinorMatrix(clusterA, featuresIndices); // x
+            auto minorA = getMinorMatrix(clusterA, featuresIndices);
             auto minorB = getMinorMatrix(clusterB, featuresIndices);
             auto negatedMeanA = getNegatedMeanVector(meanVectorA, featuresIndices);
             auto negatedMeanB = getNegatedMeanVector(meanVectorB, featuresIndices);

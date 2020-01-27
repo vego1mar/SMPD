@@ -48,6 +48,8 @@ namespace data_builders {
 
         const Headers &getHeaders() const;
 
+        void getData(const std::string &header, Matrix &out) const;
+
     private:
         void processCSVRecords(const CSVFile &csvFile);
 

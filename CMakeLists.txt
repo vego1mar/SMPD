@@ -25,6 +25,6 @@ add_executable(
 
         src/io_manager/csv_reader.hpp src/io_manager/csv_reader.cpp
         src/statistics/statistics.hpp src/statistics/statistics.cpp
-        src/test/constants.hpp src/data_builders/csv_parser.hpp src/data_builders/csv_parser.cpp)
+        src/test/constants.hpp src/data_builders/csv_parser.hpp src/data_builders/csv_parser.cpp src/main_program/statistical_run.hpp src/main_program/statistical_run.cpp src/helpers/collections.hpp src/helpers/collections.cpp)
 
 add_subdirectory(Catch_tests)

@@ -6,7 +6,7 @@
 using matrix::Matrix;
 
 
-namespace fisher {
+namespace selectors {
 
     typedef std::vector<double> FpVector;
     typedef std::vector<int> IntVector;
@@ -33,12 +33,10 @@ namespace fisher {
 
         std::string toString();
 
-    public:
         int getFeatureIndex() const;
 
         const std::vector<int> &getFeatureIndices() const;
 
-    public:
         void selectOne(const Matrix &clusterA, const Matrix &clusterB);
 
         void select(int howMany, const Matrix &clusterA, const Matrix &clusterB);

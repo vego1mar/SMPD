@@ -3,6 +3,7 @@ add_executable(
 
         src/data_builders/csv_parser_test.cpp ../src/data_builders/csv_parser.cpp
 
+        ../src/helpers/collections.cpp
         src/helpers/combinations_test.cpp ../src/helpers/combinations.cpp
         ../src/helpers/converters.cpp
         src/helpers/strings_test.cpp ../src/helpers/strings.cpp
@@ -22,6 +23,6 @@ add_executable(
         io_manager_test.cpp ../src/io_manager.cpp
         selectors_test.cpp ../src/selectors.cpp
         statistical_test.cpp ../src/statistical.cpp
-)
+        src/helpers/collections_test.cpp)
 
 target_link_libraries(Catch_tests_run)

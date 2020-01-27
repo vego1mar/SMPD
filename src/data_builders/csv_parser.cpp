@@ -46,6 +46,29 @@ namespace data_builders {
         return *headers;
     }
 
+    void CSVParser::getData(const std::string &header, Matrix &out) const {
+        if (headers->empty() || dataset == nullptr) {
+            throw std::bad_function_call();
+        }
+
+        if (headers->size() != dataset->getRows()) {
+            throw std::invalid_argument("headers->size() != dataset->getRows()");
+        }
+
+        auto selection = std::make_unique<CSVDataFile>();
+
+        for (std::size_t i = 0; i < headers->size(); i++) {
+            const auto &name = (*headers)[i];
+
+            if (name == header) {
+                selection->push_back(dataset->getRow(i));
+            }
+        }
+
+        out.set(*selection);
+        selection.reset();
+    }
+
     void CSVParser::processCSVRecords(const CSVFile &csvFile) {
         for (std::size_t i = 0; i < csvFile.size(); i++) {
             const auto &record = csvFile[i];

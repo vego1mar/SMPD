@@ -2,8 +2,9 @@
 #include "../../../src/matrix/matrix.hpp"
 #include "../../../src/selectors/fisher.hpp"
 
-using fisher::FLD;
+using selectors::FLD;
 using matrix::Matrix;
+
 
 TEST_CASE("fisher.hpp") {
     SECTION("selectOne(A,B) -> 1") {
