@@ -1,15 +1,20 @@
 add_executable(
         Catch_tests_run
 
+        src/command_line/cla_parser_test.cpp ../src/command_line/cla_parser.cpp
+
         src/data_builders/csv_parser_test.cpp ../src/data_builders/csv_parser.cpp
 
-        ../src/helpers/collections.cpp
+        src/helpers/collections_test.cpp ../src/helpers/collections.cpp
         src/helpers/combinations_test.cpp ../src/helpers/combinations.cpp
         ../src/helpers/converters.cpp
+        src/helpers/stringify_test.cpp ../src/helpers/stringify.cpp
         src/helpers/strings_test.cpp ../src/helpers/strings.cpp
 
         src/io_manager/csv_reader.cpp ../src/io_manager/csv_reader.cpp
         ../src/io_manager/file_reader.cpp
+
+        src/main_program/statistical_run_test.cpp ../src/main_program/statistical_run.cpp
 
         src/matrix/matrix_test.cpp ../src/matrix/matrix.cpp
 
@@ -23,6 +28,7 @@ add_executable(
         io_manager_test.cpp ../src/io_manager.cpp
         selectors_test.cpp ../src/selectors.cpp
         statistical_test.cpp ../src/statistical.cpp
-        src/helpers/collections_test.cpp)
+
+)
 
 target_link_libraries(Catch_tests_run)

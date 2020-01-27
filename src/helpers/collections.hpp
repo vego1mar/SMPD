@@ -25,6 +25,8 @@ namespace helpers {
 
         static std::set<std::string> getDistinct(const std::vector<std::string> &source);
 
+        static std::size_t count(const std::vector<std::string> &source, const std::string &label);
+
     };
 
 }

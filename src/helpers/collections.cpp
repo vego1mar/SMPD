@@ -12,4 +12,16 @@ namespace helpers {
         return result;
     }
 
+    std::size_t Collections::count(const std::vector<std::string> &source, const std::string &label) {
+        std::size_t counter = 0;
+
+        for (const auto &str : source) {
+            if (str == label) {
+                counter++;
+            }
+        }
+
+        return counter;
+    }
+
 }
