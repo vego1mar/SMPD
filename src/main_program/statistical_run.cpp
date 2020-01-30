@@ -1,12 +1,11 @@
 #include <iostream>
 #include "statistical_run.hpp"
-#include "../helpers/collections.hpp"
 #include "../helpers/combinations.hpp"
 #include "../helpers/stringify.hpp"
 
 using data_builders::Headers;
 using matrix::Matrix;
-using helpers::Collections;
+using matrix::TransformationType;
 using helpers::Combinations;
 using helpers::Stringify;
 
@@ -34,7 +33,7 @@ namespace main_program {
     }
 
     void StatisticalRun::performRun() {
-        const auto &pathOption = *std::next(CLA_OPTIONS.begin(), 3);
+        const auto &pathOption = *std::next(CLA_OPTIONS.begin(), 1);
         const auto &pathToCSV = claParser->getOption(pathOption);
         CSVParser parser(pathToCSV);
         parser.build();
@@ -51,21 +50,11 @@ namespace main_program {
             return false;
         }
 
-        const auto &selectClasses = *std::next(CLA_OPTIONS.begin(), 0);
-        const auto &selectSubclasses = *std::next(CLA_OPTIONS.begin(), 1);
-        const auto &featuresNo = *std::next(CLA_OPTIONS.begin(), 2);
-        const auto &path = *std::next(CLA_OPTIONS.begin(), 3);
+        const auto &featuresNo = *std::next(CLA_OPTIONS.begin(), 0);
+        const auto &path = *std::next(CLA_OPTIONS.begin(), 1);
 
         if (!claParser->isOptionExists(path)) {
             std::cerr << "No path to CSV file!" << std::endl;
-            return false;
-        }
-
-        bool areNotSelected = !claParser->isOptionExists(selectClasses) && !claParser->isOptionExists(selectSubclasses);
-        bool areAllSelected = claParser->isOptionExists(selectClasses) && claParser->isOptionExists(selectSubclasses);
-
-        if (areNotSelected || areAllSelected) {
-            std::cerr << "Choose one of: ['" << selectClasses << "','" << selectSubclasses << "']" << std::endl;
             return false;
         }
 
@@ -79,54 +68,42 @@ namespace main_program {
 
     void StatisticalRun::printHelp() {
         std::string helpStr = "USAGE:\n"
-                              "./program --file MapleOak.csv --select-classes\n"
-                              "./program --file MapleOak.csv --select-subclasses\n"
-                              "./program --file MapleOak.csv --select-classes --features-no <number>\n";
+                              "./program --file MapleOak.csv\n"
+                              "./program --file MapleOak.csv --features-no <number>\n";
         std::cout << helpStr << std::endl;
     }
 
     void StatisticalRun::performSelection(const CSVParser &csvParser) {
-        const auto &selectClasses = *std::next(CLA_OPTIONS.begin(), 0);
-        const auto &selectSubclasses = *std::next(CLA_OPTIONS.begin(), 1);
+        auto superCluster = std::make_unique<std::vector<Matrix>>();
+        auto superHeaders = std::make_unique<Headers>();
+        csvParser.regroupAsSuperCluster(*superCluster, *superHeaders);
 
-        if (claParser->isOptionExists(selectClasses)) {
-            // TODO: performSelectionForTwoClasses(csvParser)
-            return;
+        for (auto &cluster : *superCluster) {
+            cluster.transform(TransformationType::Transposition);
         }
 
-        if (claParser->isOptionExists(selectSubclasses)) {
-            performSelectionForEachLabel(csvParser);
-        }
-    }
-
-    void StatisticalRun::performSelectionForEachLabel(const CSVParser &csvParser) {
-        const Headers &headers = csvParser.getHeaders();
-        const auto headersSet = Collections::getDistinct(headers);
-        const Matrix &dataset = csvParser.getDataset();
-        Combinations combinations(headersSet.size(), 2);
-        const std::size_t &COLUMNS = dataset.getColumns();
         FLD fld;
+        Combinations combinations(superCluster->size(), 2);
 
         while (combinations.hasNext()) {
             const auto indices = combinations.getNext();
             const auto &first = indices[0];
             const auto &second = indices[1];
-            const auto &firstHeader = *std::next(headersSet.begin(), first);
-            const auto &secondHeader = *std::next(headersSet.begin(), second);
-            FLDHeader fldHeader(firstHeader, secondHeader);
+            const auto &firstHeader = (*superHeaders)[first];
+            const auto &secondIndex = (*superHeaders)[second];
+            FLDHeader fldHeader(firstHeader, secondIndex);
 
-            std::size_t rowsA = Collections::count(headers, firstHeader);
-            std::size_t rowsB = Collections::count(headers, secondHeader);
-            Matrix clusterA(COLUMNS, rowsA);
-            Matrix clusterB(COLUMNS, rowsB);
-            csvParser.getData(firstHeader, clusterA);
-            csvParser.getData(secondHeader, clusterB);
-
+            const auto &clusterA = (*superCluster)[first];
+            const auto &clusterB = (*superCluster)[second];
             fld.select(*featuresToSelect, clusterA, clusterB);
-            const auto &selectedFeatures = fld.getFeatureIndices();
 
-            std::cout << Stringify::toString(fldHeader) << " -> FLD " << Stringify::toString(selectedFeatures) << std::endl;
+            const auto &features = fld.getFeatureIndices();
+            printInfo(fldHeader, features);
         }
+    }
+
+    void StatisticalRun::printInfo(const FLDHeader &fldHeader, const IntVector &selectedFeatures) {
+        std::cout << Stringify::toString(fldHeader) << " -> FLD " << Stringify::toString(selectedFeatures) << std::endl;
     }
 
 }

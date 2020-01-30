@@ -50,6 +50,8 @@ namespace data_builders {
 
         void getData(const std::string &header, Matrix &out) const;
 
+        void regroupAsSuperCluster(std::vector<Matrix> &outMatrix, Headers &outHeaders) const;
+
     private:
         void processCSVRecords(const CSVFile &csvFile);
 

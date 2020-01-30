@@ -1,5 +1,10 @@
 #include <functional>
+#include <set>
 #include "csv_parser.hpp"
+#include "../helpers/strings.hpp"
+
+using helpers::Strings;
+
 
 namespace data_builders {
 
@@ -67,6 +72,45 @@ namespace data_builders {
 
         out.set(*selection);
         selection.reset();
+    }
+
+    void CSVParser::regroupAsSuperCluster(std::vector<Matrix> &outMatrix, Headers &outHeaders) const {
+        typedef std::vector<double> Row;
+        typedef std::vector<Row> Rows;
+
+        std::set<std::string> firstWords;
+        std::size_t outIndex = 0;
+
+        for (std::size_t i = 0; i < headers->size(); i++) {
+            const auto &header = (*headers)[i];
+            const auto firstWord = Strings::split(header, ' ')[0];
+            bool isAlreadyExists = firstWords.find(firstWord) != firstWords.end();
+
+            if (isAlreadyExists) {
+                continue;
+            }
+
+            firstWords.insert(firstWord);
+            auto rows = std::make_unique<Rows>();
+            rows->push_back(dataset->getRow(i));
+            outHeaders.push_back(firstWord);
+
+            for (std::size_t j = i + 1; j < headers->size(); j++) {
+                const auto &nextHeader = (*headers)[j];
+                const auto nextFirstWord = Strings::split(nextHeader, ' ')[0];
+
+                if (firstWord == nextFirstWord) {
+                    rows->push_back(dataset->getRow(j));
+                }
+            }
+
+            const auto columnsNo = (*rows)[0].size();
+            const auto rowsNo = rows->size();
+            outMatrix.emplace_back(Matrix(columnsNo, rowsNo));
+            outMatrix[outIndex].set(*rows);
+            outIndex++;
+            rows.reset();
+        }
     }
 
     void CSVParser::processCSVRecords(const CSVFile &csvFile) {

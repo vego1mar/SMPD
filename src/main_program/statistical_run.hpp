@@ -10,6 +10,7 @@
 using data_builders::CSVParser;
 using command_line::CLAParser;
 using selectors::FLD;
+using selectors::IntVector;
 
 
 namespace main_program {
@@ -19,7 +20,7 @@ namespace main_program {
 
     class StatisticalRun {
     private:
-        const std::list<std::string> CLA_OPTIONS = {"--select-classes", "--select-subclasses", "--features-no", "--path"};
+        const std::list<std::string> CLA_OPTIONS = {"--features-no", "--path"};
         std::unique_ptr<int> featuresToSelect = std::make_unique<int>(5);
         std::unique_ptr<CLAParser> claParser;
 
@@ -50,7 +51,7 @@ namespace main_program {
 
         void performSelection(const CSVParser &csvParser);
 
-        void performSelectionForEachLabel(const CSVParser &csvParser);
+        static void printInfo(const FLDHeader &fldHeader, const IntVector &selectedFeatures);
 
     };
 

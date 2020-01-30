@@ -4,6 +4,9 @@
 #include <set>
 #include <string>
 #include <vector>
+#include "../data_builders/csv_parser.hpp"
+
+using data_builders::CSVParser;
 
 
 namespace helpers {

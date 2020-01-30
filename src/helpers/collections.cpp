@@ -1,5 +1,8 @@
 #include "collections.hpp"
 
+using data_builders::Headers;
+
+
 namespace helpers {
 
     std::set<std::string> Collections::getDistinct(const std::vector<std::string> &source) {
