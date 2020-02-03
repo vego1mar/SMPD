@@ -36,4 +36,14 @@ TEST_CASE("collections_test", "[collections_test]") {
         REQUIRE(result3 == expectedResult3);
     }
 
+    SECTION("getOrdinals -> OK") {
+        const int BEGIN = -3;
+        const int END = 4;
+        const std::vector<int> expectedOrdinals = {-3, -2, -1, 0, 1, 2, 3};
+
+        const auto result = Collections::getOrdinals(BEGIN, END);
+
+        REQUIRE_THAT(result, Catch::UnorderedEquals(expectedOrdinals));
+    }
+
 }

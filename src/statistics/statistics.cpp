@@ -13,7 +13,7 @@ namespace statistics {
         std::vector<double> mean;
         mean.reserve(matrix.getRows());
 
-        for (int i = 0; i < matrix.getRows(); i++) {
+        for (std::size_t i = 0; i < matrix.getRows(); i++) {
             auto currentMean = arithmeticMean(matrix.getRow(i));
             mean.emplace_back(currentMean);
         }

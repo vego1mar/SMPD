@@ -12,10 +12,6 @@ namespace io_manager {
         fileContent = std::make_unique<CSVFile>();
     }
 
-    CSVReader::~CSVReader() {
-        dispose();
-    }
-
     void CSVReader::dispose() {
         if (fileReader != nullptr) {
             fileReader.reset();

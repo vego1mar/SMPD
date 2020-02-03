@@ -30,7 +30,7 @@ namespace io_manager {
 
         CSVReader &operator=(CSVReader &&rvalue) noexcept = delete;
 
-        virtual ~CSVReader();
+        virtual ~CSVReader() = default;
 
         void read();
 

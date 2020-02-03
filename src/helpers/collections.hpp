@@ -30,6 +30,8 @@ namespace helpers {
 
         static std::size_t count(const std::vector<std::string> &source, const std::string &label);
 
+        static std::vector<int> getOrdinals(int begin, int end);
+
     };
 
 }

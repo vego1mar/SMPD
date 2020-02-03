@@ -6,7 +6,8 @@ using selectors::FLD;
 using matrix::Matrix;
 
 
-TEST_CASE("fisher.hpp") {
+TEST_CASE("fisher_test", "[fisher.test]") {
+
     SECTION("selectOne(A,B) -> 1") {
         auto clusterA = Matrix(4, 3);
         clusterA.set(std::vector<std::vector<double>>{
@@ -55,7 +56,7 @@ TEST_CASE("fisher.hpp") {
                 {0, 1, 3},
                 {4, 7, 5}
         });
-        auto expectedIndices = std::vector<int>{0, 1};
+        auto expectedIndices = std::vector<int>{0, 2};
         FLD fld;
 
         fld.select(2, clusterA, clusterB);
@@ -64,7 +65,7 @@ TEST_CASE("fisher.hpp") {
         REQUIRE_THAT(fld.getFeatureIndices(), Catch::UnorderedEquals(expectedIndices));
     }
 
-    SECTION("select(2,C,D) -> [0,1]") {
+    SECTION("SFS(2,C,D) -> [2,3] from 3") {
         auto clusterA = Matrix(4, 3);
         clusterA.set(std::vector<std::vector<double>>{
                 {1,  2,  1,  0},
@@ -77,10 +78,10 @@ TEST_CASE("fisher.hpp") {
                 {-1, -2, -3},
                 {0,  1,  -1}
         });
-        auto expectedIndices = std::vector<int>{0, 1};
+        auto expectedIndices = std::vector<int>{1, 2};
         FLD fld;
 
-        fld.select(2, clusterA, clusterB);
+        fld.selectWithSFS(2, clusterA, clusterB);
 
         REQUIRE(fld.getFeatureIndices().size() == 2);
         REQUIRE_THAT(fld.getFeatureIndices(), Catch::UnorderedEquals(expectedIndices));

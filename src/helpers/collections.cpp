@@ -27,4 +27,14 @@ namespace helpers {
         return counter;
     }
 
+    std::vector<int> Collections::getOrdinals(int begin, int end) {
+        std::vector<int> ordinals;
+
+        for (int i = begin; i < end; i++) {
+            ordinals.emplace_back(i);
+        }
+
+        return ordinals;
+    }
+
 }

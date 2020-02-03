@@ -20,7 +20,6 @@ namespace helpers {
 
         virtual ~Converters() = delete;
 
-    public:
         static std::string toHex(unsigned long number);
 
     };

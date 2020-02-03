@@ -23,7 +23,6 @@ namespace statistics {
 
         virtual ~Statistics() = delete;
 
-    public:
         static double arithmeticMean(const std::vector<double> &list);
 
         static std::vector<double> arithmeticMean(const Matrix &matrix);

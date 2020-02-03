@@ -3,7 +3,7 @@
 namespace helpers {
 
     Combinations::Combinations(int elements, int distinct)
-            : loopLimit(elements), combinationLimit(distinct), successors({}) {
+            : loopLimit(elements), combinationLimit(distinct) {
         determineStartingSuccessors(distinct);
     }
 

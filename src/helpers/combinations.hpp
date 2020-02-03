@@ -3,6 +3,7 @@
 
 #include <vector>
 
+
 namespace helpers {
 
     class Combinations {
@@ -26,7 +27,6 @@ namespace helpers {
 
         virtual ~Combinations() = default;
 
-    public:
         std::vector<int> getNext();
 
         bool hasNext() const;
