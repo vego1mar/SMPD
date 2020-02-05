@@ -1,9 +1,15 @@
+#include <stdexcept>
 #include "combinations.hpp"
+
 
 namespace helpers {
 
     Combinations::Combinations(int elements, int distinct)
             : loopLimit(elements), combinationLimit(distinct) {
+        if (distinct <= 1 || elements <= 1) {
+            throw std::invalid_argument("distinct <= 1 || elements <= 1");
+        }
+
         determineStartingSuccessors(distinct);
     }
 

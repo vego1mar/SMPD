@@ -3,37 +3,10 @@
 
 #include "../matrix/matrix.hpp"
 #include "../helpers/combinations.hpp"
-
-using matrix::Matrix;
-using helpers::Combinations;
+#include "definitions.hpp"
 
 
 namespace selectors {
-
-    typedef std::vector<double> FpVector;
-    typedef std::vector<int> IntVector;
-
-
-    struct SelectionArgs {
-        std::unique_ptr<Matrix> clusterA;
-        std::unique_ptr<Matrix> clusterB;
-        std::unique_ptr<IntVector> nextIndices;
-        std::unique_ptr<FpVector> meanVectorA;
-        std::unique_ptr<FpVector> meanVectorB;
-        std::unique_ptr<Matrix> denominatorPart;
-    };
-
-    struct CombinationArgs {
-        std::unique_ptr<IntVector> features;
-        std::unique_ptr<IntVector> nextIndices;
-        std::unique_ptr<Combinations> combinations;
-    };
-
-    struct CoefficientsData {
-        std::unique_ptr<FpVector> coefficients;
-        std::unique_ptr<std::vector<IntVector>> features;
-    };
-
 
     /// Fisher Linear Discriminant
     class FLD {
@@ -64,6 +37,7 @@ namespace selectors {
 
         void select(int howMany, const Matrix &clusterA, const Matrix &clusterB);
 
+        /// SFS - Sequential Forward Selection
         void selectWithSFS(std::size_t howMany, const Matrix &clusterA, const Matrix &clusterB);
 
     private:

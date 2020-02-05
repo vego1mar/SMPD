@@ -1,6 +1,5 @@
 #include <iostream>
 #include "statistical_run.hpp"
-#include "../helpers/combinations.hpp"
 #include "../helpers/stringify.hpp"
 
 using data_builders::Headers;
@@ -66,11 +65,23 @@ namespace main_program {
         return true;
     }
 
-    void StatisticalRun::printHelp() {
-        std::string helpStr = "USAGE:\n"
-                              "./program --file MapleOak.csv\n"
-                              "./program --file MapleOak.csv --features-no <number>\n";
-        std::cout << helpStr << std::endl;
+    void StatisticalRun::printHelp() const {
+        const auto &featuresNo = *std::next(CLA_OPTIONS.begin(), 0);
+        const auto &path = *std::next(CLA_OPTIONS.begin(), 1);
+        const auto &sfs = *std::next(CLA_OPTIONS.begin(), 2);
+
+        /* ./program --path MapleOak.csv
+         * ./program --path MapleOak.csv --features-no 3
+         * ./program --path MapleOak.csv --features-no 3 --sfs
+         */
+        std::string program = "./program ";
+        std::string mapleOak = " MapleOak.csv ";
+        std::string three = " 3 ";
+        std::cout << "USAGE:" << std::endl <<
+                  program << path << mapleOak << std::endl <<
+                  program << path << mapleOak << featuresNo << three << std::endl <<
+                  program << path << mapleOak << featuresNo << three << sfs << std::endl <<
+                  std::endl;
     }
 
     void StatisticalRun::performSelection(const CSVParser &csvParser) {
@@ -95,7 +106,7 @@ namespace main_program {
 
             const auto &clusterA = (*superCluster)[first];
             const auto &clusterB = (*superCluster)[second];
-            fld.select(*featuresToSelect, clusterA, clusterB);
+            selectAndUseFLDMethod(clusterA, clusterB, fld);
 
             const auto &features = fld.getFeatureIndices();
             printInfo(fldHeader, features);
@@ -104,6 +115,18 @@ namespace main_program {
 
     void StatisticalRun::printInfo(const FLDHeader &fldHeader, const IntVector &selectedFeatures) {
         std::cout << Stringify::toString(fldHeader) << " -> FLD " << Stringify::toString(selectedFeatures) << std::endl;
+    }
+
+    void StatisticalRun::selectAndUseFLDMethod(const Matrix &clusterA, const Matrix &clusterB, FLD &fld) {
+        const auto sfsOption = *std::next(CLA_OPTIONS.begin(), 2);
+        bool isSFSOptionPresent = claParser->isOptionExists(sfsOption);
+
+        if (isSFSOptionPresent) {
+            fld.selectWithSFS(*featuresToSelect, clusterA, clusterB);
+            return;
+        }
+
+        fld.select(*featuresToSelect, clusterA, clusterB);
     }
 
 }

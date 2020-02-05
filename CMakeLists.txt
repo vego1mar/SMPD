@@ -29,11 +29,13 @@ add_executable(
         src/matrix/matrix.hpp src/matrix/matrix.cpp
 
         src/selectors/fisher.hpp src/selectors/fisher.cpp
+        src/selectors/definitions.hpp
 
         src/io_manager/csv_reader.hpp src/io_manager/csv_reader.cpp
         src/statistics/statistics.hpp src/statistics/statistics.cpp
         src/test/constants.hpp
 
-        src/helpers/stringify.hpp src/helpers/stringify.cpp)
+        src/helpers/stringify.hpp src/helpers/stringify.cpp
+)
 
 add_subdirectory(Catch_tests)

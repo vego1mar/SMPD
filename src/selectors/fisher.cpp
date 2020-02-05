@@ -67,7 +67,11 @@ namespace selectors {
         }
 
         if (static_cast<std::size_t>(howMany) == clusterA.getRows()) {
-            throw std::invalid_argument("howMany == clusterA.getRows()");
+            throw std::invalid_argument("static_cast<std::size_t>(howMany) == clusterA.getRows()");
+        }
+
+        if (static_cast<std::size_t>(howMany) == 0) {
+            throw std::invalid_argument("static_cast<std::size_t>(howMany) == 0");
         }
 
         auto coefficients = std::vector<double>();
@@ -144,7 +148,6 @@ namespace selectors {
         return mean;
     }
 
-    /// SFS - Sequential Forward Selection
     void FLD::selectWithSFS(std::size_t howMany, const Matrix &clusterA, const Matrix &clusterB) {
         if (clusterA.getRows() != clusterB.getRows()) {
             throw std::invalid_argument("clusterA.getRows() != clusterB.getRows()");

@@ -20,8 +20,8 @@ namespace main_program {
 
     class StatisticalRun {
     private:
-        const std::list<std::string> CLA_OPTIONS = {"--features-no", "--path"};
-        std::unique_ptr<int> featuresToSelect = std::make_unique<int>(5);
+        const std::list<std::string> CLA_OPTIONS = {"--features-no", "--path", "--sfs"};
+        std::unique_ptr<int> featuresToSelect = std::make_unique<int>(3);
         std::unique_ptr<CLAParser> claParser;
 
 
@@ -47,11 +47,13 @@ namespace main_program {
 
         bool areCLIArgumentsOK();
 
-        static void printHelp();
+        void printHelp() const;
 
         void performSelection(const CSVParser &csvParser);
 
         static void printInfo(const FLDHeader &fldHeader, const IntVector &selectedFeatures);
+
+        void selectAndUseFLDMethod(const Matrix &clusterA, const Matrix &clusterB, FLD &fld);
 
     };
 
