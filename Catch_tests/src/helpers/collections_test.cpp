@@ -46,4 +46,15 @@ TEST_CASE("collections_test", "[collections_test]") {
         REQUIRE_THAT(result, Catch::UnorderedEquals(expectedOrdinals));
     }
 
+    SECTION("convert[int,ulong] -> OK") {
+        const std::vector<std::size_t> source = {0, 3, 2};
+        const std::vector<int> expectedResult = {0, 3, 2};
+
+        const auto result = Collections::convert(source);
+
+        bool areTypesTheSame = typeid(result) == typeid(expectedResult);
+        REQUIRE(areTypesTheSame);
+        REQUIRE_THAT(result, Catch::UnorderedEquals(expectedResult));
+    }
+
 }

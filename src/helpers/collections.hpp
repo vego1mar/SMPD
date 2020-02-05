@@ -4,9 +4,6 @@
 #include <set>
 #include <string>
 #include <vector>
-#include "../data_builders/csv_parser.hpp"
-
-using data_builders::CSVParser;
 
 
 namespace helpers {
@@ -31,6 +28,10 @@ namespace helpers {
         static std::size_t count(const std::vector<std::string> &source, const std::string &label);
 
         static std::vector<int> getOrdinals(int begin, int end);
+
+        static std::vector<int> convert(const std::vector<std::size_t> &source);
+
+        static std::vector<std::size_t> convert(const std::vector<int> &source);
 
     };
 

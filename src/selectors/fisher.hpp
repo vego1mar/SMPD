@@ -51,8 +51,6 @@ namespace selectors {
 
         static void countDenominatorPart(SelectionArgs &args, const Matrix &cluster, const FpVector &meanVector);
 
-        static void seekValidCombination(SelectionArgs &args1, const CombinationArgs &args2);
-
     };
 
 }

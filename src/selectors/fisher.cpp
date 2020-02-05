@@ -5,11 +5,16 @@
 #include "../statistics/statistics.hpp"
 #include "../helpers/converters.hpp"
 #include "../helpers/collections.hpp"
+#include "../helpers/combinations.hpp"
 
 using statistics::Statistics;
 using helpers::Converters;
 using helpers::Collections;
+using helpers::Combinations;
 using matrix::TransformationType;
+using helpers::Sequence;
+using helpers::Range;
+using helpers::Values;
 
 
 namespace selectors {
@@ -171,9 +176,12 @@ namespace selectors {
         auto meanVectorB = std::make_unique<FpVector>(Statistics::arithmeticMean(clusterB));
 
         for (std::size_t i = 1; i < howMany; i++) {
-            CombinationArgs nextArgs;
-            nextArgs.combinations = std::make_unique<Combinations>(clusterA.getRows(), static_cast<int>(features->size() + 1));
-            const auto &combinations = nextArgs.combinations;
+            SequenceArgs nextArgs;
+            const auto range = Range(0, clusterA.getColumns());
+            auto startPoint = Sequence();
+            startPoint.values = Values(Collections::convert(*features));
+            nextArgs.sequencer = std::make_unique<ContinuationSequence>(startPoint, range);
+            const auto &sequencer = nextArgs.sequencer;
 
             auto results = CoefficientsData();
             results.coefficients = std::make_unique<FpVector>();
@@ -185,10 +193,9 @@ namespace selectors {
             selectArgs.meanVectorA = std::make_unique<FpVector>(*meanVectorA);
             selectArgs.meanVectorB = std::make_unique<FpVector>(*meanVectorB);
 
-            while (combinations->hasNext()) {
-                nextArgs.nextIndices = std::make_unique<IntVector>(combinations->getNext());
+            while (sequencer->hasNext()) {
+                nextArgs.nextIndices = std::make_unique<IntVector>(Collections::convert(sequencer->getNext()));
                 nextArgs.features = std::make_unique<IntVector>(*features);
-                seekValidCombination(selectArgs, nextArgs);
                 const auto numerator = getNumerator(*meanVectorA, *meanVectorB, *nextArgs.nextIndices);
                 const auto denominator = getDenominator(selectArgs);
                 const auto coefficient = numerator / denominator;
@@ -244,30 +251,6 @@ namespace selectors {
 
         args.denominatorPart = std::make_unique<Matrix>(*matrixC);
         matrixC.reset();
-    }
-
-    void FLD::seekValidCombination(SelectionArgs &args1, const CombinationArgs &args2) {
-        const auto &features = args2.features;
-        const auto &nextIndices = args2.nextIndices;
-
-        while (true) {
-            bool areAllFeaturesPresent = true;
-
-            for (const auto &index : *features) {
-                bool isFeaturePresent = std::find((*nextIndices).begin(), (*nextIndices).end(), index) != (*nextIndices).end();
-
-                if (!isFeaturePresent) {
-                    *nextIndices = (*args2.combinations).getNext();
-                    areAllFeaturesPresent = false;
-                    break;
-                }
-            }
-
-            if (areAllFeaturesPresent) {
-                args1.nextIndices = std::make_unique<IntVector>(*nextIndices);
-                break;
-            }
-        }
     }
 
 }

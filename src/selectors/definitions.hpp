@@ -4,10 +4,10 @@
 #include <vector>
 #include <memory>
 #include "../matrix/matrix.hpp"
-#include "../helpers/combinations.hpp"
+#include "../helpers/continuation_sequence.hpp"
 
 using matrix::Matrix;
-using helpers::Combinations;
+using helpers::ContinuationSequence;
 
 
 namespace selectors {
@@ -25,10 +25,10 @@ namespace selectors {
         std::unique_ptr<Matrix> denominatorPart;
     };
 
-    struct CombinationArgs {
+    struct SequenceArgs {
         std::unique_ptr<IntVector> features;
         std::unique_ptr<IntVector> nextIndices;
-        std::unique_ptr<Combinations> combinations;
+        std::unique_ptr<ContinuationSequence> sequencer;
     };
 
     struct CoefficientsData {

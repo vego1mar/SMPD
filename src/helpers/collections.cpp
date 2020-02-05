@@ -1,7 +1,5 @@
 #include "collections.hpp"
 
-using data_builders::Headers;
-
 
 namespace helpers {
 
@@ -35,6 +33,36 @@ namespace helpers {
         }
 
         return ordinals;
+    }
+
+    std::vector<int> Collections::convert(const std::vector<std::size_t> &source) {
+        if (source.empty()) {
+            return std::vector<int>();
+        }
+
+        std::vector<int> target;
+        target.reserve(source.size());
+
+        for (const auto &value : source) {
+            target.push_back(static_cast<int>(value));
+        }
+
+        return target;
+    }
+
+    std::vector<std::size_t> Collections::convert(const std::vector<int> &source) {
+        if (source.empty()) {
+            return std::vector<std::size_t>();
+        }
+
+        std::vector<std::size_t> target;
+        target.reserve(source.size());
+
+        for (const auto &value : source) {
+            target.push_back(static_cast<std::size_t>(value));
+        }
+
+        return target;
     }
 
 }
