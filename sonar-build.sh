@@ -29,6 +29,7 @@ echo "./helpers"
 mkdir sonar-build/helpers
 g++ -Wall -fexceptions -std=c++14 -g  -c src/helpers/collections.cpp -o sonar-build/helpers/collections.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/helpers/combinations.cpp -o sonar-build/helpers/combinations.o
+g++ -Wall -fexceptions -std=c++14 -g  -c src/helpers/continuation_sequence.cpp -o sonar-build/helpers/continuation_sequence.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/helpers/converters.cpp -o sonar-build/helpers/converters.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/helpers/stringify.cpp -o sonar-build/helpers/stringify.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/helpers/strings.cpp -o sonar-build/helpers/strings.o

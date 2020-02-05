@@ -7,6 +7,7 @@ add_executable(
 
         src/helpers/collections_test.cpp ../src/helpers/collections.cpp
         src/helpers/combinations_test.cpp ../src/helpers/combinations.cpp
+        src/helpers/continuation_sequence_test.cpp ../src/helpers/continuation_sequence.cpp
         ../src/helpers/converters.cpp
         src/helpers/stringify_test.cpp ../src/helpers/stringify.cpp
         src/helpers/strings_test.cpp ../src/helpers/strings.cpp

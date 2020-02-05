@@ -19,7 +19,9 @@ add_executable(
 
         src/helpers/collections.hpp src/helpers/collections.cpp
         src/helpers/combinations.hpp src/helpers/combinations.cpp
+        src/helpers/continuation_sequence.hpp src/helpers/continuation_sequence.cpp
         src/helpers/converters.hpp src/helpers/converters.cpp
+        src/helpers/definitions.hpp
         src/helpers/strings.hpp src/helpers/strings.cpp
 
         src/io_manager/file_reader.hpp src/io_manager/file_reader.cpp
@@ -36,6 +38,7 @@ add_executable(
         src/test/constants.hpp
 
         src/helpers/stringify.hpp src/helpers/stringify.cpp
+
 )
 
 add_subdirectory(Catch_tests)
