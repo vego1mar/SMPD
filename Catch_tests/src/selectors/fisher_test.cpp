@@ -78,7 +78,7 @@ TEST_CASE("fisher_test", "[fisher.test]") {
                 {-1, -2, -3},
                 {0,  1,  -1}
         });
-        auto expectedIndices = std::vector<int>{1, 2};
+        auto expectedIndices = std::vector<int>{1, 0};
         FLD fld;
 
         fld.selectWithSFS(2, clusterA, clusterB);

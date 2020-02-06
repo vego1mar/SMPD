@@ -177,7 +177,7 @@ namespace selectors {
 
         for (std::size_t i = 1; i < howMany; i++) {
             SequenceArgs nextArgs;
-            const auto range = Range(0, clusterA.getColumns());
+            const auto range = Range(0, clusterA.getRows() - 1);
             auto startPoint = Sequence();
             startPoint.values = Values(Collections::convert(*features));
             nextArgs.sequencer = std::make_unique<ContinuationSequence>(startPoint, range);
@@ -195,6 +195,7 @@ namespace selectors {
 
             while (sequencer->hasNext()) {
                 nextArgs.nextIndices = std::make_unique<IntVector>(Collections::convert(sequencer->getNext()));
+                selectArgs.nextIndices = std::make_unique<IntVector>(*nextArgs.nextIndices);
                 nextArgs.features = std::make_unique<IntVector>(*features);
                 const auto numerator = getNumerator(*meanVectorA, *meanVectorB, *nextArgs.nextIndices);
                 const auto denominator = getDenominator(selectArgs);
@@ -203,14 +204,13 @@ namespace selectors {
                 results.features->push_back(*nextArgs.nextIndices);
             }
 
-            meanVectorA.reset();
-            meanVectorB.reset();
-
             const auto argMaxIndex = Statistics::argMax(*results.coefficients);
             const auto &indicesSetSelection = (*results.features)[argMaxIndex];
             *features = indicesSetSelection;
         }
 
+        meanVectorA.reset();
+        meanVectorB.reset();
         featureIndices = IntVector(*features);
         features.reset();
     }
