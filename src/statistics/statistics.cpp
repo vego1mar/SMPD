@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include "statistics.hpp"
 
+
 namespace statistics {
 
     double Statistics::arithmeticMean(const std::vector<double> &list) {
@@ -77,6 +78,20 @@ namespace statistics {
         }
 
         return std::sqrt(sum);
+    }
+
+    double Statistics::geometricDistance(const std::vector<double> &point1, const std::vector<double> &point2) {
+        if (point1.size() != point2.size()) {
+            throw std::invalid_argument("point1.size() != point2.size()");
+        }
+
+        double summed_mse = 0.0;
+
+        for (size_t i = 0; i < point1.size(); i++) {
+            summed_mse += meanSquaredError(point1[i], point2[i]);
+        }
+
+        return std::sqrt(summed_mse);
     }
 
 }

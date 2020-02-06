@@ -6,6 +6,7 @@
 
 using matrix::Matrix;
 
+
 namespace statistics {
 
     /// A utility class.
@@ -36,6 +37,9 @@ namespace statistics {
         static int argMax(const std::vector<double> &list);
 
         static double normL2(const std::vector<double> &list);
+
+        static double geometricDistance(const std::vector<double> &point1, const std::vector<double> &point2);
+
     };
 
 }

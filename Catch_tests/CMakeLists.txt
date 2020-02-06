@@ -1,6 +1,8 @@
 add_executable(
         Catch_tests_run
 
+        src/classifiers/nearest_neighbors_test.cpp ../src/classifiers/nearest_neighbors.cpp
+
         src/command_line/cla_parser_test.cpp ../src/command_line/cla_parser.cpp
 
         src/data_builders/csv_parser_test.cpp ../src/data_builders/csv_parser.cpp

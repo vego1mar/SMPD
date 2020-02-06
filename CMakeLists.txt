@@ -13,6 +13,9 @@ add_executable(
         src/selectors.hpp src/selectors.cpp
         src/statistical.hpp src/statistical.cpp
 
+        src/classifiers/definitions.hpp
+        src/classifiers/nearest_neighbors.hpp src/classifiers/nearest_neighbors.cpp
+
         src/command_line/cla_parser.hpp src/command_line/cla_parser.cpp
 
         src/data_builders/csv_parser.hpp src/data_builders/csv_parser.cpp
@@ -22,22 +25,22 @@ add_executable(
         src/helpers/continuation_sequence.hpp src/helpers/continuation_sequence.cpp
         src/helpers/converters.hpp src/helpers/converters.cpp
         src/helpers/definitions.hpp
+        src/helpers/stringify.hpp src/helpers/stringify.cpp
         src/helpers/strings.hpp src/helpers/strings.cpp
 
+        src/io_manager/csv_reader.hpp src/io_manager/csv_reader.cpp
         src/io_manager/file_reader.hpp src/io_manager/file_reader.cpp
 
         src/main_program/statistical_run.hpp src/main_program/statistical_run.cpp
 
         src/matrix/matrix.hpp src/matrix/matrix.cpp
 
-        src/selectors/fisher.hpp src/selectors/fisher.cpp
         src/selectors/definitions.hpp
+        src/selectors/fisher.hpp src/selectors/fisher.cpp
 
-        src/io_manager/csv_reader.hpp src/io_manager/csv_reader.cpp
         src/statistics/statistics.hpp src/statistics/statistics.cpp
-        src/test/constants.hpp
 
-        src/helpers/stringify.hpp src/helpers/stringify.cpp
+        src/test/constants.hpp
 
 )
 

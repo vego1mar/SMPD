@@ -17,6 +17,10 @@ g++ -Wall -fexceptions -std=c++14 -g  -c src/main.cpp -o sonar-build/main.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/selectors.cpp -o sonar-build/selectors.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/statistical.cpp -o sonar-build/statistical.o
 
+echo "./classifiers"
+mkdir sonar-build/classifiers
+g++ -Wall -fexceptions -std=c++14 -g  -c src/classifiers/nearest_neighbors.cpp -o sonar-build/classifiers/nearest_neighbors.o
+
 echo "./command_line"
 mkdir sonar-build/command_line
 g++ -Wall -fexceptions -std=c++14 -g  -c src/command_line/cla_parser.cpp -o sonar-build/command_line/cla_parser.o
