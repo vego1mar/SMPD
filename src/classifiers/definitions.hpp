@@ -70,7 +70,7 @@ namespace classifiers {
         std::size_t nearestCount;
         std::size_t totalCount;
 
-        NearestNeighborScore(std::string label, std::size_t nearest, std::size_t total) :
+        NearestNeighborScore(std::string &label, std::size_t nearest, std::size_t total) :
                 label(std::move(label)), nearestCount(nearest), totalCount(total) {
         }
 
@@ -78,6 +78,20 @@ namespace classifiers {
             return '{' + label + ',' + std::to_string(nearestCount) + '/' + std::to_string(totalCount) + '}';
         }
     };
+
+
+    typedef std::vector<NearestNeighborScore> NearestNeighborScores;
+    typedef std::vector<Cluster> SuperCluster;
+
+
+    struct NearestNeighborParams2 {
+        Cluster input;
+        SuperCluster superCluster;
+        std::size_t neighbors;
+    };
+
+
+    typedef std::vector<Markers> SuperMarkers;
 
 }
 

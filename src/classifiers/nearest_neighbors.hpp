@@ -11,6 +11,7 @@ namespace classifiers {
     private:
         std::unique_ptr<Markers> markers;
         std::unique_ptr<LabelsCountMap> counts;
+        std::unique_ptr<SuperMarkers> superMarkers;
 
 
     public:
@@ -28,12 +29,16 @@ namespace classifiers {
 
         NearestNeighborScore classify(const Input &input, const Cluster &cluster, std::size_t neighbors);
 
+        NearestNeighborScores classify(const Cluster &input, const Cluster &cluster, std::size_t neighbors);
+
+        NearestNeighborScores classify(const Cluster &input, const SuperCluster &superCluster, std::size_t neighbors);
+
     private:
         static void checkPrerequisites(const NearestNeighborParams &params);
 
         void countDistances(const NearestNeighborParams &params);
 
-        void sortByDistance();
+        void sortMarkersByDistance();
 
         void countLabels(const NearestNeighborParams &params);
 
@@ -42,6 +47,16 @@ namespace classifiers {
         NearestNeighborScore getScore() const;
 
         void dispose();
+
+        static void checkSuperClusterPrerequisites(const NearestNeighborParams2 &params);
+
+        static void checkInputClusterPrerequisites(const NearestNeighborParams2 &params);
+
+        void countDistances(const NearestNeighborParams2 &params);
+
+        void prepareSuperMarker(const NearestNeighborParams2 &params);
+
+        void sortSuperMarkersByDistance();
 
     };
 
