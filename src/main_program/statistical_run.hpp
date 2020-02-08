@@ -49,11 +49,13 @@ namespace main_program {
 
         void printHelp() const;
 
-        void performSelection(const CSVParser &csvParser);
+        void performStatisticalRun(const CSVParser &csvParser);
 
         static void printInfo(const FLDHeader &fldHeader, const IntVector &selectedFeatures);
 
-        void selectAndUseFLDMethod(const Matrix &clusterA, const Matrix &clusterB, FLD &fld);
+        void performSelection(const Matrix &clusterA, const Matrix &clusterB, FLD &fld);
+
+        void performClassification(const CSVParser &csvParser, const FLD &fld);
 
     };
 

@@ -5,6 +5,7 @@ add_executable(
 
         src/command_line/cla_parser_test.cpp ../src/command_line/cla_parser.cpp
 
+        ../src/data_builders/classifiers_grouper.cpp
         src/data_builders/csv_parser_test.cpp ../src/data_builders/csv_parser.cpp
 
         src/helpers/collections_test.cpp ../src/helpers/collections.cpp

@@ -27,6 +27,7 @@ g++ -Wall -fexceptions -std=c++14 -g  -c src/command_line/cla_parser.cpp -o sona
 
 echo "./data_builders"
 mkdir sonar-build/data_builders
+g++ -Wall -fexceptions -std=c++14 -g  -c src/data_builders/classifiers_grouper.cpp -o sonar-build/data_builders/classifiers_grouper.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/data_builders/csv_parser.cpp -o sonar-build/data_builders/csv_parser.o
 
 echo "./helpers"

@@ -1,12 +1,19 @@
 #include <iostream>
 #include "statistical_run.hpp"
 #include "../helpers/stringify.hpp"
+#include "../classifiers/nearest_neighbors.hpp"
+#include "../data_builders/classifiers_grouper.hpp"
 
 using data_builders::Headers;
 using matrix::Matrix;
 using matrix::TransformationType;
 using helpers::Combinations;
 using helpers::Stringify;
+using classifiers::Cluster;
+using classifiers::Features;
+using classifiers::NearestNeighbors;
+using classifiers::SuperCluster;
+using data_builders::ClassifiersGrouper;
 
 
 namespace main_program {
@@ -36,10 +43,7 @@ namespace main_program {
         const auto &pathToCSV = claParser->getOption(pathOption);
         CSVParser parser(pathToCSV);
         parser.build();
-
-        performSelection(parser);
-        //TODO: classify
-
+        performStatisticalRun(parser);
         parser.dispose();
     }
 
@@ -84,7 +88,7 @@ namespace main_program {
                   std::endl;
     }
 
-    void StatisticalRun::performSelection(const CSVParser &csvParser) {
+    void StatisticalRun::performStatisticalRun(const CSVParser &csvParser) {
         auto superCluster = std::make_unique<std::vector<Matrix>>();
         auto superHeaders = std::make_unique<Headers>();
         csvParser.regroupAsSuperCluster(*superCluster, *superHeaders);
@@ -96,6 +100,7 @@ namespace main_program {
         FLD fld;
         Combinations combinations(superCluster->size(), 2);
 
+        // Combinations will be applied to the (first-worded) label pairs in the CSV file.
         while (combinations.hasNext()) {
             const auto indices = combinations.getNext();
             const auto &first = indices[0];
@@ -103,13 +108,13 @@ namespace main_program {
             const auto &firstHeader = (*superHeaders)[first];
             const auto &secondIndex = (*superHeaders)[second];
             FLDHeader fldHeader(firstHeader, secondIndex);
-
             const auto &clusterA = (*superCluster)[first];
             const auto &clusterB = (*superCluster)[second];
-            selectAndUseFLDMethod(clusterA, clusterB, fld);
 
-            const auto &features = fld.getFeatureIndices();
-            printInfo(fldHeader, features);
+            performSelection(clusterA, clusterB, fld);
+            printInfo(fldHeader, fld.getFeatureIndices());
+
+            performClassification(csvParser, fld);
         }
     }
 
@@ -117,7 +122,7 @@ namespace main_program {
         std::cout << Stringify::toString(fldHeader) << " -> FLD " << Stringify::toString(selectedFeatures) << std::endl;
     }
 
-    void StatisticalRun::selectAndUseFLDMethod(const Matrix &clusterA, const Matrix &clusterB, FLD &fld) {
+    void StatisticalRun::performSelection(const Matrix &clusterA, const Matrix &clusterB, FLD &fld) {
         const auto sfsOption = *std::next(CLA_OPTIONS.begin(), 2);
         bool isSFSOptionPresent = claParser->isOptionExists(sfsOption);
 
@@ -127,6 +132,20 @@ namespace main_program {
         }
 
         fld.select(*featuresToSelect, clusterA, clusterB);
+    }
+
+    void StatisticalRun::performClassification(const CSVParser &csvParser, const FLD &fld) {
+        // TODO: features selected -> input for classification -> build and regroup into SuperCluster struct
+        // TODO: classify -> NN(0), NN( featuresSelectedNo/3 )
+        // TODO: classify -> NM, k means
+
+        ClassifiersGrouper grouper;
+        grouper.makeSuperCluster(csvParser, fld);
+        const auto &superCluster = grouper.getSuperCluster();
+
+        // TODO: neighbors from command line
+        NearestNeighbors nn;
+        const auto result = nn.classify(Cluster(), superCluster, 0);
     }
 
 }

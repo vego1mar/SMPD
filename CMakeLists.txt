@@ -18,6 +18,7 @@ add_executable(
 
         src/command_line/cla_parser.hpp src/command_line/cla_parser.cpp
 
+        src/data_builders/classifiers_grouper.hpp src/data_builders/classifiers_grouper.cpp
         src/data_builders/csv_parser.hpp src/data_builders/csv_parser.cpp
 
         src/helpers/collections.hpp src/helpers/collections.cpp
