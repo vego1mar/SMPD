@@ -92,6 +92,7 @@ namespace classifiers {
 
 
     typedef std::vector<Markers> SuperMarkers;
+    typedef std::vector<LabelsCountMap> SuperCounts;
 
 }
 

@@ -12,6 +12,7 @@ namespace classifiers {
         std::unique_ptr<Markers> markers;
         std::unique_ptr<LabelsCountMap> counts;
         std::unique_ptr<SuperMarkers> superMarkers;
+        std::unique_ptr<SuperCounts> superCounts;
 
 
     public:
@@ -57,6 +58,12 @@ namespace classifiers {
         void prepareSuperMarker(const NearestNeighborParams2 &params);
 
         void sortSuperMarkersByDistance();
+
+        void superCountLabels(const NearestNeighborParams2 &params);
+
+        static Labels getSuperLabels(const NearestNeighborParams2 &params);
+
+        NearestNeighborScores getScores();
 
     };
 

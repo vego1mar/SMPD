@@ -33,6 +33,8 @@ namespace helpers {
 
         static std::vector<std::size_t> convert(const std::vector<int> &source);
 
+        static void join(const std::vector<std::string> &source, std::vector<std::string> &target);
+
     };
 
 }

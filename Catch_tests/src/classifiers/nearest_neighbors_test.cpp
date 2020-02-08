@@ -57,12 +57,12 @@ TEST_CASE("nearest_neighbors_test", "[nearest_neighbors]") {
     }
 
     SECTION("classify superCluster -> OK") {
-        const std::vector<std::size_t> neighborsNo = {1, 3};
+        const std::vector<std::size_t> neighborsNo = {1, 3, 2};
         auto input = Cluster();
         input.features = Features(
-                {{1, 2},
-                 {7, 5},
-                 {3, 2}}
+                {{1, 2, 0, -1},
+                 {7, 5, 0, -1},
+                 {3, 2, 0, -2}}
         );
         auto superCluster = SuperCluster();
         auto clusterA = Cluster();
@@ -80,8 +80,10 @@ TEST_CASE("nearest_neighbors_test", "[nearest_neighbors]") {
                                      });
         clusterB.labels = Labels({"B 1", "B 2", "B 3", "B 4"});
         superCluster = {clusterA, clusterB};
-        const std::vector<std::string> expectedResultStrings = {"{B}", "{A}"};
-
+        const std::vector<std::string> expectedResultStrings = {"{B,1/1}", "{A,1/1}", "{A,1/1}", "{A,1/1}",
+                                                                "{A,2/3}", "{A,2/3}", "{A,3/3}", "{A,2/3}",
+                                                                "{A,1/2}", "{A,2/2}", "{A,2/2}", "{A,2/2}",
+        };
 
         NearestNeighbors nn;
         auto results = std::vector<std::string>();

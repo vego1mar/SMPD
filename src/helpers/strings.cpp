@@ -2,6 +2,7 @@
 #include <regex>
 #include "strings.hpp"
 
+
 namespace helpers {
 
     std::vector<std::string> Strings::split(const std::string &source, char delimiter) {
@@ -150,6 +151,18 @@ namespace helpers {
         auto s = trimLeft(str);
         s = trimRight(s);
         return s;
+    }
+
+    std::string Strings::getFirstWord(const std::string &source) {
+        const auto trimmedSource = trim(source);
+        const auto spaceIndex = trimmedSource.find_first_of(' ');
+
+        if (spaceIndex == std::string::npos) {
+            return trimmedSource;
+        }
+
+        const auto word = trimmedSource.substr(0, spaceIndex);
+        return word;
     }
 
 }

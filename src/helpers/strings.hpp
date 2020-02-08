@@ -49,6 +49,8 @@ namespace helpers {
 
         static std::string trim(const std::string &str);
 
+        static std::string getFirstWord(const std::string &source);
+
     };
 
 }

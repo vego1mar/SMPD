@@ -2,8 +2,12 @@
 #include <algorithm>
 #include "nearest_neighbors.hpp"
 #include "../statistics/statistics.hpp"
+#include "../helpers/collections.hpp"
+#include "../helpers/strings.hpp"
 
 using statistics::Statistics;
+using helpers::Collections;
+using helpers::Strings;
 
 
 namespace classifiers {
@@ -47,9 +51,11 @@ namespace classifiers {
         checkInputClusterPrerequisites(*params);
         countDistances(*params);
         sortSuperMarkersByDistance();
+        superCountLabels(*params);
 
-        // TODO: continue
-        return NearestNeighborScores();
+        const auto scores = getScores();
+        dispose();
+        return scores;
     }
 
     void NearestNeighbors::checkPrerequisites(const NearestNeighborParams &params) {
@@ -161,6 +167,10 @@ namespace classifiers {
         if (superMarkers != nullptr) {
             superMarkers.reset();
         }
+
+        if (superCounts != nullptr) {
+            superCounts.reset();
+        }
     }
 
     void NearestNeighbors::checkSuperClusterPrerequisites(const NearestNeighborParams2 &params) {
@@ -228,21 +238,16 @@ namespace classifiers {
 
             for (std::size_t k = 0; k < featuresSize; k++) {
                 auto classPoints = std::make_unique<Input>(selectClass(*params1a, k));
-                bool distCounterLogic = true;
 
                 for (std::size_t j = 0; j < inputFeaturesSize; j++) {
                     auto inputClass = std::make_unique<Input>(selectClass(*params1b, j));
                     const auto distance = Statistics::geometricDistance(*inputClass, *classPoints);
-                    (*superMarkers)[inputCounter][distCounter] = NearestNeighborMarker(distance, distCounter);
-                    distCounterLogic = !distCounterLogic;
+                    (*superMarkers)[inputCounter].emplace_back(NearestNeighborMarker(distance, distCounter));
                     inputCounter++;
-
-                    if (distCounterLogic) {
-                        distCounter++;
-                    }
 
                     if (inputCounter >= inputFeaturesSize) {
                         inputCounter = 0;
+                        distCounter++;
                     }
                 }
             }
@@ -251,16 +256,10 @@ namespace classifiers {
 
     void NearestNeighbors::prepareSuperMarker(const NearestNeighborParams2 &params) {
         superMarkers = std::make_unique<SuperMarkers>();
-        const auto &superCluster = params.superCluster;
+        const auto inputFeaturesSize = params.input.features[0].size();
 
-        for (std::size_t i = 0; i < superCluster.size(); i++) {
+        for (std::size_t i = 0; i < inputFeaturesSize; i++) {
             superMarkers->emplace_back();
-            const auto &cluster = superCluster[i];
-            const auto length = cluster.features[0].size() * superCluster.size();
-
-            for (std::size_t j = 0; j < length; j++) {
-                (*superMarkers)[i].emplace_back(NearestNeighborMarker(0.0, 0));
-            }
         }
     }
 
@@ -272,6 +271,60 @@ namespace classifiers {
         for (auto &markersCluster : *superMarkers) {
             std::sort(markersCluster.begin(), markersCluster.end(), compareByDistance);
         }
+    }
+
+    void NearestNeighbors::superCountLabels(const NearestNeighborParams2 &params) {
+        superCounts = std::make_unique<SuperCounts>();
+        const auto &neighbors = params.neighbors;
+        const auto superLabels = std::make_unique<Labels>(getSuperLabels(params));
+
+        for (std::size_t i = 0; i < superMarkers->size(); i++) {
+            const auto &currentMarkers = (*superMarkers)[i];
+            superCounts->emplace_back(LabelsCountMap());
+            auto &currentCounts = (*superCounts)[i];
+
+            for (std::size_t j = 0; j < neighbors; j++) {
+                const auto &labelIndex = currentMarkers[j].index;
+                const auto &label = (*superLabels)[labelIndex];
+                const auto firstWord = Strings::getFirstWord(label);
+                bool isLabelInMap = currentCounts.find(firstWord) != currentCounts.end();
+
+                if (isLabelInMap) {
+                    currentCounts.at(firstWord) += 1;
+                    continue;
+                }
+
+                currentCounts[firstWord] = 1;
+            }
+        }
+    }
+
+    Labels NearestNeighbors::getSuperLabels(const NearestNeighborParams2 &params) {
+        const auto &superCluster = params.superCluster;
+        auto superLabels = std::make_unique<std::vector<Labels>>();
+        auto labels = Labels();
+
+        for (const auto &cluster : superCluster) {
+            (*superLabels).emplace_back(cluster.labels);
+        }
+
+        for (const auto &currentLabels : *superLabels) {
+            Collections::join(currentLabels, labels);
+        }
+
+        superLabels.reset();
+        return labels;
+    }
+
+    NearestNeighborScores NearestNeighbors::getScores() {
+        NearestNeighborScores scores;
+
+        for (const auto &currentCounts : *superCounts) {
+            counts = std::make_unique<LabelsCountMap>(currentCounts);
+            scores.emplace_back(getScore());
+        }
+
+        return scores;
     }
 
 }

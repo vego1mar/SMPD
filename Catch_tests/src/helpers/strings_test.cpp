@@ -127,4 +127,13 @@ TEST_CASE("strings.hpp", "[strings]") {
         REQUIRE_THAT(result1, Catch::Equals(expectedResult1));
     }
 
+    SECTION("getFirstWord() -> OK") {
+        const std::string source = " A 1 2 3  ! ";
+        const std::string expectedResult = "A";
+
+        const auto result = Strings::getFirstWord(source);
+
+        REQUIRE_THAT(result, Catch::Equals(result));
+    }
+
 }

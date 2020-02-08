@@ -65,4 +65,10 @@ namespace helpers {
         return target;
     }
 
+    void Collections::join(const std::vector<std::string> &source, std::vector<std::string> &target) {
+        for (const auto &sourceStr : source) {
+            target.push_back(sourceStr);
+        }
+    }
+
 }

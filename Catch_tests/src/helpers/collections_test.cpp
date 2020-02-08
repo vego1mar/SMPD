@@ -57,4 +57,14 @@ TEST_CASE("collections_test", "[collections_test]") {
         REQUIRE_THAT(result, Catch::UnorderedEquals(expectedResult));
     }
 
+    SECTION("join(vector<string>) -> OK") {
+        const std::vector<std::string> source = {"Dd", "Ee", "Ff", "Gg"};
+        std::vector<std::string> target = {"Aa", "Bb", "Cc"};
+        const std::vector<std::string> expectedResult = {"Aa", "Bb", "Cc", "Dd", "Ee", "Ff", "Gg"};
+
+        Collections::join(source, target);
+
+        REQUIRE_THAT(target, Catch::UnorderedEquals(expectedResult));
+    }
+
 }
