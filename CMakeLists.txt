@@ -14,6 +14,7 @@ add_executable(
         src/statistical.hpp src/statistical.cpp
 
         src/classifiers/definitions.hpp
+        src/classifiers/nearest_mean.hpp src/classifiers/nearest_mean.cpp
         src/classifiers/nearest_neighbors.hpp src/classifiers/nearest_neighbors.cpp
 
         src/command_line/cla_parser.hpp src/command_line/cla_parser.cpp

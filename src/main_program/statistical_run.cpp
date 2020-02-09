@@ -111,8 +111,8 @@ namespace main_program {
             const auto &first = indices[0];
             const auto &second = indices[1];
             const auto &firstHeader = (*superHeaders)[first];
-            const auto &secondIndex = (*superHeaders)[second];
-            FLDHeader fldHeader(firstHeader, secondIndex);
+            const auto &secondHeader = (*superHeaders)[second];
+            FLDHeader fldHeader(firstHeader, secondHeader);
             const auto &clusterA = (*superCluster)[first];
             const auto &clusterB = (*superCluster)[second];
 
