@@ -14,9 +14,8 @@ namespace data_builders {
 
     class ClassifiersGrouper {
     private:
-        std::unique_ptr<Matrix> selectionData;
-        std::unique_ptr<Headers> selectionLabels;
-        std::unique_ptr<SuperCluster> selectionSuperCluster;
+        std::unique_ptr<Matrix> selection;
+        std::unique_ptr<Matrix> input;
 
 
     public:
@@ -32,16 +31,17 @@ namespace data_builders {
 
         virtual ~ClassifiersGrouper() = default;
 
-        void makeSuperCluster(const CSVParser &csvParser, const FLD &fld);
+        void group(const CSVParser &csvParser, const FLD &fld);
 
-        const SuperCluster &getSuperCluster() const;
+        const Matrix &getSelection() const;
 
-        void makeInputCluster(const CSVParser &csvParser, const FLD &fld);
+        const Matrix &getInput() const;
+
 
     private:
         void selectFeaturesData(const CSVParser &csvParser, const FLD &fld);
 
-        void selectNonFeaturesData(const CSVParser &csvParser, const FLD &fld);
+        void selectInputData(const CSVParser &csvParser, const FLD &fld);
 
     };
 

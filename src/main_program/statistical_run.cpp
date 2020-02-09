@@ -9,11 +9,10 @@ using matrix::Matrix;
 using matrix::TransformationType;
 using helpers::Combinations;
 using helpers::Stringify;
-using classifiers::Cluster;
-using classifiers::Features;
 using classifiers::NearestNeighbors;
-using classifiers::SuperCluster;
 using data_builders::ClassifiersGrouper;
+using classifiers::NearestNeighborsArgs;
+using classifiers::Labels;
 
 
 namespace main_program {
@@ -135,18 +134,23 @@ namespace main_program {
     }
 
     void StatisticalRun::performClassification(const CSVParser &csvParser, const FLD &fld) {
-        // TODO: features selected -> input for classification -> build and regroup into SuperCluster struct
         // TODO: classify -> NN(0), NN( featuresSelectedNo/3 )
         // TODO: classify -> NM, k means
 
         ClassifiersGrouper grouper;
-        grouper.makeSuperCluster(csvParser, fld);
-        const auto &superCluster = grouper.getSuperCluster();
-        grouper.makeInputCluster(csvParser, fld);
+        grouper.group(csvParser, fld);
 
-        // TODO: neighbors from command line
+        NearestNeighborsArgs args;
+        args.input = std::make_unique<Matrix>(grouper.getInput());
+        args.sourceData = std::make_unique<Matrix>(grouper.getSelection());
+        args.sourceLabels = std::make_unique<Labels>(csvParser.getHeaders());
+        //args.neighbors = ?from_command_line_field?
+
         NearestNeighbors nn;
-        const auto result = nn.classify(Cluster(), superCluster, 0);
+        args.neighbors = std::make_unique<std::size_t>(5);
+        const auto result = nn.classify(args);
+
+        int dummy = 1;
     }
 
 }

@@ -39,6 +39,7 @@ add_executable(
         src/selectors/definitions.hpp
         src/selectors/fisher.hpp src/selectors/fisher.cpp
 
+        src/statistics/randoms.hpp
         src/statistics/statistics.hpp src/statistics/statistics.cpp
 
         src/test/constants.hpp
