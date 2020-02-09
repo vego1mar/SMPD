@@ -1,12 +1,16 @@
 #include <set>
+#include <algorithm>
+#include <functional>
 #include "classifiers_grouper.hpp"
 #include "../helpers/strings.hpp"
+#include "../helpers/collections.hpp"
 
 using helpers::Strings;
 using classifiers::Cluster;
 using classifiers::Labels;
 using classifiers::Features;
 using matrix::TransformationType;
+using helpers::Collections;
 
 
 namespace data_builders {
@@ -68,7 +72,10 @@ namespace data_builders {
             currentCluster.labels.emplace_back(classLabel);
         }
 
-        // TODO: transpose superCluster.features -> (64 rows, 3 columns) and (3) headers/labels
+        for (auto &innerCluster : superCluster) {
+            auto &innerFeatures = innerCluster.features;
+            innerFeatures = Collections::transpose(innerFeatures);
+        }
 
         selectionData.reset();
         selectionLabels.reset();
@@ -76,6 +83,37 @@ namespace data_builders {
 
     const SuperCluster &ClassifiersGrouper::getSuperCluster() const {
         return *selectionSuperCluster;
+    }
+
+    void ClassifiersGrouper::makeInputCluster(const CSVParser &csvParser, const FLD &fld) {
+        // TODO: change labels grouping
+        selectNonFeaturesData(csvParser, fld);
+        throw std::bad_function_call();
+    }
+
+    void ClassifiersGrouper::selectNonFeaturesData(const CSVParser &csvParser, const FLD &fld) {
+        const auto &dataset = csvParser.getDataset();
+        const auto &features = fld.getFeatureIndices();
+        const auto &headers = csvParser.getHeaders();
+        selectionData = std::make_unique<Matrix>(dataset.getColumns(), dataset.getColumns() - features.size());
+        selectionLabels = std::make_unique<Headers>();
+        auto data = std::make_unique<std::vector<std::vector<double>>>();
+
+        for (std::size_t i = 0; i < dataset.getColumns(); i++) {
+            bool isIndexOfSelectedFeature = std::find(features.begin(), features.end(), i) != features.end();
+
+            if (isIndexOfSelectedFeature) {
+                continue;
+            }
+
+            const auto &featureRow = dataset.getRow(i);
+            const auto &label = headers[i];
+            data->push_back(featureRow);
+            selectionLabels->emplace_back(label);
+        }
+
+        selectionData->set(*data);
+        data.reset();
     }
 
 }

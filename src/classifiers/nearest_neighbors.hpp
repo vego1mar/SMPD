@@ -34,6 +34,8 @@ namespace classifiers {
 
         NearestNeighborScores classify(const Cluster &input, const SuperCluster &superCluster, std::size_t neighbors);
 
+        NearestNeighborScores classify(const NearestNeighborsArgs &args);
+
     private:
         static void checkPrerequisites(const NearestNeighborParams &params);
 
@@ -64,6 +66,10 @@ namespace classifiers {
         static Labels getSuperLabels(const NearestNeighborParams2 &params);
 
         NearestNeighborScores getScores();
+
+        void countDistances(const NearestNeighborsArgs &args);
+
+        void superCountLabels(const NearestNeighborsArgs &args);
 
     };
 

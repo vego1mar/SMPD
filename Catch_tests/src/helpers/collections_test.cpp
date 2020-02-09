@@ -57,7 +57,7 @@ TEST_CASE("collections_test", "[collections_test]") {
         REQUIRE_THAT(result, Catch::UnorderedEquals(expectedResult));
     }
 
-    SECTION("join(vector<string>) -> OK") {
+    SECTION("join[vector<string>] -> OK") {
         const std::vector<std::string> source = {"Dd", "Ee", "Ff", "Gg"};
         std::vector<std::string> target = {"Aa", "Bb", "Cc"};
         const std::vector<std::string> expectedResult = {"Aa", "Bb", "Cc", "Dd", "Ee", "Ff", "Gg"};
@@ -65,6 +65,21 @@ TEST_CASE("collections_test", "[collections_test]") {
         Collections::join(source, target);
 
         REQUIRE_THAT(target, Catch::UnorderedEquals(expectedResult));
+    }
+
+    SECTION("transpose[vector<vector<double>>] -> OK") {
+        const auto row1 = std::vector<double>({0.1, 0.2, 0.3, 0.4, 0.5});
+        const auto row2 = std::vector<double>({1.1, 1.2, 1.3, 1.4, 1.5});
+        const auto source = std::vector<std::vector<double>>({row1, row2});
+        const auto expectedRow1 = std::vector<double>({0.1, 1.1});
+        const auto expectedRow2 = std::vector<double>({0.2, 1.2});
+        const auto expectedRow3 = std::vector<double>({0.3, 1.3});
+        const auto expectedRow4 = std::vector<double>({0.4, 1.5});
+        const auto expectedResult = std::vector<std::vector<double>>({expectedRow1, expectedRow2, expectedRow3, expectedRow4});
+
+        const auto result = Collections::transpose(source);
+
+        REQUIRE_THAT(expectedResult, Catch::UnorderedEquals(expectedResult));
     }
 
 }

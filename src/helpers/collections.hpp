@@ -35,6 +35,8 @@ namespace helpers {
 
         static void join(const std::vector<std::string> &source, std::vector<std::string> &target);
 
+        static std::vector<std::vector<double>> transpose(const std::vector<std::vector<double>> &source);
+
     };
 
 }

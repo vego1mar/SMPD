@@ -58,6 +58,28 @@ namespace classifiers {
         return scores;
     }
 
+    NearestNeighborScores NearestNeighbors::classify(const NearestNeighborsArgs &args) {
+        const auto &source = *args.sourceData;
+        const auto &labels = *args.sourceLabels;
+        const auto &input = *args.input;
+        const auto &neighbors = *args.neighbors;
+
+        if (source.getRows() != labels.size() || input.getColumns() != source.getColumns()) {
+            throw std::length_error("source.getRows() != labels.size() || input.getColumns() != source.getColumns()");
+        }
+
+        if (neighbors <= 0 || neighbors >= source.getRows()) {
+            throw std::invalid_argument("neighbors <= 0 || neighbors >= source.getRows()");
+        }
+
+        countDistances(args);
+        sortSuperMarkersByDistance();
+        superCountLabels(args);
+        const auto scores = getScores();
+        dispose();
+        return scores;
+    }
+
     void NearestNeighbors::checkPrerequisites(const NearestNeighborParams &params) {
         const auto &neighbors = params.neighbors;
         const auto &cluster = params.cluster;
@@ -325,6 +347,62 @@ namespace classifiers {
         }
 
         return scores;
+    }
+
+    void NearestNeighbors::countDistances(const NearestNeighborsArgs &args) {
+        superMarkers = std::make_unique<SuperMarkers>();
+        const auto &input = *args.input;
+        const auto &source = *args.sourceData;
+
+        for (std::size_t i = 0; i < input.getRows(); i++) {
+            const auto &currentInput = input.getRow(i);
+            superMarkers->emplace_back(Markers());
+
+            for (std::size_t j = 0; j < source.getRows(); j++) {
+                const auto &currentSource = source.getRow(j);
+                const auto distance = Statistics::geometricDistance(currentInput, currentSource);
+                (*superMarkers)[i].emplace_back(NearestNeighborMarker(distance, j));
+            }
+        }
+    }
+
+    void NearestNeighbors::superCountLabels(const NearestNeighborsArgs &args) {
+        const auto &neighbors = args.neighbors;
+        const auto &labels = args.sourceLabels;
+        const auto neighborsMarkers = std::make_unique<SuperMarkers>();
+        superCounts = std::make_unique<SuperCounts>();
+
+        for (std::size_t i = 0; i < superMarkers->size(); i++) {
+            const auto &innerMarkers = (*superMarkers)[i];
+            neighborsMarkers->emplace_back(Markers());
+
+            for (std::size_t j = 0; j < *neighbors; j++) {
+                const auto &marker = innerMarkers[j];
+                (*neighborsMarkers)[i].emplace_back(marker);
+            }
+        }
+
+        superMarkers.reset();
+
+        for (std::size_t i = 0; i < neighborsMarkers->size(); i++) {
+            const auto &innerMarkers = (*neighborsMarkers)[i];
+            superCounts->emplace_back(LabelsCountMap());
+
+            for (const auto &currentMarker : innerMarkers) {
+                const auto &index = currentMarker.index;
+                const auto &label = (*labels)[index];
+                const auto firstWord = Strings::getFirstWord(label);
+                auto &currentCounts = (*superCounts)[i];
+                bool isLabelInMap = currentCounts.find(firstWord) != currentCounts.end();
+
+                if (isLabelInMap) {
+                    currentCounts.at(firstWord) += 1;
+                    continue;
+                }
+
+                currentCounts[firstWord] = 1;
+            }
+        }
     }
 
 }

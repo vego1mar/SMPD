@@ -71,4 +71,33 @@ namespace helpers {
         }
     }
 
+    std::vector<std::vector<double>> Collections::transpose(const std::vector<std::vector<double>> &source) {
+        if (source.empty()) {
+            return source;
+        }
+
+        auto transposed = std::vector<std::vector<double>>();
+        const std::size_t columns = source[0].size();
+        const std::size_t rows = source.size();
+
+        for (std::size_t i = 0; i < columns; i++) {
+            transposed.emplace_back(std::vector<double>());
+
+            for (std::size_t j = 0; j < rows; j++) {
+                transposed[i].emplace_back(0.0);
+            }
+        }
+
+        for (std::size_t i = 0; i < source.size(); i++) {
+            const auto &innerRow = source[i];
+
+            for (std::size_t j = 0; j < innerRow.size(); j++) {
+                const auto &value = innerRow[j];
+                transposed[j][i] = value;
+            }
+        }
+
+        return transposed;
+    }
+
 }

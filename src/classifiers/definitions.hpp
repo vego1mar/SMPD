@@ -5,6 +5,10 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <memory>
+#include "../matrix/matrix.hpp"
+
+using matrix::Matrix;
 
 
 namespace classifiers {
@@ -93,6 +97,14 @@ namespace classifiers {
 
     typedef std::vector<Markers> SuperMarkers;
     typedef std::vector<LabelsCountMap> SuperCounts;
+
+
+    struct NearestNeighborsArgs {
+        std::unique_ptr<Matrix> input;
+        std::unique_ptr<Matrix> sourceData;
+        std::unique_ptr<Labels> sourceLabels;
+        std::unique_ptr<std::size_t> neighbors;
+    };
 
 }
 

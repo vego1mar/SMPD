@@ -142,6 +142,7 @@ namespace main_program {
         ClassifiersGrouper grouper;
         grouper.makeSuperCluster(csvParser, fld);
         const auto &superCluster = grouper.getSuperCluster();
+        grouper.makeInputCluster(csvParser, fld);
 
         // TODO: neighbors from command line
         NearestNeighbors nn;

@@ -36,8 +36,12 @@ namespace data_builders {
 
         const SuperCluster &getSuperCluster() const;
 
+        void makeInputCluster(const CSVParser &csvParser, const FLD &fld);
+
     private:
         void selectFeaturesData(const CSVParser &csvParser, const FLD &fld);
+
+        void selectNonFeaturesData(const CSVParser &csvParser, const FLD &fld);
 
     };
 
