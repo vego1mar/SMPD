@@ -78,6 +78,10 @@ namespace classifiers {
                 label(std::move(label)), nearestCount(nearest), totalCount(total) {
         }
 
+        NearestNeighborScore(std::string &&label, std::size_t nearest, std::size_t total) :
+                label(label), nearestCount(nearest), totalCount(total) {
+        }
+
         inline std::string toString() const {
             return '{' + label + ',' + std::to_string(nearestCount) + '/' + std::to_string(totalCount) + '}';
         }

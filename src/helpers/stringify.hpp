@@ -3,10 +3,12 @@
 
 #include <string>
 #include "../main_program/statistical_run.hpp"
-#include "../selectors/fisher.hpp"
+#include "../selectors/definitions.hpp"
+#include "../classifiers/definitions.hpp"
 
 using main_program::FLDHeader;
 using selectors::IntVector;
+using classifiers::NearestNeighborScores;
 
 
 namespace helpers {
@@ -28,6 +30,10 @@ namespace helpers {
         static std::string toString(const FLDHeader &fldHeader);
 
         static std::string toString(const IntVector &source);
+
+        static std::string toString(const std::vector<std::size_t> &source);
+
+        static std::string toString(const NearestNeighborScores &scores);
 
     };
 

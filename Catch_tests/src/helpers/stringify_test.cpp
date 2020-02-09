@@ -4,11 +4,13 @@
 using helpers::Stringify;
 using main_program::FLDHeader;
 using selectors::IntVector;
+using classifiers::NearestNeighborScores;
+using classifiers::NearestNeighborScore;
 
 
 TEST_CASE("stringify_test", "[stringify]") {
 
-    SECTION("toString FLDHeader -> OK") {
+    SECTION("FLDHeader -> OK") {
         FLDHeader fldHeader("h1", "h2");
         const std::string expectedResult = "(h1,h2)";
 
@@ -17,13 +19,25 @@ TEST_CASE("stringify_test", "[stringify]") {
         REQUIRE_THAT(result, Catch::Equals(expectedResult));
     }
 
-    SECTION("toString IntVector -> OK") {
+    SECTION("IntVector -> OK") {
         const auto source = IntVector({1, 2, 3, 4, 5, 6, 7, 8, 9});
         const std::string expectedResult = "[1,2,3,4,5,6,7,8,9]";
 
         const auto result = Stringify::toString(source);
 
         REQUIRE_THAT(result, Catch::Equals(expectedResult));
+    }
+
+    SECTION("NearestNeighborScores -> OK") {
+        const auto score1 = NearestNeighborScore("Acer", 1, 1);
+        const auto score2 = NearestNeighborScore("Quercus", 2, 3);
+        const auto score3 = NearestNeighborScore("Gilgamesz", 3, 5);
+        const auto scores = NearestNeighborScores({score1, score2, score3});
+        const std::string expectedStr = "[{Acer,1/1},{Quercus,2/3},{Gilgamesz,3/5}]";
+
+        const auto result = Stringify::toString(scores);
+
+        REQUIRE_THAT(result, Catch::Equals(expectedStr));
     }
 
 }

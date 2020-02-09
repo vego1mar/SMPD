@@ -7,7 +7,6 @@
 
 using data_builders::CSVParser;
 using selectors::FLD;
-using classifiers::SuperCluster;
 
 
 namespace data_builders {
@@ -15,7 +14,8 @@ namespace data_builders {
     class ClassifiersGrouper {
     private:
         std::unique_ptr<Matrix> selection;
-        std::unique_ptr<Matrix> input;
+        std::unique_ptr<Matrix> inputData;
+        std::unique_ptr<std::vector<std::size_t>> inputIndices;
 
 
     public:
@@ -36,6 +36,8 @@ namespace data_builders {
         const Matrix &getSelection() const;
 
         const Matrix &getInput() const;
+
+        const std::vector<std::size_t> &getInputIndices() const;
 
 
     private:

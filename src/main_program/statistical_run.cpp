@@ -1,8 +1,6 @@
 #include <iostream>
 #include "statistical_run.hpp"
 #include "../helpers/stringify.hpp"
-#include "../classifiers/nearest_neighbors.hpp"
-#include "../data_builders/classifiers_grouper.hpp"
 
 using data_builders::Headers;
 using matrix::Matrix;
@@ -10,7 +8,6 @@ using matrix::TransformationType;
 using helpers::Combinations;
 using helpers::Stringify;
 using classifiers::NearestNeighbors;
-using data_builders::ClassifiersGrouper;
 using classifiers::NearestNeighborsArgs;
 using classifiers::Labels;
 
@@ -54,6 +51,7 @@ namespace main_program {
 
         const auto &featuresNo = *std::next(CLA_OPTIONS.begin(), 0);
         const auto &path = *std::next(CLA_OPTIONS.begin(), 1);
+        const auto &neighbors = *std::next(CLA_OPTIONS.begin(), 3);
 
         if (!claParser->isOptionExists(path)) {
             std::cerr << "No path to CSV file!" << std::endl;
@@ -65,6 +63,11 @@ namespace main_program {
             *featuresToSelect = argNo;
         }
 
+        if (claParser->isOptionExists(neighbors)) {
+            std::size_t argNo = std::stoul(claParser->getOption(neighbors));
+            *neighborsNo = argNo;
+        }
+
         return true;
     }
 
@@ -72,10 +75,12 @@ namespace main_program {
         const auto &featuresNo = *std::next(CLA_OPTIONS.begin(), 0);
         const auto &path = *std::next(CLA_OPTIONS.begin(), 1);
         const auto &sfs = *std::next(CLA_OPTIONS.begin(), 2);
+        const auto &neighbors = *std::next(CLA_OPTIONS.begin(), 3);
 
         /* ./program --path MapleOak.csv
          * ./program --path MapleOak.csv --features-no 3
          * ./program --path MapleOak.csv --features-no 3 --sfs
+         * ./program --path MapleOak.csv --features-no 3 --sfs --neighbors 3
          */
         std::string program = "./program ";
         std::string mapleOak = " MapleOak.csv ";
@@ -84,6 +89,7 @@ namespace main_program {
                   program << path << mapleOak << std::endl <<
                   program << path << mapleOak << featuresNo << three << std::endl <<
                   program << path << mapleOak << featuresNo << three << sfs << std::endl <<
+                  program << path << mapleOak << featuresNo << three << sfs << ' ' << neighbors << three << std::endl <<
                   std::endl;
     }
 
@@ -134,9 +140,6 @@ namespace main_program {
     }
 
     void StatisticalRun::performClassification(const CSVParser &csvParser, const FLD &fld) {
-        // TODO: classify -> NN(0), NN( featuresSelectedNo/3 )
-        // TODO: classify -> NM, k means
-
         ClassifiersGrouper grouper;
         grouper.group(csvParser, fld);
 
@@ -144,13 +147,33 @@ namespace main_program {
         args.input = std::make_unique<Matrix>(grouper.getInput());
         args.sourceData = std::make_unique<Matrix>(grouper.getSelection());
         args.sourceLabels = std::make_unique<Labels>(csvParser.getHeaders());
-        //args.neighbors = ?from_command_line_field?
 
         NearestNeighbors nn;
-        args.neighbors = std::make_unique<std::size_t>(5);
-        const auto result = nn.classify(args);
+        args.neighbors = std::make_unique<std::size_t>(1);
+        auto result = std::make_unique<NearestNeighborScores>(nn.classify(args));
+        auto printArgs = std::make_unique<InfoPrintingArgs>(fld, grouper, *args.neighbors, *result);
+        printInfoAboutNN(*printArgs);
 
-        int dummy = 1;
+        *args.neighbors = *neighborsNo;
+        *result = nn.classify(args);
+        printArgs = std::make_unique<InfoPrintingArgs>(fld, grouper, *neighborsNo, *result);
+        printInfoAboutNN(*printArgs);
+        printArgs.reset();
+
+        // TODO: classify -> NM, k means
+    }
+
+    void StatisticalRun::printInfoAboutNN(const InfoPrintingArgs &printArgs) {
+        const auto &fld = printArgs.fld;
+        const auto &grouper = printArgs.grouper;
+        const auto &neighbors = printArgs.neighbors;
+        const auto &result = printArgs.scores;
+
+        auto toString = std::make_unique<std::string>();
+        (*toString) = '(' + Stringify::toString(fld.getFeatureIndices()) + ',' + Stringify::toString(grouper.getInputIndices()) +
+                      ") -> NN(" + std::to_string(neighbors) + ") " + Stringify::toString(result);
+        std::cout << *toString << std::endl;
+        toString.reset();
     }
 
 }

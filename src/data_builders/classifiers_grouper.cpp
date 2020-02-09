@@ -36,29 +36,31 @@ namespace data_builders {
     }
 
     const Matrix &ClassifiersGrouper::getInput() const {
-        return *input;
+        return *inputData;
     }
 
     void ClassifiersGrouper::selectInputData(const CSVParser &csvParser, const FLD &fld) {
         const auto &dataset = csvParser.getDataset();
         const auto &features = fld.getFeatureIndices();
-        input = std::make_unique<Matrix>(dataset.getColumns() - features.size(), dataset.getRows());
+        inputData = std::make_unique<Matrix>(features.size(), dataset.getRows());
         auto data = std::make_unique<std::vector<std::vector<double>>>();
-
-        // TODO: randomize selection of 3 new features indices!
         const auto rng = std::make_unique<RandomInts<std::size_t>>(0, dataset.getColumns());
-        auto randoms = std::vector<std::size_t>();
+        inputIndices = std::make_unique<std::vector<std::size_t>>();
 
         for (std::size_t i = 0; i < features.size(); i++) {
-            //const auto &featureColumn = dataset.getColumn(i);
-            //data->emplace_back(featureColumn);
             const auto randomValue = (*rng)();
-            randoms.emplace_back(randomValue);
+            const auto &featureColumn = dataset.getColumn(randomValue);
+            inputIndices->emplace_back(randomValue);
+            data->emplace_back(featureColumn);
         }
 
         *data = Collections::transpose(*data);
-        input->set(*data);
+        inputData->set(*data);
         data.reset();
+    }
+
+    const std::vector<std::size_t> &ClassifiersGrouper::getInputIndices() const {
+        return *inputIndices;
     }
 
 }

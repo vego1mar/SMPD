@@ -1,5 +1,6 @@
 #include "stringify.hpp"
 
+
 namespace helpers {
 
     std::string Stringify::toString(const FLDHeader &fldHeader) {
@@ -24,6 +25,40 @@ namespace helpers {
         result += std::to_string(source[source.size() - 1]);
         result += ']';
         return result;
+    }
+
+    std::string Stringify::toString(const std::vector<std::size_t> &source) {
+        if (source.empty()) {
+            return "[]";
+        }
+
+        std::string result = "[";
+
+        for (std::size_t i = 0; i < source.size() - 1; i++) {
+            const auto &number = source[i];
+            result += std::to_string(number) + ',';
+        }
+
+        const auto &lastSource = source[source.size() - 1];
+        result += std::to_string(lastSource) + ']';
+        return result;
+    }
+
+    std::string Stringify::toString(const NearestNeighborScores &scores) {
+        if (scores.empty()) {
+            return "[]";
+        }
+
+        std::string str = "[";
+
+        for (std::size_t i = 0; i < scores.size() - 1; i++) {
+            const auto &score = scores[i];
+            str += score.toString() + ',';
+        }
+
+        const auto &lastScore = scores[scores.size() - 1];
+        str += lastScore.toString() + ']';
+        return str;
     }
 
 }
