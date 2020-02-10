@@ -22,6 +22,18 @@ namespace statistics {
         return mean;
     }
 
+    std::vector<double> Statistics::arithmeticMean2(const Matrix &matrix) {
+        std::vector<double> mean;
+        mean.reserve(matrix.getColumns());
+
+        for (std::size_t i = 0; i < matrix.getColumns(); i++) {
+            auto currentMean = arithmeticMean(matrix.getColumn(i));
+            mean.emplace_back(currentMean);
+        }
+
+        return mean;
+    }
+
     double Statistics::meanSquaredError(double left, double right) {
         const unsigned short P_NORM = 2;
         auto difference = left - right;
@@ -68,6 +80,26 @@ namespace statistics {
         }
 
         return maxIndex;
+    }
+
+    std::size_t Statistics::argMin(const std::vector<double> &list) {
+        if (list.empty()) {
+            throw std::invalid_argument("list.empty()");
+        }
+
+        int minIndex = 0;
+        double minValue = list[minIndex];
+
+        for (std::size_t i = 0; i < list.size(); i++) {
+            const auto &feature = list[i];
+
+            if (feature < minValue) {
+                minValue = feature;
+                minIndex = i;
+            }
+        }
+
+        return minIndex;
     }
 
     double Statistics::normL2(const std::vector<double> &list) {

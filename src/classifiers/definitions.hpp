@@ -110,6 +110,23 @@ namespace classifiers {
         std::unique_ptr<std::size_t> neighbors;
     };
 
+
+    struct NearestMeanArgs {
+        const Matrix &input;
+        const Matrix &clusterA;
+        const Matrix &clusterB;
+        const Labels &labels;
+
+        NearestMeanArgs(const Matrix &input, const Matrix &clusterA, const Matrix &clusterB, const Labels &labels)
+                : input(input), clusterA(clusterA), clusterB(clusterB), labels(labels) {
+        }
+    };
+
+
+    typedef std::vector<std::vector<double>> Means;
+    typedef std::vector<std::vector<double>> Distances;
+    typedef std::vector<std::size_t> Indices;
+
 }
 
 #endif //CLASSIFIERS_DEFINITIONS_HPP

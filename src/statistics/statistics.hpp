@@ -28,6 +28,8 @@ namespace statistics {
 
         static std::vector<double> arithmeticMean(const Matrix &matrix);
 
+        static std::vector<double> arithmeticMean2(const Matrix &matrix);
+
         static double meanSquaredError(double left, double right);
 
         static double variance(const std::vector<double> &list);
@@ -35,6 +37,8 @@ namespace statistics {
         static double standardDeviation(const std::vector<double> &list);
 
         static int argMax(const std::vector<double> &list);
+
+        static std::size_t argMin(const std::vector<double> &list);
 
         static double normL2(const std::vector<double> &list);
 
