@@ -6,6 +6,7 @@
 
 using helpers::Collections;
 using statistics::RandomInts;
+using matrix::TransformationType;
 
 
 namespace data_builders {
@@ -30,7 +31,7 @@ namespace data_builders {
         return *selection;
     }
 
-    void ClassifiersGrouper::group(const CSVParser &csvParser, const FLD &fld) {
+    void ClassifiersGrouper::groupNN(const CSVParser &csvParser, const FLD &fld) {
         selectFeaturesData(csvParser, fld);
         selectInputData(csvParser, fld);
     }
@@ -61,6 +62,53 @@ namespace data_builders {
 
     const std::vector<std::size_t> &ClassifiersGrouper::getInputIndices() const {
         return *inputIndices;
+    }
+
+    void ClassifiersGrouper::groupNM(const Matrix &cluster1, const Matrix &cluster2, const FLD &fld) {
+        typedef std::vector<std::vector<double>> Values;
+
+        clusterA = std::make_unique<Matrix>(cluster1.getColumns(), cluster1.getRows());
+        clusterB = std::make_unique<Matrix>(cluster2.getColumns(), cluster2.getRows());
+        auto valuesA = std::make_unique<Values>();
+        auto valuesB = std::make_unique<Values>();
+
+        for (std::size_t i = 0; i < cluster1.getRows(); i++) {
+            valuesA->emplace_back(cluster1.getRow(i));
+        }
+
+        for (std::size_t j = 0; j < cluster2.getRows(); j++) {
+            valuesB->emplace_back(cluster2.getRow(j));
+        }
+
+        clusterA->set(*valuesA);
+        clusterB->set(*valuesB);
+        valuesA->clear();
+        valuesB->clear();
+        clusterA->transform(TransformationType::Transposition);
+        clusterB->transform(TransformationType::Transposition);
+        const auto FEATURES_NO = fld.getFeatureIndices().size();
+
+        for (std::size_t i = 0; i < FEATURES_NO; i++) {
+            valuesA->emplace_back(clusterA->getColumn(i));
+            valuesB->emplace_back(clusterB->getColumn(i));
+        }
+
+        clusterA = std::make_unique<Matrix>(clusterA->getRows(), FEATURES_NO);
+        clusterB = std::make_unique<Matrix>(clusterB->getRows(), FEATURES_NO);
+        clusterA->set(*valuesA);
+        clusterB->set(*valuesB);
+        valuesA.reset();
+        valuesB.reset();
+        clusterA->transform(TransformationType::Transposition);
+        clusterB->transform(TransformationType::Transposition);
+    }
+
+    const Matrix &ClassifiersGrouper::getClusterA() const {
+        return *clusterA;
+    }
+
+    const Matrix &ClassifiersGrouper::getClusterB() const {
+        return *clusterB;
     }
 
 }

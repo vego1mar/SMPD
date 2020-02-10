@@ -9,6 +9,7 @@
 using main_program::FLDHeader;
 using selectors::IntVector;
 using classifiers::NearestNeighborScores;
+using classifiers::LabelsCountMap;
 
 
 namespace helpers {
@@ -34,6 +35,8 @@ namespace helpers {
         static std::string toString(const std::vector<std::size_t> &source);
 
         static std::string toString(const NearestNeighborScores &scores);
+
+        static std::string toString(const LabelsCountMap &countMap);
 
     };
 

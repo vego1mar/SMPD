@@ -15,6 +15,7 @@ using selectors::FLD;
 using selectors::IntVector;
 using data_builders::ClassifiersGrouper;
 using classifiers::NearestNeighborScores;
+using classifiers::Labels;
 
 
 namespace main_program {
@@ -22,14 +23,17 @@ namespace main_program {
     typedef std::pair<std::string, std::string> FLDHeader;
 
 
-    struct InfoPrintingArgs {
+    struct StatisticalRunParams {
+        const CSVParser &csvParser;
         const FLD &fld;
-        const ClassifiersGrouper &grouper;
-        const std::size_t &neighbors;
-        const NearestNeighborScores &scores;
+        std::unique_ptr<Matrix> clusterA;
+        std::unique_ptr<Matrix> clusterB;
+        std::unique_ptr<FLDHeader> infoHeader;
+        std::unique_ptr<std::size_t> neighbors;
+        std::unique_ptr<NearestNeighborScores> nnResult;
+        std::unique_ptr<Labels> nmResult;
 
-        InfoPrintingArgs(const FLD &fld, const ClassifiersGrouper &gr, const std::size_t &nb, const NearestNeighborScores &scores)
-                : fld(fld), grouper(gr), neighbors(nb), scores(scores) {
+        StatisticalRunParams(const CSVParser &csvParser, const FLD &fld) : csvParser(csvParser), fld(fld) {
         }
     };
 
@@ -68,13 +72,15 @@ namespace main_program {
 
         void performStatisticalRun(const CSVParser &csvParser);
 
-        static void printInfo(const FLDHeader &fldHeader, const IntVector &selectedFeatures);
+        static void printSelectionInfo(const StatisticalRunParams &params);
 
-        void performSelection(const Matrix &clusterA, const Matrix &clusterB, FLD &fld);
+        void performSelection(const StatisticalRunParams &params, FLD &fld);
 
-        void performClassification(const CSVParser &csvParser, const FLD &fld);
+        void performClassification(StatisticalRunParams &params);
 
-        static void printInfoAboutNN(const InfoPrintingArgs &printArgs);
+        static void printNearestNeighborsInfo(const StatisticalRunParams &params, const ClassifiersGrouper &grouper);
+
+        static void printNearestMeanInfo(const StatisticalRunParams &params);
 
     };
 

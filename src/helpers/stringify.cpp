@@ -61,4 +61,23 @@ namespace helpers {
         return str;
     }
 
+    std::string Stringify::toString(const LabelsCountMap &countMap) {
+        if (countMap.empty()) {
+            return "[]";
+        }
+
+        std::string str = "[";
+
+        for (const auto &entry : countMap) {
+            str += '(' + entry.first + ',' + std::to_string(entry.second) + "),";
+        }
+
+        if (str.size() > 1) {
+            str = str.substr(0, str.size() - 1);
+        }
+
+        str += ']';
+        return str;
+    }
+
 }

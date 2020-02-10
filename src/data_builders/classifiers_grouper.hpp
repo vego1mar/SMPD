@@ -16,6 +16,8 @@ namespace data_builders {
         std::unique_ptr<Matrix> selection;
         std::unique_ptr<Matrix> inputData;
         std::unique_ptr<std::vector<std::size_t>> inputIndices;
+        std::unique_ptr<Matrix> clusterA;
+        std::unique_ptr<Matrix> clusterB;
 
 
     public:
@@ -31,13 +33,19 @@ namespace data_builders {
 
         virtual ~ClassifiersGrouper() = default;
 
-        void group(const CSVParser &csvParser, const FLD &fld);
+        void groupNN(const CSVParser &csvParser, const FLD &fld);
 
         const Matrix &getSelection() const;
 
         const Matrix &getInput() const;
 
         const std::vector<std::size_t> &getInputIndices() const;
+
+        void groupNM(const Matrix &cluster1, const Matrix &cluster2, const FLD &fld);
+
+        const Matrix &getClusterA() const;
+
+        const Matrix &getClusterB() const;
 
 
     private:
