@@ -7,9 +7,10 @@ using classifiers::NearestMean;
 
 TEST_CASE("nearest_mean_test", "[nearest_mean]") {
 
-    SECTION("classify -> OK") {
-        typedef std::vector<std::vector<double>> Values;
+    typedef std::vector<std::vector<double>> Values;
 
+
+    SECTION("classify -> OK") {
         auto input = Matrix(3, 2);
         input.set(Values({
                                  {3, 9, 1},
@@ -36,6 +37,20 @@ TEST_CASE("nearest_mean_test", "[nearest_mean]") {
 
         const Labels expectedResult = {"B", "A"};
         REQUIRE_THAT(result, Catch::UnorderedEquals(expectedResult));
+    }
+
+    SECTION("kMeans -> OK") {
+        auto cluster = Matrix(11, 2);
+        cluster.set(Values({
+                                   {-7, -5, -6, -5, 2, 3, 8, 10, 0, 2,  5},
+                                   {5,  3,  1,  -3, 2, 8, 5, 4,  1, -1, -2}
+                           }));
+        const auto labels = Labels({"A 1", "A 1", "A 1", "A 1", "B 2", "B 2", "B 2", "B 2", "C 3", "C 3", "A 2"});
+
+        NearestMean nm;
+        nm.kMeans(cluster, labels);
+
+        int dummy = 1;
     }
 
 }

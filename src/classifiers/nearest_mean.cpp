@@ -1,8 +1,15 @@
+#include <random>
+#include <chrono>
+#include <algorithm>
 #include "nearest_neighbors.hpp"
 #include "nearest_mean.hpp"
 #include "../statistics/statistics.hpp"
+#include "../helpers/strings.hpp"
+#include "../helpers/collections.hpp"
 
 using statistics::Statistics;
+using helpers::Strings;
+using helpers::Collections;
 
 
 namespace classifiers {
@@ -81,6 +88,117 @@ namespace classifiers {
         }
 
         return resultLabels;
+    }
+
+    void NearestMean::dispose() {
+        if (means != nullptr) {
+            means.reset();
+        }
+
+        if (distances != nullptr) {
+            distances.reset();
+        }
+
+        if (indices != nullptr) {
+            indices.reset();
+        }
+    }
+
+    void NearestMean::kMeans(const Matrix &cluster, const Labels &labels, std::size_t maxIter) {
+        if (cluster.getColumns() != labels.size()) {
+            throw std::length_error("cluster.getColumns() != labels.size()");
+        }
+
+        // TODO: determine first centroids by shuffling ordinal indices and computing means
+        // TODO: in cycle -> computing next means and geometric closeness as delta
+
+        KMeansArgs args(cluster, labels);
+        args.maxIter = std::make_unique<std::size_t>(maxIter);
+
+        auto distinctLabels = std::make_unique<std::set<std::string>>(getDistinctLabels(args));
+        args.k = std::make_unique<std::size_t>(distinctLabels->size());
+
+        if (*args.k >= cluster.getColumns()) {
+            throw std::invalid_argument("*args.k >= cluster.getColumns()");
+        }
+
+        determineCentroidIndices(args);
+        computeMeans(args);
+    }
+
+    std::set<std::string> NearestMean::getDistinctLabels(const KMeansArgs &args) {
+        const auto &labels = args.labels;
+        std::set<std::string> distinct;
+
+        for (const auto &label : labels) {
+            const auto firstWord = Strings::getFirstWord(label);
+            distinct.insert(firstWord);
+        }
+
+        return distinct;
+    }
+
+    void NearestMean::determineCentroidIndices(const KMeansArgs &args) {
+        const auto &cluster = args.cluster;
+        const auto &k = *args.k;
+
+        auto permutation = std::make_unique<Indices>(Collections::getOrdinals(0L, cluster.getColumns()));
+        auto rng = std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
+        std::shuffle(permutation->begin(), permutation->end(), rng);
+        indices = std::make_unique<Indices>(Collections::select(*permutation, 0, k));
+    }
+
+    void NearestMean::computeMeans(const KMeansArgs &args) {
+        computeDistances(args);
+
+        const auto &cluster = args.cluster;
+        const auto &labels = args.labels;
+
+        for (std::size_t i = 0; i < distances->size(); i++) {
+            const auto &currentDistances = (*distances)[i];
+            const auto &currentPoint = std::make_unique<Input>(cluster.getColumn(i));
+
+            if (currentDistances.empty()) {
+                const auto &label = labels[i];
+                // dict[label] = currentPoint
+                continue;
+            }
+
+            const auto minIndex = Statistics::argMin(currentDistances);
+            const auto centroidIndexInCluster = (*indices)[minIndex];
+            const auto &label = labels[centroidIndexInCluster];
+            // dict[label] = currentPoint
+        }
+
+        // build mean matrices
+        // compute means
+    }
+
+    void NearestMean::computeDistances(const KMeansArgs &args) {
+        const auto &cluster = args.cluster;
+        distances = std::make_unique<Distances>();
+
+        for (std::size_t i = 0; i < cluster.getColumns(); i++) {
+            distances->emplace_back(Input());
+            const auto currentPoint = *std::make_unique<Input>(cluster.getColumn(i));
+            bool isCentroid = std::find(indices->begin(), indices->end(), i) != indices->end();
+
+            if (isCentroid) {
+                continue;
+            }
+
+            for (std::size_t j = 0; j < cluster.getColumns(); j++) {
+                isCentroid = std::find(indices->begin(), indices->end(), j) != indices->end();
+
+                if (!isCentroid) {
+                    continue;
+                }
+
+                const auto centroid = *std::make_unique<Input>(cluster.getColumn(j));
+                const auto distance = Statistics::geometricDistance(currentPoint, centroid);
+                (*distances)[i].emplace_back(distance);
+            }
+        }
     }
 
 }

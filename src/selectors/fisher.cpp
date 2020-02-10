@@ -159,7 +159,7 @@ namespace selectors {
         }
 
         if (howMany == clusterA.getRows()) {
-            featureIndices = Collections::getOrdinals(0, clusterA.getRows());
+            featureIndices = Collections::getOrdinals(0, static_cast<int>(clusterA.getRows()));
             return;
         }
 

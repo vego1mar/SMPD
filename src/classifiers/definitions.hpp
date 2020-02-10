@@ -127,6 +127,17 @@ namespace classifiers {
     typedef std::vector<std::vector<double>> Distances;
     typedef std::vector<std::size_t> Indices;
 
+
+    struct KMeansArgs {
+        const Matrix &cluster;
+        const Labels &labels;
+        std::unique_ptr<std::size_t> maxIter;
+        std::unique_ptr<std::size_t> k;
+
+        KMeansArgs(const Matrix &cluster, const Labels &labels) : cluster(cluster), labels(labels) {
+        }
+    };
+
 }
 
 #endif //CLASSIFIERS_DEFINITIONS_HPP

@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include "collections.hpp"
 
 
@@ -29,6 +30,17 @@ namespace helpers {
         std::vector<int> ordinals;
 
         for (int i = begin; i < end; i++) {
+            ordinals.emplace_back(i);
+        }
+
+        return ordinals;
+    }
+
+    std::vector<std::size_t> Collections::getOrdinals(std::size_t begin, std::size_t end) {
+        std::vector<std::size_t> ordinals;
+        ordinals.reserve(std::abs(static_cast<long>(end - begin + 1)));
+
+        for (std::size_t i = begin; i < end; i++) {
             ordinals.emplace_back(i);
         }
 
@@ -98,6 +110,26 @@ namespace helpers {
         }
 
         return transposed;
+    }
+
+    std::vector<std::size_t> Collections::select(const std::vector<std::size_t> &source, std::size_t begin, std::size_t end) {
+        if (source.empty()) {
+            return source;
+        }
+
+        if (begin >= source.size() || end >= source.size()) {
+            throw std::length_error("begin >= source.size() || end >= source.size()");
+        }
+
+        std::vector<std::size_t> selection;
+        selection.reserve(std::abs(static_cast<long>(end - begin + 1)));
+
+        for (std::size_t i = begin; i < end; i++) {
+            const auto &value = source[i];
+            selection.emplace_back(value);
+        }
+
+        return selection;
     }
 
 }
