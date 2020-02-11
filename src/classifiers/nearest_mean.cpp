@@ -164,7 +164,6 @@ namespace classifiers {
         const auto &distinctLabels = *args.distinct;
         const auto &labels = args.labels;
         const auto &cluster = args.cluster;
-        const auto &k = *args.k;
 
         auto permutation = std::make_unique<Indices>(Collections::getOrdinals(0L, cluster.getColumns()));
         auto rng = std::default_random_engine(std::chrono::system_clock::now().time_since_epoch().count());
@@ -192,7 +191,7 @@ namespace classifiers {
         const auto &labels = *args.cycleLabels;
         auto subClasses = std::make_unique<SubClassesDict>();
 
-        const auto buildSubClasses = [&subClasses, &cluster](const std::string &label, const Input &point) {
+        const auto buildSubClasses = [&subClasses](const std::string &label, const Input &point) {
             bool isLabelInMap = subClasses->find(label) != subClasses->end();
 
             if (!isLabelInMap) {

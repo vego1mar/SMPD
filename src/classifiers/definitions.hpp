@@ -80,7 +80,7 @@ namespace classifiers {
         }
 
         NearestNeighborScore(std::string &&label, std::size_t nearest, std::size_t total) :
-                label(label), nearestCount(nearest), totalCount(total) {
+                label(std::move(label)), nearestCount(nearest), totalCount(total) {
         }
 
         inline std::string toString() const {

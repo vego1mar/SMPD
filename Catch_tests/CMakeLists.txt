@@ -27,13 +27,6 @@ add_executable(
 
         src/statistics/statistics_test.cpp ../src/statistics/statistics.cpp
 
-        casing_test.cpp ../src/casing.cpp
-        classifiers_test.cpp ../src/classifiers.cpp
-        helpers_test.cpp ../src/helpers.cpp
-        io_manager_test.cpp ../src/io_manager.cpp
-        selectors_test.cpp ../src/selectors.cpp
-        statistical_test.cpp ../src/statistical.cpp
-
 )
 
 target_link_libraries(Catch_tests_run)

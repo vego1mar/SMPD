@@ -11,9 +11,8 @@ namespace statistics {
         std::mt19937 generator;
         std::uniform_int_distribution<T> distribution;
 
-        RandomInts(T min, T max, unsigned int seed = std::random_device{}()) {
-            generator = std::mt19937(seed);
-            distribution = std::uniform_int_distribution<T>(min, max);
+        RandomInts(T min, T max, unsigned int seed = std::random_device{}())
+                : generator(std::mt19937(seed)), distribution(std::uniform_int_distribution<T>(min, max)) {
         }
 
         T operator()() {

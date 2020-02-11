@@ -6,13 +6,6 @@ set(CMAKE_CXX_STANDARD 14)
 add_executable(
         SMPD src/main.cpp
 
-        src/casing.hpp src/casing.cpp
-        src/classifiers.hpp src/classifiers.cpp
-        src/helpers.hpp src/helpers.cpp
-        src/io_manager.hpp src/io_manager.cpp
-        src/selectors.hpp src/selectors.cpp
-        src/statistical.hpp src/statistical.cpp
-
         src/classifiers/definitions.hpp
         src/classifiers/nearest_mean.hpp src/classifiers/nearest_mean.cpp
         src/classifiers/nearest_neighbors.hpp src/classifiers/nearest_neighbors.cpp

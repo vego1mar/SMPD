@@ -5,10 +5,11 @@ Statystyczne metody przetwarzania danych
 
 
 ### classifiers
-* nearest_neighbors
-* nearest_mean
+* nearest neighbors
+* nearest mean
 * k means
 
 
 ### selectors
 * Fisher Linear Discriminant
+* Sequential Forward Selection (SFS)

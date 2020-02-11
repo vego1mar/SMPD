@@ -9,16 +9,11 @@ rm -rf sonar-build
 echo "BUILDING"
 echo "./"
 mkdir sonar-build
-g++ -Wall -fexceptions -std=c++14 -g  -c src/casing.cpp -o sonar-build/casing.o
-g++ -Wall -fexceptions -std=c++14 -g  -c src/classifiers.cpp -o sonar-build/classifiers.o
-g++ -Wall -fexceptions -std=c++14 -g  -c src/helpers.cpp -o sonar-build/helpers.o
-g++ -Wall -fexceptions -std=c++14 -g  -c src/io_manager.cpp -o sonar-build/io_manager.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/main.cpp -o sonar-build/main.o
-g++ -Wall -fexceptions -std=c++14 -g  -c src/selectors.cpp -o sonar-build/selectors.o
-g++ -Wall -fexceptions -std=c++14 -g  -c src/statistical.cpp -o sonar-build/statistical.o
 
 echo "./classifiers"
 mkdir sonar-build/classifiers
+g++ -Wall -fexceptions -std=c++14 -g  -c src/classifiers/nearest_mean.cpp -o sonar-build/classifiers/nearest_mean.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/classifiers/nearest_neighbors.cpp -o sonar-build/classifiers/nearest_neighbors.o
 
 echo "./command_line"
@@ -43,6 +38,10 @@ echo "./io_manager"
 mkdir sonar-build/io_manager
 g++ -Wall -fexceptions -std=c++14 -g  -c src/io_manager/csv_reader.cpp -o sonar-build/io_manager/csv_reader.o
 g++ -Wall -fexceptions -std=c++14 -g  -c src/io_manager/file_reader.cpp -o sonar-build/io_manager/file_reader.o
+
+echo "./main_program"
+mkdir sonar-build/main_program
+g++ -Wall -fexceptions -std=c++14 -g  -c src/main_program/statistical_run.cpp -o sonar-build/main_program/statistical_run.o
 
 echo "./matrix"
 mkdir sonar-build/matrix

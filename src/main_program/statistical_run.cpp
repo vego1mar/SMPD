@@ -159,8 +159,8 @@ namespace main_program {
         const auto &csvParser = params.csvParser;
         const auto &fld = params.fld;
         const auto &nmLabels = *params.infoHeader;
-        auto &clusterA = *params.clusterA;
-        auto &clusterB = *params.clusterB;
+        const auto &clusterA = *params.clusterA;
+        const auto &clusterB = *params.clusterB;
 
         ClassifiersGrouper grouper;
         grouper.groupNN(csvParser, fld);
