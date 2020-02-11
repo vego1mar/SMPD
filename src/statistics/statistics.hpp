@@ -9,7 +9,9 @@ using matrix::Matrix;
 
 namespace statistics {
 
-    /// A utility class.
+    typedef std::vector<std::vector<double>> Means;
+
+
     class Statistics {
     public:
         Statistics() = delete;
@@ -43,6 +45,8 @@ namespace statistics {
         static double normL2(const std::vector<double> &list);
 
         static double geometricDistance(const std::vector<double> &point1, const std::vector<double> &point2);
+
+        static double geometricCloseness(const Means &mean1, const Means &mean2);
 
     };
 

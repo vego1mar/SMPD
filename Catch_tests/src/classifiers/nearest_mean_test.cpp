@@ -1,8 +1,10 @@
 #include "../../catch.hpp"
 #include "../../../src/classifiers/nearest_mean.hpp"
+#include "../../../src/helpers/stringify.hpp"
 
 using classifiers::Labels;
 using classifiers::NearestMean;
+using helpers::Stringify;
 
 
 TEST_CASE("nearest_mean_test", "[nearest_mean]") {
@@ -48,9 +50,15 @@ TEST_CASE("nearest_mean_test", "[nearest_mean]") {
         const auto labels = Labels({"A 1", "A 1", "A 1", "A 1", "B 2", "B 2", "B 2", "B 2", "C 3", "C 3", "A 2"});
 
         NearestMean nm;
-        nm.kMeans(cluster, labels);
+        const auto result = nm.kMeans(cluster, labels);
 
-        int dummy = 1;
+        const auto toString = Stringify::toString(result);
+        REQUIRE(toString.size() > 2);
+        REQUIRE(result.size() == 3);
+
+        for (const auto &inner : result) {
+            REQUIRE(inner.second.size() == 2);
+        }
     }
 
 }

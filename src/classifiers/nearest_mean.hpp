@@ -12,6 +12,7 @@ namespace classifiers {
         std::unique_ptr<Means> means;
         std::unique_ptr<Distances> distances;
         std::unique_ptr<Indices> indices;
+        std::unique_ptr<Centroids> centroids;
 
 
     public:
@@ -31,7 +32,7 @@ namespace classifiers {
 
         void dispose();
 
-        void kMeans(const Matrix &cluster, const Labels &labels, std::size_t maxIter = 10'000);
+        Centroids kMeans(const Matrix &cluster, const Labels &labels, std::size_t maxIter = 10'000, double delta = 0.001);
 
 
     private:
@@ -45,11 +46,13 @@ namespace classifiers {
 
         static std::set<std::string> getDistinctLabels(const KMeansArgs &args);
 
-        void determineCentroidIndices(const KMeansArgs &args);
+        void determineCentroidIndices1(const KMeansArgs &args);
 
-        void computeMeans(const KMeansArgs &args);
+        void computeCentroidMeans(const KMeansArgs &args);
 
-        void computeDistances(const KMeansArgs &args);
+        void computeCentroidDistances(const KMeansArgs &args);
+
+        void prepareNextCycleArgs(KMeansArgs &args, std::size_t columnsOffset = 0);
 
     };
 

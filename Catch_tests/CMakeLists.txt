@@ -25,7 +25,7 @@ add_executable(
 
         src/selectors/fisher_test.cpp ../src/selectors/fisher.cpp
 
-        ../src/statistics/statistics.cpp
+        src/statistics/statistics_test.cpp ../src/statistics/statistics.cpp
 
         casing_test.cpp ../src/casing.cpp
         classifiers_test.cpp ../src/classifiers.cpp

@@ -132,4 +132,15 @@ namespace helpers {
         return selection;
     }
 
+    std::vector<std::vector<double>> Collections::selectSecond(const std::unordered_map<std::string, std::vector<double>> &map) {
+        std::vector<std::vector<double>> selection;
+
+        for (const auto &entry : map) {
+            const auto &values = entry.second;
+            selection.emplace_back(values);
+        }
+
+        return selection;
+    }
+
 }

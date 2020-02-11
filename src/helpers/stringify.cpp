@@ -1,3 +1,4 @@
+#include <sstream>
 #include "stringify.hpp"
 
 
@@ -78,6 +79,42 @@ namespace helpers {
 
         str += ']';
         return str;
+    }
+
+    std::string Stringify::toString(const Centroids &centroids) {
+        if (centroids.empty()) {
+            return "[]";
+        }
+
+        std::string str = "[";
+
+        for (const auto &entry : centroids) {
+            str += '(' + entry.first + ',' + toString(entry.second) + "),";
+        }
+
+        if (str.size() > 1) {
+            str = str.substr(0, str.size() - 1);
+        }
+
+        str += ']';
+        return str;
+    }
+
+    std::string Stringify::toString(const std::vector<double> &source) {
+        if (source.empty()) {
+            return "[]";
+        }
+
+        std::ostringstream stringify;
+        stringify.precision(3);
+        stringify << '[';
+
+        for (std::size_t i = 0; i < source.size() - 1; i++) {
+            stringify << source[i] << ',';
+        }
+
+        stringify << source[source.size() - 1] << ']';
+        return stringify.str();
     }
 
 }

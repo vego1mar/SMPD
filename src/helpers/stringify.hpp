@@ -10,6 +10,7 @@ using main_program::FLDHeader;
 using selectors::IntVector;
 using classifiers::NearestNeighborScores;
 using classifiers::LabelsCountMap;
+using classifiers::Centroids;
 
 
 namespace helpers {
@@ -37,6 +38,10 @@ namespace helpers {
         static std::string toString(const NearestNeighborScores &scores);
 
         static std::string toString(const LabelsCountMap &countMap);
+
+        static std::string toString(const Centroids &centroids);
+
+        static std::string toString(const std::vector<double> &source);
 
     };
 

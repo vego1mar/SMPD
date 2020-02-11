@@ -4,6 +4,7 @@
 #include <utility>
 #include <vector>
 #include <string>
+#include <set>
 #include <unordered_map>
 #include <memory>
 #include "../matrix/matrix.hpp"
@@ -131,12 +132,18 @@ namespace classifiers {
     struct KMeansArgs {
         const Matrix &cluster;
         const Labels &labels;
-        std::unique_ptr<std::size_t> maxIter;
         std::unique_ptr<std::size_t> k;
+        std::unique_ptr<Matrix> cycleCluster;
+        std::unique_ptr<Labels> cycleLabels;
+        std::unique_ptr<std::set<std::string>> distinct;
 
         KMeansArgs(const Matrix &cluster, const Labels &labels) : cluster(cluster), labels(labels) {
         }
     };
+
+
+    typedef std::unordered_map<std::string, Features> SubClassesDict;
+    typedef std::unordered_map<std::string, Input> Centroids;
 
 }
 

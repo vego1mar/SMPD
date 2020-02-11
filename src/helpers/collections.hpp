@@ -4,6 +4,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 
 namespace helpers {
@@ -39,6 +40,8 @@ namespace helpers {
         static std::vector<std::vector<double>> transpose(const std::vector<std::vector<double>> &source);
 
         static std::vector<std::size_t> select(const std::vector<std::size_t> &source, std::size_t begin, std::size_t end);
+
+        static std::vector<std::vector<double>> selectSecond(const std::unordered_map<std::string,std::vector<double>> &map);
 
     };
 

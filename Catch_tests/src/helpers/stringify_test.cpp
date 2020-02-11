@@ -6,6 +6,7 @@ using main_program::FLDHeader;
 using selectors::IntVector;
 using classifiers::NearestNeighborScores;
 using classifiers::NearestNeighborScore;
+using classifiers::Centroids;
 
 
 TEST_CASE("stringify_test", "[stringify]") {
@@ -38,6 +39,20 @@ TEST_CASE("stringify_test", "[stringify]") {
         const auto result = Stringify::toString(scores);
 
         REQUIRE_THAT(result, Catch::Equals(expectedStr));
+    }
+
+    SECTION("Centroids -> OK") {
+        const auto centroids = Centroids({
+                                                 {"label4", {std::sqrt(2.0), 1.0 / 11.0}},
+                                                 {"label3", {}},
+                                                 {"label2", {0.3,            1.44, 2.77262}},
+                                                 {"label1", {0,              1,    2}},
+                                         });
+        const std::string expectedResult = "[(label1,[0,1,2]),(label2,[0.3,1.44,2.77]),(label3,[]),(label4,[1.41,0.0909])]";
+
+        const auto result = Stringify::toString(centroids);
+
+        REQUIRE_THAT(result, Catch::Equals(expectedResult));
     }
 
 }

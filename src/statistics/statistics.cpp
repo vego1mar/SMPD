@@ -126,4 +126,32 @@ namespace statistics {
         return std::sqrt(summed_mse);
     }
 
+    double Statistics::geometricCloseness(const Means &mean1, const Means &mean2) {
+        if (mean1.empty() && mean2.empty()) {
+            return 0.0;
+        }
+
+        if (mean1.empty() || mean2.empty()) {
+            throw std::length_error("mean1.empty() || mean2.empty()");
+        }
+
+        if (mean1.size() != mean2.size()) {
+            throw std::length_error("mean1.size() != mean2.size()");
+        }
+
+        auto distances = std::make_unique<std::vector<double>>();
+
+        for (std::size_t i = 0; i < mean1.size(); i++) {
+            const auto &point1 = mean1[i];
+            const auto &point2 = mean2[i];
+            const auto distance = geometricDistance(point1, point2);
+            distances->emplace_back(distance);
+        }
+
+        const auto sum = std::accumulate(distances->begin(), distances->end(), 0.0);
+        const auto closeness = sum / distances->size();
+        distances.reset();
+        return closeness;
+    }
+
 }
