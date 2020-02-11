@@ -18,6 +18,7 @@ namespace data_builders {
         std::unique_ptr<std::vector<std::size_t>> inputIndices;
         std::unique_ptr<Matrix> clusterA;
         std::unique_ptr<Matrix> clusterB;
+        std::unique_ptr<Matrix> datasetTransposed;
 
 
     public:
@@ -46,6 +47,8 @@ namespace data_builders {
         const Matrix &getClusterA() const;
 
         const Matrix &getClusterB() const;
+
+        const Matrix &getDatasetTransposed(const CSVParser &csvParser);
 
 
     private:

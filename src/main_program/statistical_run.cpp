@@ -190,8 +190,12 @@ namespace main_program {
         auto result2 = std::make_unique<Labels>(nm.classify(grouper.getSelection(), grouper.getClusterA(), grouper.getClusterB(), labels));
         params.nmResult = std::make_unique<Labels>(*result2);
         printNearestMeanInfo(params);
+        result2.reset();
 
-        // TODO: classify -> k means
+        auto result3 = std::make_unique<Centroids>(nm.kMeans(grouper.getDatasetTransposed(csvParser), csvParser.getHeaders()));
+        params.kMeansResult = std::make_unique<Centroids>(*result3);
+        result3.reset();
+        printKMeansInfo(params);
     }
 
     void StatisticalRun::printNearestNeighborsInfo(const StatisticalRunParams &params, const ClassifiersGrouper &grouper) {
@@ -269,6 +273,19 @@ namespace main_program {
         featuresStr.reset();
         indicesStr.reset();
         std::cout << *toString << std::endl;
+    }
+
+    void StatisticalRun::printKMeansInfo(const StatisticalRunParams &params) {
+        const auto &headers = params.infoHeader;
+        const auto &centroids = *params.kMeansResult;
+
+        auto toString = std::make_unique<std::string>();
+        auto centroidsStr = std::make_unique<std::string>(Stringify::toString(centroids));
+        *toString += '(' + headers->first + '+' + headers->second + ") -> k means " + *centroidsStr;
+        centroidsStr.reset();
+
+        std::cout << *toString << std::endl;
+        toString.reset();
     }
 
 }

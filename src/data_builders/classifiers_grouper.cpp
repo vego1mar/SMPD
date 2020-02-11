@@ -111,4 +111,21 @@ namespace data_builders {
         return *clusterB;
     }
 
+    const Matrix &ClassifiersGrouper::getDatasetTransposed(const CSVParser &csvParser) {
+        typedef std::vector<std::vector<double>> MatrixValues;
+
+        const auto &dataset = csvParser.getDataset();
+        datasetTransposed = std::make_unique<Matrix>(dataset.getColumns(), dataset.getRows());
+        auto data = std::make_unique<MatrixValues>();
+
+        for (std::size_t i = 0; i < dataset.getRows(); i++) {
+            data->emplace_back(dataset.getRow(i));
+        }
+
+        datasetTransposed->set(*data);
+        data.reset();
+        datasetTransposed->transform(TransformationType::Transposition);
+        return *datasetTransposed;
+    }
+
 }

@@ -16,6 +16,7 @@ using selectors::IntVector;
 using data_builders::ClassifiersGrouper;
 using classifiers::NearestNeighborScores;
 using classifiers::Labels;
+using classifiers::Centroids;
 
 
 namespace main_program {
@@ -32,6 +33,7 @@ namespace main_program {
         std::unique_ptr<std::size_t> neighbors;
         std::unique_ptr<NearestNeighborScores> nnResult;
         std::unique_ptr<Labels> nmResult;
+        std::unique_ptr<Centroids> kMeansResult;
 
         StatisticalRunParams(const CSVParser &csvParser, const FLD &fld) : csvParser(csvParser), fld(fld) {
         }
@@ -81,6 +83,8 @@ namespace main_program {
         static void printNearestNeighborsInfo(const StatisticalRunParams &params, const ClassifiersGrouper &grouper);
 
         static void printNearestMeanInfo(const StatisticalRunParams &params);
+
+        static void printKMeansInfo(const StatisticalRunParams &params);
 
     };
 
